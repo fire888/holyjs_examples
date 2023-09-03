@@ -9,7 +9,13 @@ import '../assets/progress-img.png'
 
 import mapBrickDiff from '../assets/map_brick_diff.jpg'
 
-
+export const KEYS_LOADERS = {
+    IMG: 'IMG',
+    OBJ: 'OBJ',
+    GLB: 'GLB',
+    FBX: 'FBX',
+    CUBE_IMG: 'CUBE_IMG',
+}
 
 export const ASSETS_TO_LOAD = [
     // {
@@ -17,5 +23,5 @@ export const ASSETS_TO_LOAD = [
     //     filename: [px, nx, py, ny, nz, pz],
     //     key: 'skyBox'
     // },
-    { type: 'img', filename: mapBrickDiff, key: 'mapBrickDiff',},
+    { assetType: KEYS_LOADERS.IMG, fileName: mapBrickDiff, key: 'mapBrickDiff',},
 ]

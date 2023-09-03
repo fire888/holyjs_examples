@@ -7,8 +7,7 @@ const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
-    const loadManager = createLoadManager()
-    const assets = await loadManager.startLoad(ASSETS_TO_LOAD)
+    const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff}),

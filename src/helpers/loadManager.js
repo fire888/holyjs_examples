@@ -2,90 +2,31 @@ import * as THREE from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { KEYS_LOADERS } from "../constants/ASSETS";
 
 
-export const createLoadManager = () => {
-    const assets = {}
-
-    let objLoader, textureLoader, gltfLoader, fbxLoader, cubeTextureLoader
-    let index = 0
-    let onLoad = () => {}
-    let ASSETS_TO_LOAD = []
-
-
-    const checkComplete = () => {
-        index ++
-        if ( index < ASSETS_TO_LOAD.length ) {
-            loadAsset(ASSETS_TO_LOAD[index])
-        } else {
-            onLoad(assets)
+export const createLoadManager = dataAssets => {
+    return new Promise(res => {
+        const loaders = {
+            [KEYS_LOADERS.IMG]: new THREE.TextureLoader(),
+            [KEYS_LOADERS.GLB]: new GLTFLoader(),
+            [KEYS_LOADERS.FBX]: new FBXLoader(),
+            [KEYS_LOADERS.OBJ]: new OBJLoader(),
+            [KEYS_LOADERS.CUBE_IMG]: new OBJLoader(),
         }
-    }
+        const assets = {}
 
-    const loadAsset = data => {
-        if (data.type === 'obj') {
-            objLoader.load(data.filename, model => {
-                assets[data.key] = model
-                checkComplete()        
+        const loadAsset = index => {
+            if (!dataAssets[index]) {
+                return res(assets)
+            }
+
+            const { assetType, fileName, key } = dataAssets[index]
+            loaders[assetType].load(fileName, asset => {
+                assets[key] = asset
+                loadAsset(++index)
             })
         }
-        if (data.type === 'glb' || data.type === 'gltf') {
-            gltfLoader.load(data.filename, model => {
-                assets[data.key] = model
-                checkComplete()        
-            })
-        }   
-        if (data.type === 'fbx') {
-            fbxLoader.load(data.filename, model => {
-                assets[data.key] = model 
-                checkComplete()      
-            })
-        }        
-        if (data.type === 'img') {
-            textureLoader.load(data.filename, model => {
-                model.wrapS = model.wrapT = THREE.RepeatWrapping;
-                assets[data.key] = model
-                checkComplete()        
-            })
-        }
-        if (data.type === 'gltfBin') {
-            const dracoLoader = new DRACOLoader()
-            dracoLoader.setDecoderPath('draco/gltf/')
-            dracoLoader.setDecoderConfig({type: 'js'})
-            gltfLoader.setDRACOLoader( dracoLoader )
-
-            gltfLoader.load(data.filename, model => {
-                assets[data.key] = model
-                checkComplete()
-            })
-        }
-        if (data.type === 'cubeTextures') {
-            cubeTextureLoader.load(data.filename, model => {
-                assets[data.key] = model
-                checkComplete()
-            })
-        }
-    }
-
-
-
-    return {
-        startLoad: ASSETS_DATA => {
-            return new Promise(res => {
-
-                ASSETS_TO_LOAD = ASSETS_DATA
-                onLoad = res
-                index = 0
-
-                objLoader = new OBJLoader()
-                gltfLoader = new GLTFLoader()
-                textureLoader = new THREE.TextureLoader()
-                fbxLoader = new FBXLoader()
-                cubeTextureLoader = new THREE.CubeTextureLoader()
-
-                loadAsset(ASSETS_TO_LOAD[index])
-            })
-        }
-    }
+        loadAsset(0)
+    })
 }
