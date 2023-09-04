@@ -33,33 +33,27 @@ async function initApp () {
         0, 2, 0,
     ]
 
-    const m4 = new THREE.Matrix4().set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        5, 0, 0, 1,
-    )
 
-    console.log(m4)
-
-    const vv = [1, 2, 3]
+    const m4r = new THREE.Matrix4().makeRotationY(1.3)
+    const m4t = new THREE.Matrix4().makeTranslation(-3, 0, 0)
+    const m4tz = new THREE.Matrix4().makeTranslation(0, 0, -3)
 
     const v3 = new THREE.Vector3()
-    const updateArr = (arr) => {
+    const updateArr = (m, arr) => {
         for (let i = 0; i < arr.length; i += 3) {
-            v3.x = arr[i] + m4.elements[4 * 3]
-            v3.y = arr[i + 1] + m4.elements[4 * 3 + 1]
-            v3.z = arr[i + 2] + m4.elements[4 * 3 + 2]
-            console.log(v3)
-
+            v3.set(arr[i + 0], arr[i + 1], arr[i + 2])
+            v3.applyMatrix4(m)
             arr[i + 0] = v3.x
             arr[i + 1] = v3.y
             arr[i + 2] = v3.z
         }
     }
 
-    updateArr(vv)
-    console.log(vv)
+    updateArr(m4r, v)
+    updateArr(m4t, v)
+    updateArr(m4tz, v)
+
+
 
 
     const uv = [
