@@ -16,6 +16,11 @@ export const createStudio = () => {
     const scene = new THREE.Scene()
     scene.fog = new THREE.Fog(0x000000, 300, 3000)
 
+    const axesHelper = new THREE.AxesHelper(1)
+    scene.add(axesHelper)
+    const gridHelper = new THREE.GridHelper(1, 10)
+    scene.add(gridHelper)
+
     const lightA = new THREE.AmbientLight( 0xccccff, 2)
     scene.add( lightA )
 
