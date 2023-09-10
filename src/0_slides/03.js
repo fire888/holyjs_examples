@@ -94,7 +94,7 @@ async function initApp () {
         const uv = []
 
         const ph = phase % (Math.PI * 2)
-        const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, ph / 3], [0, 2, ph / 3])
+        const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, sin(ph)], [0, 2, sin(ph)])
 
         const N = 10
         for (let i = 0; i < N; ++i) {
