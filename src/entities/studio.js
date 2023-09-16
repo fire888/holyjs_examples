@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 
-export const createStudio = () => {
+export const createStudio = (startCameraZ = 3) => {
     const renderer = new THREE.WebGLRenderer({
         canvas: document.getElementById( 'webgl-canvas' ),
         antialias: true,
@@ -21,10 +21,10 @@ export const createStudio = () => {
     const gridHelper = new THREE.GridHelper(1, 10)
     scene.add(gridHelper)
 
-    const lightA = new THREE.AmbientLight( 0xccccff, 2)
+    const lightA = new THREE.AmbientLight( 0xccccff, .5)
     scene.add( lightA )
 
-    const dirLight = new THREE.DirectionalLight( 0xffffaa, 4)
+    const dirLight = new THREE.DirectionalLight( 0xffffaa, 1)
     dirLight.position.set(0, 300, 200)
     dirLight.castShadow = true
     dirLight.shadow.camera.top = 500
@@ -47,7 +47,7 @@ export const createStudio = () => {
 
 
     const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 20000)
-    camera.position.set(0, 2, 3)
+    camera.position.set(0, 2, startCameraZ)
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.target.set(0, 0, 0)
     controls.update()
