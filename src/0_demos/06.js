@@ -103,74 +103,180 @@ async function initApp () {
     animate()
 
 
+    // /** CUSTOM 00 **************************/
+    // const l00 = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
+    // const l01 = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array
+    //
+    // const W = 3
+    // const H = 2
+    // let bottomWallLeft, bottomWallRight, topWallRight, topWallLeft
+    //
+    // const v = []
+    // const uv = []
+    //
+    // {
+    //     const l00x = [...l00]
+    //     translateArr(l00x, W, 0, 0)
+    //
+    //     for (let i = 3; i < l00.length; i += 3) {
+    //         const prevI = i - 3
+    //         const nextI = i
+    //
+    //         const p = m.createPolygon(
+    //             [l00[prevI], l00[prevI + 1], l00[prevI + 2]],
+    //             [l00x[prevI], l00x[prevI + 1], l00x[prevI + 2]],
+    //             [l00x[nextI], l00x[nextI + 1], l00x[nextI + 2]],
+    //             [l00[nextI], l00[nextI + 1], l00[nextI + 2]],
+    //         )
+    //         v.push(...p.v)
+    //         uv.push(...p.uv)
+    //
+    //         if (!l00[i - 4]) {
+    //             topWallLeft = [l00[nextI], l00[nextI + 1], l00[nextI + 2]]
+    //             topWallRight = [l00x[nextI], l00x[nextI + 1], l00x[nextI + 2]]
+    //         }
+    //     }
+    //     translateArr(v, 0, H, 0)
+    //     topWallLeft = [v[0], v[1], v[2]]
+    //     topWallRight = [v[3], v[4], v[5]]
+    // }
+    //
+    // {
+    //     const l01x = [...l01]
+    //     translateArr(l01x, W, 0, 0)
+    //
+    //     for (let i = 3; i < l01.length; i += 3) {
+    //         const prevI = i - 3
+    //         const nextI = i
+    //
+    //         const p = m.createPolygon(
+    //             [l01[prevI], l01[prevI + 1], l01[prevI + 2]],
+    //             [l01x[prevI], l01x[prevI + 1], l01x[prevI + 2]],
+    //             [l01x[nextI], l01x[nextI + 1], l01x[nextI + 2]],
+    //             [l01[nextI], l01[nextI + 1], l01[nextI + 2]],
+    //         )
+    //         v.push(...p.v)
+    //         uv.push(...p.uv)
+    //     }
+    //     const l = v.length
+    //     bottomWallLeft = [v[l - 3], v[l - 2], v[l - 1]]
+    //     bottomWallRight = [v[l - 6], v[l - 5], v[l - 4]]
+    // }
+    //
+    // const back = m.createPolygon(
+    //     bottomWallLeft,
+    //     bottomWallRight,
+    //     topWallRight,
+    //     topWallLeft,
+    // )
+    // v.push(...back.v)
+    // uv.push(...back.uv)
+    //
+    // const mesh = createMesh(v, uv, materials.phongWhite)
+    // studio.addToScene(mesh)
+
     /** CUSTOM 00 **************************/
     const l00 = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
     const l01 = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array
 
-    const W = 3
-    const H = 2
-    let bottomWallLeft, bottomWallRight, topWallRight, topWallLeft
+    const createWall = (W, H, profileB) => {
+        const v = []
+        const uv = []
+
+        const l = [...profileB]
+        const lx = [...l]
+
+        m.rotateVerticesY(l, Math.PI / 4)
+        m.rotateVerticesY(lx, -Math.PI / 4)
+        m.translateVertices(lx, W, 0, 0)
+
+
+        for (let i = 3; i < l.length; i += 3) {
+            const prevI = i - 3
+            const nextI = i
+
+            const p = m.createPolygon(
+                [l[prevI], l[prevI + 1], l[prevI + 2]],
+                [lx[prevI], lx[prevI + 1], lx[prevI + 2]],
+                [lx[nextI], lx[nextI + 1], lx[nextI + 2]],
+                [l[nextI], l[nextI + 1], l[nextI + 2]],
+            )
+            v.push(...p.v)
+            uv.push(...p.uv)
+        }
+        return { v, uv }
+    }
+
 
     const v = []
     const uv = []
-
-    {
-        const l00x = [...l00]
-        translateArr(l00x, W, 0, 0)
-
-        for (let i = 3; i < l00.length; i += 3) {
-            const prevI = i - 3
-            const nextI = i
-
-            const p = m.createPolygon(
-                [l00[prevI], l00[prevI + 1], l00[prevI + 2]],
-                [l00x[prevI], l00x[prevI + 1], l00x[prevI + 2]],
-                [l00x[nextI], l00x[nextI + 1], l00x[nextI + 2]],
-                [l00[nextI], l00[nextI + 1], l00[nextI + 2]],
-            )
-            v.push(...p.v)
-            uv.push(...p.uv)
-
-            if (!l00[i - 4]) {
-                topWallLeft = [l00[nextI], l00[nextI + 1], l00[nextI + 2]]
-                topWallRight = [l00x[nextI], l00x[nextI + 1], l00x[nextI + 2]]
-            }
-        }
-        translateArr(v, 0, H, 0)
-        topWallLeft = [v[0], v[1], v[2]]
-        topWallRight = [v[3], v[4], v[5]]
+    const corners = {
+        c1b: null,
+        c1t: null,
+        c2b: null,
+        c2t: null,
+        c3b: null,
+        c3t: null,
+        c4b: null,
+        c4T: null,
     }
 
-    {
-        const l01x = [...l01]
-        translateArr(l01x, W, 0, 0)
+    // const copyT = [...l00]
+    // m.translateVertices(copyT, 0, 2, 0, 0)
+    // const fullP = [...l01, ...copyT]
+    const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
-        for (let i = 3; i < l01.length; i += 3) {
-            const prevI = i - 3
-            const nextI = i
+    const w1 = createWall(3, 2, fullP)
+    v.push(...w1.v)
+    uv.push(...w1.uv)
+    corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]
+    corners.c2b = [w1.v[3], w1.v[4], w1.v[5]]
+    const l = w1.v.length
+    corners.c1t = [w1.v[l - 3], w1.v[l - 2], w1.v[l - 1]]
+    corners.c2t = [w1.v[l - 6], w1.v[l - 5], w1.v[l - 4]]
 
-            const p = m.createPolygon(
-                [l01[prevI], l01[prevI + 1], l01[prevI + 2]],
-                [l01x[prevI], l01x[prevI + 1], l01x[prevI + 2]],
-                [l01x[nextI], l01x[nextI + 1], l01x[nextI + 2]],
-                [l01[nextI], l01[nextI + 1], l01[nextI + 2]],
-            )
-            v.push(...p.v)
-            uv.push(...p.uv)
-        }
-        const l = v.length
-        bottomWallLeft = [v[l - 3], v[l - 2], v[l - 1]]
-        bottomWallRight = [v[l - 6], v[l - 5], v[l - 4]]
-    }
+    const w2 = createWall(5, 2, fullP)
+    m.rotateVerticesY(w2.v, -Math.PI / 2)
+    m.translateVertices(w2.v, 3, 0, 0)
+    v.push(...w2.v)
+    uv.push(...w2.uv)
 
-    const back = m.createPolygon(
-        bottomWallLeft,
-        bottomWallRight,
-        topWallRight,
-        topWallLeft,
+
+    const w3 = createWall(3, 2, fullP)
+    m.rotateVerticesY(w3.v, -Math.PI)
+    m.translateVertices(w3.v, 3, 0, 5)
+    v.push(...w3.v)
+    uv.push(...w3.uv)
+    corners.c3b = [w3.v[0], w3.v[1], w3.v[2]]
+    corners.c4b = [w3.v[3], w3.v[4], w3.v[5]]
+    const l2 = w3.v.length
+    corners.c3t = [w3.v[l2 - 3], w3.v[l2 - 2], w3.v[l2 - 1]]
+    corners.c4t = [w3.v[l2 - 6], w3.v[l2 - 5], w3.v[l2 - 4]]
+
+    const w4 = createWall(5, 2, fullP)
+    m.rotateVerticesY(w4.v, Math.PI / 2)
+    m.translateVertices(w4.v, 0, 0, 5)
+    v.push(...w4.v)
+    uv.push(...w4.uv)
+
+    const floor = m.createPolygon(
+        corners.c4b,
+        corners.c3b,
+        corners.c2b,
+        corners.c1b,
     )
-    v.push(...back.v)
-    uv.push(...back.uv)
+    v.push(...floor.v)
+    uv.push(...floor.uv)
+
+    const ceil = m.createPolygon(
+        corners.c1t,
+        corners.c2t,
+        corners.c3t,
+        corners.c4t,
+    )
+    v.push(...ceil.v)
+    uv.push(...ceil.uv)
+
 
     const mesh = createMesh(v, uv, materials.phongWhite)
     studio.addToScene(mesh)
