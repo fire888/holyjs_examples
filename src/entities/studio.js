@@ -21,10 +21,10 @@ export const createStudio = (startCameraZ = 3) => {
     const gridHelper = new THREE.GridHelper(1, 10)
     scene.add(gridHelper)
 
-    const lightA = new THREE.AmbientLight( 0xccccff, .5)
+    const lightA = new THREE.AmbientLight( 0xffffff, .5)
     scene.add( lightA )
 
-    const dirLight = new THREE.DirectionalLight( 0xffffaa, 1)
+    const dirLight = new THREE.DirectionalLight( 0xffffff, 1)
     dirLight.position.set(0, 300, 200)
     dirLight.castShadow = true
     dirLight.shadow.camera.top = 500
