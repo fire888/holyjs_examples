@@ -11,19 +11,19 @@ const atlas = (() => {
     for (let i = 1; i < 5; ++i) {
         for (let j = 1; j < 5; ++j) {
             arr.push([
-                (i - 1) * h, (j - 1) * h,
-                i * h, (j - 1) * h,
-                i * h, j * h,
-                (i - 1) * h, (j - 1) * h,
-                i * h, j * h,
-                (i - 1) * h, j * h
+                (j - 1) * h, (i - 1) * h,
+                j * h, (i - 1) * h,
+                j * h, i * h,
+                (j - 1) * h, (i - 1) * h,
+                j * h, i * h,
+                (j - 1) * h, i * h
             ])
         }
     }
     arr.push([
-        0, .5,
-        .25, .5,
-        .13, .75
+        .75, .75,
+        1, .75,
+        .88, 1
     ])
     return arr
 })()
@@ -123,7 +123,7 @@ async function initApp () {
     //     )
     //
     //     v1.push(...p.v)
-    //     uv1.push(...atlas[15])
+    //     uv1.push(...atlas[14])
     // }
     //
     // const copyV = [...v1]
@@ -136,7 +136,7 @@ async function initApp () {
     // const copyV2 = [...v1]
     // const uv3 = []
     // points.forEach(() => {
-    //     uv3.push(...atlas[1])
+    //     uv3.push(...atlas[4])
     // })
     // m.translateVertices(copyV2, 0, 1.4, 0)
     //
@@ -194,16 +194,14 @@ async function initApp () {
 
                 v.push(...p.v)
                 if (nFloor === 0) {
-                    uv.push(...atlas[15])
+                    uv.push(...atlas[14])
                 }
                 else if (nFloor === nFloors - 1) {
-                    uv.push(...atlas[1])
-                }
-                else if (nFloor === nFloors - 2) {
-                    uv.push(...atlas[3])
+                    uv.push(...atlas[4])
                 }
                 else {
-                    uv.push(...atlas[0])
+                    const r = Math.random()
+                    uv.push(...atlas[r > .3 ? 0 : Math.floor(Math.random() * 14)])
                 }
             }
         }
