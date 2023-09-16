@@ -2,36 +2,6 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import {translateArr} from "../helpers/geomHelpers";
-
-
-const atlas = (() => {
-    const h = 1 / 4
-    const arr = []
-    for (let i = 1; i < 5; ++i) {
-        for (let j = 1; j < 5; ++j) {
-            arr.push([
-                (j - 1) * h, (i - 1) * h,
-                j * h, (i - 1) * h,
-                j * h, i * h,
-                (j - 1) * h, (i - 1) * h,
-                j * h, i * h,
-                (j - 1) * h, i * h
-            ])
-        }
-    }
-    arr.push([
-        .75, .75,
-        1, .75,
-        .88, 1
-    ])
-    return arr
-})()
-
-
-
-const { sin, cos, PI } = Math
-const PI2 = PI * 2
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -60,7 +30,6 @@ const m = {
     }
 }
 
-
 const createMesh = (v, uv, material) => {
     const geometry = new THREE.BufferGeometry()
     const vF32 = new Float32Array(v)
@@ -70,8 +39,6 @@ const createMesh = (v, uv, material) => {
     geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
     return new THREE.Mesh(geometry, material)
 }
-
-
 
 async function initApp () {
     const studio = createStudio(2)
@@ -101,7 +68,6 @@ async function initApp () {
         studio.render()
     }
     animate()
-
 
     // /** CUSTOM 00 **************************/
     // const l00 = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
@@ -207,7 +173,6 @@ async function initApp () {
         return { v, uv }
     }
 
-
     const v = []
     const uv = []
     const corners = {
@@ -240,7 +205,6 @@ async function initApp () {
     m.translateVertices(w2.v, 3, 0, 0)
     v.push(...w2.v)
     uv.push(...w2.uv)
-
 
     const w3 = createWall(3, 2, fullP)
     m.rotateVerticesY(w3.v, -Math.PI)
@@ -276,7 +240,6 @@ async function initApp () {
     )
     v.push(...ceil.v)
     uv.push(...ceil.uv)
-
 
     const mesh = createMesh(v, uv, materials.phongWhite)
     studio.addToScene(mesh)
