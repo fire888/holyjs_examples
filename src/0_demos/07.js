@@ -4,6 +4,30 @@ import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { ClickerOnScene } from "../entities/clickerOnScene";
 
+const atlas = (() => {
+    const h = 1 / 4
+    const arr = []
+    for (let i = 1; i < 5; ++i) {
+        for (let j = 1; j < 5; ++j) {
+            arr.push([
+                (j - 1) * h, (i - 1) * h,
+                j * h, (i - 1) * h,
+                j * h, i * h,
+                (j - 1) * h, (i - 1) * h,
+                j * h, i * h,
+                (j - 1) * h, i * h
+            ])
+        }
+    }
+    arr.push([
+        .75, .75,
+        1, .75,
+        .88, 1
+    ])
+    return arr
+})()
+
+
 const m = {
     createPolygon(v0, v1, v2, v3) {
         return {
@@ -79,30 +103,35 @@ async function initApp () {
     let currentWall
 
     const createWalls = (path) => {
-        const pathV = path.map(item => new THREE.Vector3().fromArray(item))
-        const dataWalls = pathV.map((item, i, arr) => {
-            const prevIndex = arr[i - 1] ? i - 1 : arr.length - 1
-            const v = new THREE.Vector3().copy(item).sub(arr[prevIndex])
-            const angle = m.angleFromCoords(v.x, v.z)
-            return {
-                angle,
-                w: arr[prevIndex].distanceTo(item),
-                p1: arr[prevIndex],
-                p2: item,
-            }
-        })
-        dataWalls.forEach((item, i, arr) => {
-            const prevInd = arr[i - 1] ? i - 1 : arr.length - 1
-            const nextInd = arr[i + 1] ? i + 1 : 0
-            item.angle1 = -(item.angle - arr[prevInd].angle) / 2
-            if (Math.abs(item.angle1) > Math.PI / 2) {
-                item.angle1 += Math.PI
-            }
-            item.angle2 = (arr[nextInd].angle - item.angle) / 2
-            if (Math.abs(item.angle2) > Math.PI / 2) {
-                item.angle2 += Math.PI
-            }
-        })
+
+        const createDataWalls = path => {
+            const pathV = path.map(item => new THREE.Vector3().fromArray(item))
+            const dataWalls = pathV.map((item, i, arr) => {
+                const prevIndex = arr[i - 1] ? i - 1 : arr.length - 1
+                const v = new THREE.Vector3().copy(item).sub(arr[prevIndex])
+                const angle = m.angleFromCoords(v.x, v.z)
+                return {
+                    angle,
+                    w: arr[prevIndex].distanceTo(item),
+                    p1: arr[prevIndex],
+                    p2: item,
+                }
+            })
+            dataWalls.forEach((item, i, arr) => {
+                const prevInd = arr[i - 1] ? i - 1 : arr.length - 1
+                const nextInd = arr[i + 1] ? i + 1 : 0
+                item.angle1 = -(item.angle - arr[prevInd].angle) / 2
+                if (Math.abs(item.angle1) > Math.PI / 2) {
+                    item.angle1 += Math.PI
+                }
+                item.angle2 = (arr[nextInd].angle - item.angle) / 2
+                if (Math.abs(item.angle2) > Math.PI / 2) {
+                    item.angle2 += Math.PI
+                }
+            })
+            return dataWalls
+        }
+
 
         const createWall = (W, H, profileB, angle1, angle2) => {
             const v = []
@@ -129,15 +158,17 @@ async function initApp () {
                 v.push(...p.v)
                 uv.push(...p.uv)
             }
-            return {v, uv}
+            return { v, uv }
         }
 
         const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
+        const dataWalls = createDataWalls(path)
+
         const v = []
         const uv = []
         for (let i = 0; i < dataWalls.length; ++i) {
-            const {w, angle, p1, angle1, angle2} = dataWalls[i]
+            const { w, angle, p1, angle1, angle2 } = dataWalls[i]
             const wall = createWall(w, 3, fullP, angle1, angle2)
             m.rotateVerticesY(wall.v, angle)
             m.translateVertices(wall.v, p1.x, 0, p1.z)
