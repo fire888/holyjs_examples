@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import {ClickerOnScene} from "../entities/clickerOnScene";
+import { ClickerOnScene } from "../entities/clickerOnScene";
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -81,36 +81,26 @@ async function initApp () {
     const createWalls = (path) => {
         const pathV = path.map(item => new THREE.Vector3().fromArray(item))
         const dataWalls = pathV.map((item, i, arr) => {
-            if (i === 0) {
-                return { angle: 0, w: null, p1: null, p2: null, angle1: 0, angle2: 0 }
-            }
-            const v = new THREE.Vector3().copy(item).sub(arr[i - 1])
+            const prevIndex = arr[i - 1] ? i - 1 : arr.length - 1
+            const v = new THREE.Vector3().copy(item).sub(arr[prevIndex])
             const angle = m.angleFromCoords(v.x, v.z)
             return {
                 angle,
-                w: arr[i - 1].distanceTo(item),
-                p1: arr[i - 1],
+                w: arr[prevIndex].distanceTo(item),
+                p1: arr[prevIndex],
                 p2: item,
             }
         })
         dataWalls.forEach((item, i, arr) => {
-            if (i === 0) {
-                item.angle1 = 0
+            const prevInd = arr[i - 1] ? i - 1 : arr.length - 1
+            const nextInd = arr[i + 1] ? i + 1 : 0
+            item.angle1 = -(item.angle - arr[prevInd].angle) / 2
+            if (Math.abs(item.angle1) > Math.PI / 2) {
+                item.angle1 += Math.PI
             }
-            if (!item.hasOwnProperty('angle1')) {
-                item.angle1 = -(item.angle - arr[i - 1].angle) / 2
-                if (Math.abs(item.angle1) > Math.PI / 2) {
-                    item.angle1 += Math.PI
-                }
-            }
-            if (i === arr.length - 1) {
-                item.angle2 = 0
-            }
-            if (!item.hasOwnProperty('angle2')) {
-                item.angle2 = (arr[i + 1].angle - item.angle) / 2
-                if (Math.abs(item.angle2) > Math.PI / 2) {
-                    item.angle2 += Math.PI
-                }
+            item.angle2 = (arr[nextInd].angle - item.angle) / 2
+            if (Math.abs(item.angle2) > Math.PI / 2) {
+                item.angle2 += Math.PI
             }
         })
 
@@ -146,7 +136,7 @@ async function initApp () {
 
         const v = []
         const uv = []
-        for (let i = 1; i < dataWalls.length; ++i) {
+        for (let i = 0; i < dataWalls.length; ++i) {
             const {w, angle, p1, angle1, angle2} = dataWalls[i]
             const wall = createWall(w, 3, fullP, angle1, angle2)
             m.rotateVerticesY(wall.v, angle)
