@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import {ClickerOnScene} from "../entities/clickerOnScene";
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -32,7 +33,9 @@ const m = {
         let rad = Math.atan(y / x)
         x < 0 && y > 0 && (rad = Math.PI - Math.abs(rad))
         x < 0 && y <= 0 && (rad = Math.PI + Math.abs(rad))
-        return rad
+        rad += Math.PI * 6
+        rad = rad % (Math.PI * 2)
+        return -rad
     }
 }
 
@@ -47,7 +50,7 @@ const createMesh = (v, uv, material) => {
 }
 
 async function initApp () {
-    const studio = createStudio(2)
+    const studio = createStudio(10)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
@@ -59,7 +62,7 @@ async function initApp () {
             bumpScale: .02,
             //wireframe: true
         }),
-        'phongWhite': new THREE.MeshPhongMaterial({ color: 0x999999, flatShading: false, }),
+        'phongWhite': new THREE.MeshPhongMaterial({color: 0x999999, flatShading: false,}),
     }
     const updateFunctions = []
     let n = 0
@@ -72,133 +75,112 @@ async function initApp () {
     animate()
 
     /** CUSTOM 00 **************************/
-    const path = [
-        [0, 0, 0],
-        [3, 0, 0],
-        [4, 0, 1],
-        [4, 0, 5],
-        [-1, 0, 5],
-        [0, 0, 3],
-        [0, 0, 0],
-    ]
 
-    const pathV = path.map(item => new THREE.Vector3().fromArray(item))
-    const dataWalls = pathV.map((item, i, arr) =>  {
-        if (i === 0) {
-            return { angle: null, w: null, p1: null, p2: null }
+    let currentWall
+
+    const createWalls = (path) => {
+        const pathV = path.map(item => new THREE.Vector3().fromArray(item))
+        const dataWalls = pathV.map((item, i, arr) => {
+            if (i === 0) {
+                return { angle: 0, w: null, p1: null, p2: null, angle1: 0, angle2: 0 }
+            }
+            const v = new THREE.Vector3().copy(item).sub(arr[i - 1])
+            const angle = m.angleFromCoords(v.x, v.z)
+            return {
+                angle,
+                w: arr[i - 1].distanceTo(item),
+                p1: arr[i - 1],
+                p2: item,
+            }
+        })
+        dataWalls.forEach((item, i, arr) => {
+            if (i === 0) {
+                item.angle1 = 0
+            }
+            if (!item.hasOwnProperty('angle1')) {
+                item.angle1 = -(item.angle - arr[i - 1].angle) / 2
+                if (Math.abs(item.angle1) > Math.PI / 2) {
+                    item.angle1 += Math.PI
+                }
+            }
+            if (i === arr.length - 1) {
+                item.angle2 = 0
+            }
+            if (!item.hasOwnProperty('angle2')) {
+                item.angle2 = (arr[i + 1].angle - item.angle) / 2
+                if (Math.abs(item.angle2) > Math.PI / 2) {
+                    item.angle2 += Math.PI
+                }
+            }
+        })
+
+        const createWall = (W, H, profileB, angle1, angle2) => {
+            const v = []
+            const uv = []
+
+            const l = [...profileB]
+            const lx = [...l]
+
+            m.rotateVerticesY(l, angle1)
+            m.rotateVerticesY(lx, angle2)
+            m.translateVertices(lx, W, 0, 0)
+
+
+            for (let i = 3; i < l.length; i += 3) {
+                const prevI = i - 3
+                const nextI = i
+
+                const p = m.createPolygon(
+                    [l[prevI], l[prevI + 1], l[prevI + 2]],
+                    [lx[prevI], lx[prevI + 1], lx[prevI + 2]],
+                    [lx[nextI], lx[nextI + 1], lx[nextI + 2]],
+                    [l[nextI], l[nextI + 1], l[nextI + 2]],
+                )
+                v.push(...p.v)
+                uv.push(...p.uv)
+            }
+            return {v, uv}
         }
-        const v = new THREE.Vector3().copy(item).sub(arr[i - 1])
-        const angle = m.angleFromCoords(v.x, v.z)
-        return {
-            angle,
-            w: arr[i - 1].distanceTo(item),
-            p1: arr[i - 1],
-            p2: item
-        }
-    })
-    console.log(dataWalls)
 
+        const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
-    const l00 = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
-    const l01 = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array
-
-    const createWall = (W, H, profileB) => {
         const v = []
         const uv = []
-
-        const l = [...profileB]
-        const lx = [...l]
-
-        //m.rotateVerticesY(l, Math.PI / 4)
-        //m.rotateVerticesY(lx, -Math.PI / 4)
-        m.translateVertices(lx, W, 0, 0)
-
-
-        for (let i = 3; i < l.length; i += 3) {
-            const prevI = i - 3
-            const nextI = i
-
-            const p = m.createPolygon(
-                [l[prevI], l[prevI + 1], l[prevI + 2]],
-                [lx[prevI], lx[prevI + 1], lx[prevI + 2]],
-                [lx[nextI], lx[nextI + 1], lx[nextI + 2]],
-                [l[nextI], l[nextI + 1], l[nextI + 2]],
-            )
-            v.push(...p.v)
-            uv.push(...p.uv)
+        for (let i = 1; i < dataWalls.length; ++i) {
+            const {w, angle, p1, angle1, angle2} = dataWalls[i]
+            const wall = createWall(w, 3, fullP, angle1, angle2)
+            m.rotateVerticesY(wall.v, angle)
+            m.translateVertices(wall.v, p1.x, 0, p1.z)
+            v.push(...wall.v)
+            uv.push(...wall.uv)
         }
-        return { v, uv }
+
+        const mesh = createMesh(v, uv, materials.phongWhite)
+        studio.addToScene(mesh)
+
+        currentWall = mesh
     }
 
-    const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
+    const path = []
 
-    const v = []
-    const uv = []
-    for (let i = 1; i < dataWalls.length; ++i) {
-        const w = createWall(dataWalls[i].w, 3, fullP)
-        m.rotateVerticesY(w.v, -dataWalls[i].angle)
-        m.translateVertices(w.v, dataWalls[i].p1.x, 0, dataWalls[i].p1.z)
-        v.push(...w.v)
-        uv.push(...w.uv)
-    }
-
-    // const copyT = [...l00]
-    // m.translateVertices(copyT, 0, 2, 0, 0)
-    // const fullP = [...l01, ...copyT]
-
-
-    // const w1 = createWall(3, 2, fullP)
-    // v.push(...w1.v)
-    // uv.push(...w1.uv)
-    // corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]
-    // corners.c2b = [w1.v[3], w1.v[4], w1.v[5]]
-    // const l = w1.v.length
-    // corners.c1t = [w1.v[l - 3], w1.v[l - 2], w1.v[l - 1]]
-    // corners.c2t = [w1.v[l - 6], w1.v[l - 5], w1.v[l - 4]]
-    //
-    // const w2 = createWall(5, 2, fullP)
-    // m.rotateVerticesY(w2.v, -Math.PI / 2)
-    // m.translateVertices(w2.v, 3, 0, 0)
-    // v.push(...w2.v)
-    // uv.push(...w2.uv)
-    //
-    // const w3 = createWall(3, 2, fullP)
-    // m.rotateVerticesY(w3.v, -Math.PI)
-    // m.translateVertices(w3.v, 3, 0, 5)
-    // v.push(...w3.v)
-    // uv.push(...w3.uv)
-    // corners.c3b = [w3.v[0], w3.v[1], w3.v[2]]
-    // corners.c4b = [w3.v[3], w3.v[4], w3.v[5]]
-    // const l2 = w3.v.length
-    // corners.c3t = [w3.v[l2 - 3], w3.v[l2 - 2], w3.v[l2 - 1]]
-    // corners.c4t = [w3.v[l2 - 6], w3.v[l2 - 5], w3.v[l2 - 4]]
-    //
-    // const w4 = createWall(5, 2, fullP)
-    // m.rotateVerticesY(w4.v, Math.PI / 2)
-    // m.translateVertices(w4.v, 0, 0, 5)
-    // v.push(...w4.v)
-    // uv.push(...w4.uv)
-    //
-    // const floor = m.createPolygon(
-    //     corners.c4b,
-    //     corners.c3b,
-    //     corners.c2b,
-    //     corners.c1b,
-    // )
-    // v.push(...floor.v)
-    // uv.push(...floor.uv)
-    //
-    // const ceil = m.createPolygon(
-    //     corners.c1t,
-    //     corners.c2t,
-    //     corners.c3t,
-    //     corners.c4t,
-    // )
-    // v.push(...ceil.v)
-    // uv.push(...ceil.uv)
-
-    const mesh = createMesh(v, uv, materials.phongWhite)
-    studio.addToScene(mesh)
+    const clickerOnScene = new ClickerOnScene()
+    clickerOnScene.camera = studio.camera
+    studio.addToScene(clickerOnScene)
+    clickerOnScene.setCB(p => {
+        const ob = new THREE.Mesh(
+            new THREE.BoxGeometry(.2,.2, .2),
+            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+        )
+        ob.position.copy(p)
+        studio.addToScene(ob)
+        path.push(p.toArray())
+        if (currentWall) {
+            studio.removeFromScene(currentWall)
+            currentWall.geometry.dispose()
+            currentWall.material.dispose()
+        }
+        path.length > 2 && createWalls(path)
+    })
 }
 
 

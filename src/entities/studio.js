@@ -23,9 +23,13 @@ export const createStudio = (startCameraZ = 3) => {
     const lightA = new THREE.AmbientLight( 0xffffff, .5)
     scene.add( lightA )
 
-    const l = new THREE.PointLight( 0xffffff, 1)
-    l.position.set(1.5, 2, 2)
-    scene.add(l)
+    const dir1 = new THREE.DirectionalLight( 0xffffff, 1)
+    dir1.position.set(0, 5, 3)
+    scene.add(dir1)
+
+    const dir2 = new THREE.DirectionalLight( 0xffffff, 1)
+    dir2.position.set(0, -5, -3)
+    scene.add(dir2)
 
     const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 20000)
     camera.position.set(0, 2, startCameraZ)
@@ -43,6 +47,7 @@ export const createStudio = (startCameraZ = 3) => {
     window.addEventListener('resize', resize)
 
     return {
+        camera,
         render: () => {
             if (!camera ) {
                 return;
@@ -51,6 +56,9 @@ export const createStudio = (startCameraZ = 3) => {
         },
         addToScene: mesh => {
             scene.add(mesh)
+        },
+        removeFromScene: mesh => {
+            scene.remove(mesh)
         },
     }
 }
