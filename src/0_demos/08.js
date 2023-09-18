@@ -2,9 +2,10 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import {translateArr} from "../helpers/geomHelpers";
+import { createTopElem } from '../entities/archStructure/topElem'
 const { sin, cos, PI} = Math
 const PI2 = PI * 2
+const hPI = PI / 2
 
 
 const atlas = (() => {
@@ -31,13 +32,15 @@ const atlas = (() => {
 })()
 
 
-const createMesh = (v, uv, material) => {
+const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
     const vF32 = new Float32Array(v)
     geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
     geometry.computeVertexNormals()
     const uvF32 = new Float32Array(uv)
     geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
+    const cF32 = new Float32Array(c)
+    geometry.setAttribute('color', new THREE.BufferAttribute(cF32, 3))
     return new THREE.Mesh(geometry, material)
 }
 
@@ -68,8 +71,8 @@ const m = {
     },
     angleFromCoords (x, y) {
         let rad = Math.atan(y / x)
-        x < 0 && y > 0 && (rad = Math.PI - Math.abs(rad))
-        x < 0 && y <= 0 && (rad = Math.PI + Math.abs(rad))
+        x < 0 && y > 0 && (rad = PI - Math.abs(rad))
+        x < 0 && y <= 0 && (rad = PI + Math.abs(rad))
         rad += Math.PI * 6
         rad = rad % (Math.PI * 2)
         return -rad
@@ -91,17 +94,48 @@ const m = {
         }
         arr.push(...arr2)
     },
+    getUvByLen: arr => {
+        const uv = []
+        let minX = 1000
+        let minY = 1000
+        let maxX = -1000
+        let maxY = -1000
+        for (let i = 0; i < arr.length; i += 3) {
+            if (minX > arr[i]) {
+                minX = arr[i]
+            }
+            if (maxX < arr[i]) {
+                maxX = arr[i]
+            }
+            if (minY > arr[i + 1]) {
+                minY = arr[i + 1]
+            }
+            if (maxY < arr[i + 1]) {
+                maxY = arr[i + 1]
+            }
+        }
+
+        const lx = maxX - minX
+        const ly = maxY - minY
+
+        for (let i = 0; i < arr.length; i += 3) {
+            const x = (arr[i] - minX) / lx
+            const y = (arr[i + 1] - minY) / ly
+            uv.push(x, y)
+        }
+        return uv
+    }
 }
 
-const createData = {
-    arc: (w, h) => {
+const createArch = {
+    arc: function (w, h) {
         const v = []
         const uv = []
 
         const r = w / 2
         const n = 15
         const arcH = h - .5
-        const z = .3
+        const z = .1
 
         const p = []
         for (let i = 0; i < n; ++i) {
@@ -121,8 +155,6 @@ const createData = {
                 [p[i - 1][0], h, z],
             )
             v.push(...d.v)
-            uv.push(...d.uv)
-
             const d1 = m.createPolygon(
                 [p[i - 1][0], p[i - 1][1], 0],
                 [p[i][0], p[i][1], 0],
@@ -130,8 +162,9 @@ const createData = {
                 [...p[i - 1]],
             )
             v.push(...d1.v)
-            uv.push(...d1.uv)
         }
+        const uvElem = m.getUvByLen(v)
+        uv.push(...uvElem)
         const top = m.createPolygon(
             [-w / 2, h, z],
             [w / 2, h, z],
@@ -140,27 +173,99 @@ const createData = {
         )
         v.push(...top.v)
         uv.push(...top.uv)
-        m.mirrorZ(v)
+        const copy = [...v]
+        m.rotateVerticesY(copy, PI)
+        v.push(...copy)
         uv.push(...uv)
         return { v, uv }
     },
-    column1: (r, h) => {
+    column1: function (r, h) {
         const v = []
         const uv = []
+
+        const c = m.createPolygon(
+            [-r, 0, r],
+            [r, 0, r],
+            [r, h, r],
+            [-r, h, r],
+        )
+        v.push(...c.v)
+        uv.push(...c.uv)
+
+        const copy1 = [...c.v]
+        m.rotateVerticesY(copy1, hPI)
+        v.push(...copy1)
+        uv.push(...c.uv)
+
+        const copy2 = [...c.v]
+        m.rotateVerticesY(copy2, PI)
+        v.push(...copy2)
+        uv.push(...c.uv)
+
+        const copy3 = [...c.v]
+        m.rotateVerticesY(copy3, -hPI)
+        v.push(...copy3)
+        uv.push(...c.uv)
+
+        return { v, uv }
     },
-    elem: (r, h) => {
+    elem: function (r, h) {
         const v = []
         const uv = []
+        const uvE = [0, 0, 0, 0, 0, 0]
+
+        const col = this.column1(r, h * .2)
+        v.push(...col.v)
+        uv.push(...col.uv)
+
+        const tr = [
+            -r, h * .2, r,
+            r, h * .2, r,
+            0, h, 0,
+        ]
+        v.push(...tr)
+        uv.push(...uvE)
+
+        const copy = [...tr]
+        m.rotateVerticesY(copy, hPI)
+        v.push(...copy)
+        uv.push(...uvE)
+
+        const copy1 = [...tr]
+        m.rotateVerticesY(copy1, -hPI)
+        v.push(...copy1)
+        uv.push(...uvE)
+
+        const copy2 = [...tr]
+        m.rotateVerticesY(copy2, PI)
+        v.push(...copy2)
+        uv.push(...uvE)
+
+        return { v, uv }
     },
 }
 
 
 async function initApp () {
-    const studio = createStudio(10)
+    const studio = createStudio(1)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
+        'brick': new THREE.MeshPhongMaterial({
+            color: 0xFFFFFF,
+            map: assets.mapBrickDiff,
+            bumpMap: assets.mapBrickDiff,
+            bumpScale: .02,
+           // side: THREE.DoubleSide
+        }),
+        'brickColor': new THREE.MeshPhongMaterial({
+            color: 0xFFFFFF,
+            map: assets.mapBrickDiff,
+            bumpMap: assets.mapBrickDiff,
+            bumpScale: .02,
+            vertexColors: true,
+            // side: THREE.DoubleSide
+        }),
         'atlasBrick': new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
             map: assets.atlasBrickDiff,
@@ -184,19 +289,39 @@ async function initApp () {
     const v = []
     const uv = []
 
-    let x = 0
-    for (let i = 0; i < 15; ++i) {
-        const w = Math.random() * 3 + 1
-        x += w
-        const arc = createData.arc(w,2)
-        m.translateVertices(arc.v, x - w / 2, 0, 0)
-        v.push(...arc.v)
-        uv.push(...arc.uv)
-    }
+    const elemT = createTopElem({ r: .1, h: 1, color1: [1, 0, 0], color2: [0, 1, 0] })
 
-
-    const mesh = createMesh(v, uv, materials.phongWhite)
+    const mesh = createMesh(elemT.v, elemT.uv, elemT.c,  materials.brickColor)
     studio.addToScene(mesh)
+
+
+    // const v = []
+    // const uv = []
+    //
+    // let x = 0
+    // for (let i = 0; i < 15; ++i) {
+    //     const w = Math.random() * 3 + 1
+    //     x += w
+    //
+    //     const arc = createArch.arc(w,2)
+    //     m.translateVertices(arc.v, x - w / 2, 0, 0)
+    //     v.push(...arc.v)
+    //     uv.push(...arc.uv)
+    //
+    //     const column = createArch.column1(.2, 2)
+    //     m.translateVertices(column.v, x, 0, 0)
+    //     v.push(...column.v)
+    //     uv.push(...column.uv)
+    //
+    //     const elem = createArch.elem(.2, 1.5)
+    //     m.translateVertices(elem.v, x, 2, 0)
+    //     v.push(...elem.v)
+    //     uv.push(...elem.uv)
+    // }
+
+
+    //const mesh = createMesh(v, uv, materials.brick)
+    //studio.addToScene(mesh)
 }
 
 
