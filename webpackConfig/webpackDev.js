@@ -10,6 +10,6 @@ module.exports = merge.merge( appCommonConfig, {
         host: 'localhost',
         //host: '192.168.0.101',
         compress: true,
-        port: 9001
+        port: 9002
     }
 })

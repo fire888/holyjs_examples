@@ -76,5 +76,82 @@ export const M = {
             uv.push(x, y)
         }
         return uv
-    }
+    },
+    ran: function (start, end) { return start + Math.random() * (end - start) },
+    fillColorFaceWithSquare: function(c1, c2){ return [
+        ...this.fillColorFace(c1),
+        ...this.fillColorFace(c2),
+        ...this.fillColorFace(c2),
+        ...this.fillColorFace(c2),
+        ...this.fillColorFace(c2),
+    ]},
+    createFaceWithSquare: function (v1, v2, v3, v4, color1, color2) {
+        const maxW = v2[0] - v1[0]
+        const maxH = v3[1] - v1[1]
+
+        const innerW = this.ran(maxW * 0.3, maxW * 0.7)
+        const innerH = this.ran(maxH * 0.3, maxH * 0.7)
+
+        const x1 = v1[0] + (maxW - innerW) / 2
+        const x2 = v2[0] - (maxW - innerW) / 2
+        const y1 = v1[1] + (maxH - innerH) / 2
+        const y2 = v3[1] - (maxH - innerH) / 2
+
+        const v1_i = [x1, y1, v1[2]]
+        const v2_i = [x2, y1, v1[2]]
+        const v3_i = [x2, y2, v1[2]]
+        const v4_i = [x1, y2, v1[2]]
+
+        const vArr = []
+        vArr.push(
+            ...this.createPolygon(v1_i, v2_i, v3_i, v4_i),
+            ...this.createPolygon(v1, v2, v2_i, v1_i),
+            ...this.createPolygon(v2_i, v2, v3, v3_i),
+            ...this.createPolygon(v4_i, v3_i, v3, v4),
+            ...this.createPolygon(v1, v1_i, v4_i, v4),
+        )
+
+        const cArr = this.fillColorFaceWithSquare(color1, color2)
+
+        const uArr = [
+            ...this.createUv(
+                [.5, .5],
+                [1, .5],
+                [1, 1],
+                [.5, 1],
+            ),
+            ...this.createUv(
+                [0, .5],
+                [.5, .5],
+                //[.5, 1],
+                //[0, 1],
+                [.4, .6],
+                [.1, .6],
+            ),
+            ...this.createUv(
+                [.4, .6],
+                [.5, .5],
+                [.5, 1],
+                [.4, .9],
+            ),
+            ...this.createUv(
+                [.1, .9],
+                [.4, .9],
+                [.5, 1],
+                [0, 1],
+            ),
+            ...this.createUv(
+                [0, .5],
+                [.1, .6],
+                [.1, .9],
+                [0, 1],
+            )
+        ]
+
+        return {
+            vArr,
+            cArr,
+            uArr,
+        }
+    },
 }

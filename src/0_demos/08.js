@@ -3,6 +3,7 @@ import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { createTopElem } from '../entities/archStructure/topElem'
+import { createDataSideColumn } from '../entities/archStructure/sideColumn'
 const { sin, cos, PI} = Math
 const PI2 = PI * 2
 const hPI = PI / 2
@@ -293,6 +294,17 @@ async function initApp () {
 
     const mesh = createMesh(elemT.v, elemT.uv, elemT.c,  materials.brickColor)
     studio.addToScene(mesh)
+
+    //const side = createDataSideColumn({ h0: 1, h1: 5, })
+    const side = createDataSideColumn({color1:[0, 0, 0],
+    color2:[0, 1, 0],
+    h0 :303.5301289008287,
+    h1: 361.09714802087785,
+    rBase: 5,
+    rCapital:6,
+})
+    const mesh1 = createMesh(side.v, side.uv, side.c,  materials.brickColor)
+    studio.addToScene(mesh1)
 
 
     // const v = []
