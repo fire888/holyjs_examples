@@ -12,13 +12,10 @@ const createDataSideColumn = ({ h = 2, r = .1, color1 = [1, 0, 0], color2 = [0, 
     while (currH < h) {
         ++i
         const currentStep = r * M.ran(2, 8)
+
         let newH = currH + currentStep
-        if (h - newH < r * 2) {
-            newH = h
-        }
-        if (i === 0) {
-            newH = newH * .3
-        }
+        if (h - newH < r * 2) newH = h // clamp last step not small
+        if (i === 0) newH = newH * .3 // bottom base
 
         /** bottom base */
         if (i === 0) {
