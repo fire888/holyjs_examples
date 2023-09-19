@@ -293,16 +293,11 @@ async function initApp () {
     const elemT = createTopElem({ r: .1, h: 1, color1: [1, 0, 0], color2: [0, 1, 0] })
 
     const mesh = createMesh(elemT.v, elemT.uv, elemT.c,  materials.brickColor)
+    mesh.position.set(1, 0, 0)
     studio.addToScene(mesh)
 
     //const side = createDataSideColumn({ h0: 1, h1: 5, })
-    const side = createDataSideColumn({color1:[0, 0, 0],
-    color2:[0, 1, 0],
-    h0 :303.5301289008287,
-    h1: 361.09714802087785,
-    rBase: 5,
-    rCapital:6,
-})
+    const side = createDataSideColumn({color1: [1, 0, 0], color2: [0, 1, 0] })
     const mesh1 = createMesh(side.v, side.uv, side.c,  materials.brickColor)
     studio.addToScene(mesh1)
 

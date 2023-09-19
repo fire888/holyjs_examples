@@ -147,84 +147,150 @@ const createTrunk = ({
 
 
 export const createDataSideColumn = ({
-     h0,
-     h1,
-     color1 = [.2, .1, .1],
-     color2 = [1, 1, 1],
-     rBase = 5,
-     hBase = 5,
-     hBaseToTrunk = 1,
-
-     hCapital = 2,
-     rCapital = 6,
-     hTrunkToCapital = 1,
-
-     rTrunk = 3,
+    h = 2,
+    r = .1,
+    color1 = [1, 0, 0],
+    color2 = [0, 1, 0],
  }) => {
-    let _h0 = h0
-    let _h1 = h0 + hBase
-    /** BASE **************/
-    const base = M.createPolygon(
-        [-rBase, _h0, rBase,],
-        [rBase, _h0, rBase],
-        [rBase, _h1, rBase],
-        [-rBase, _h1, rBase],
-    )
-    const colorBase = M.fillColorFace(color1)
-    const uv1 = M.createUv(
-        [.5, 0],
-        [1, 0],
-        [1, .5],
-        [.5, .5],
-    )
+    const v = []
+    const c = []
+    const uv = []
 
-    const base1 = M.createPolygon(
-        [rBase + lW, _h0 - lW, rBase + lW],
-        [-rBase - lW, _h0 - lW, rBase + lW],
-        [-rBase - lW, _h1, rBase + lW],
-        [rBase + lW, _h1, rBase + lW],
-    )
-    const colorBase1 = M.fillColorFace(lCol)
-    const uv1_1 = M.createUv([.1, .1], [.1, .1], [.1, .1], [.1, 1],)
+    let i = -1
+    let currH = 0
+    while (currH < h) {
+        ++i
+
+        let newH = currH + Math.random() * .3 + .1
+        if (newH > h) {
+            newH = h
+        }
+
+        const diff = newH - currH
+
+        /** base **/
+        let h0 = currH
+        let h1 = h0 + diff * .2
+        let r1 = r
+        let r2 = r1
+        v.push(...M.createPolygon(
+            [-r1, h0, r1],
+            [r1, h0, r1],
+            [r2, h1, r2],
+            [-r2, h1, r2],
+        ))
+        c.push(...M.fillColorFace(color1))
+        uv.push(...M.createUv([.5, 0], [1, 0], [1, .5], [.5, .5],))
+
+        h0 = h1
+        h1 = h0 + diff * .2
+        r1 = r
+        r2 = r1 * .3
+        v.push(...M.createPolygon(
+            [-r1, h0, r1],
+            [r1, h0, r1],
+            [r2, h1, r2],
+            [-r2, h1, r2],
+        ))
+        c.push(...M.fillColorFace(color2))
+        uv.push(...M.createUv([.5, 0], [1, 0], [1, .5], [.5, .5],))
+
+        h0 = h1
+        h1 = newH
+        r1 = r2
+        r2 = r1
+        const p5 = M.createFaceWithSquare(
+            [-r1, h0, r1],
+            [r1, h0, r1],
+            [r2, h1, r2],
+            [-r2, h1, r2],
+            color1,
+            color2,
+        )
+        v.push(...p5.vArr)
+        c.push(...p5.cArr)
+        uv.push(...p5.uArr)
 
 
-    _h0 = _h1
-    _h1 = _h0 + hBaseToTrunk
-    const baseToTrunk = [...M.createPolygon(
-        [-rBase, _h0, rBase],
-        [rBase, _h0, rBase],
-        [rTrunk, _h1, rTrunk],
-        [-rTrunk, _h1, rTrunk],
-    )]
-    const colorBaseToTrunk = [...M.fillColorFace(color2)]
-    const uvBT = M.createUv(
-        [0, .5],
-        [.5, .5],
-        [.4, .7],
-        [.1, .7],
-    )
+        currH = newH
+    }
+
+    /** base */
+
+
+
+    // let r1 = r, r2 = r * .4
+    // v.push(...M.createPolygon(
+    //     [-r1, hl1, r1],
+    //     [r1, hl1, r1],
+    //     [r2, hl2, r2],
+    //     [-r2, hl2, r2],
+    // ))
+    // c.push(...M.fillColorFace(color2))
+    // uv.push(...M.createUv(
+    //     [.5, 0],
+    //     [1, 0],
+    //     [1, .5],
+    //     [.5, .5],
+    // ))
+
+
+    // r1 = r2
+    // r2 = r1
+    // v.push(...M.createFaceWithSquare(
+    //     [-r1, hl2, r1],
+    //     [r1, hl2, r1],
+    //     [r2, hl3, r2],
+    //     [-r2, hl3, r2],
+    // ))
+
+    // const base1 = M.createPolygon(
+    //     [rBase + lW, _h0 - lW, rBase + lW],
+    //     [-rBase - lW, _h0 - lW, rBase + lW],
+    //     [-rBase - lW, _h1, rBase + lW],
+    //     [rBase + lW, _h1, rBase + lW],
+    // )
+    // const colorBase1 = M.fillColorFace(lCol)
+    // const uv1_1 = M.createUv([.1, .1], [.1, .1], [.1, .1], [.1, 1],)
+    //
+    //
+    // _h0 = _h1
+    // _h1 = _h0 + hBaseToTrunk
+    // const baseToTrunk = [...M.createPolygon(
+    //     [-rBase, _h0, rBase],
+    //     [rBase, _h0, rBase],
+    //     [rTrunk, _h1, rTrunk],
+    //     [-rTrunk, _h1, rTrunk],
+    // )]
+    // const colorBaseToTrunk = [...M.fillColorFace(color2)]
+    // const uvBT = M.createUv(
+    //     [0, .5],
+    //     [.5, .5],
+    //     [.4, .7],
+    //     [.1, .7],
+    // )
 
 
     /** TRUNK ************************/
 
 
-    let h = hBase + hBaseToTrunk
-
-    _h0 = _h1
-    _h1 = h1 - hCapital - hTrunkToCapital
-
-    const { vert, col, uv } = createTrunk({
-        color1, color2,
-        h: _h0,
-        h2: _h1,
-        r: rTrunk,
-    })
-    const uvT = uv
+    // let h = hBase + hBaseToTrunk
+    //
+    // _h0 = _h1
+    // _h1 = h1 - hCapital - hTrunkToCapital
+    //
+    // const { vert, col, uv } = createTrunk({
+    //     color1, color2,
+    //     h: _h0,
+    //     h2: _h1,
+    //     r: rTrunk,
+    // })
+    // const uvT = uv
 
 
     /** CAPITAL **************/
-    _h0 = _h1
-    _h1 = h1 - hCapital
+    // _h0 = _h1
+    // _h1 = h1 - hCapital
     // const trunkToCapital = [...M.createPolygon(
     //     [-rTrunk, _h0, rTrunk],
     //     [rTrunk, _h0, rTrunk],
@@ -249,34 +315,34 @@ export const createDataSideColumn = ({
     // )
 
 
-    const frontVert = [
-        ...base,
-        ...base1,
-        //...baseToTrunk,
-        //...vert,
-        //...trunkToCapital,
-        //...capital,
-    ]
-    const frontColors = [
-        ...colorBase,
-        ...colorBase1,
-        //...colorBaseToTrunk,
-        //...col,
-        //...colorBaseToTrunk,
-        //...colorBase,
-    ]
-    const frontUV = [
-        ...uv1,
-        ...uv1_1,
-        //...uvBT,
-        //...uvT,
-        //...uvBT,
-        //...uvC,
-    ]
+    // const frontVert = [
+    //     ...base,
+    //     ...base1,
+    //     //...baseToTrunk,
+    //     //...vert,
+    //     //...trunkToCapital,
+    //     //...capital,
+    // ]
+    // const frontColors = [
+    //     ...colorBase,
+    //     ...colorBase1,
+    //     //...colorBaseToTrunk,
+    //     //...col,
+    //     //...colorBaseToTrunk,
+    //     //...colorBase,
+    // ]
+    // const frontUV = [
+    //     ...uv1,
+    //     ...uv1_1,
+    //     //...uvBT,
+    //     //...uvT,
+    //     //...uvBT,
+    //     //...uvC,
+    // ]
 
     return {
-        v: frontVert,
-        c: frontColors,
-        uv: frontUV,
+        v,
+        c,
+        uv,
     }
 }
