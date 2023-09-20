@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { createTopElem } from '../entities/archStructure/topElem'
+import { topElem } from '../entities/archStructure/topElem'
 import { column } from '../entities/archStructure/column'
 import { columnSimple } from '../entities/archStructure/columnSimple'
 import { arc } from '../entities/archStructure/arc'
@@ -52,7 +52,7 @@ const createMesh = (v, uv, c, material) => {
 
 
 async function initApp () {
-    const studio = createStudio(1)
+    const studio = createStudio(20)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
@@ -118,26 +118,24 @@ async function initApp () {
     // studio.addToScene(mesh3)
 
     /** CUSTOM 02 ************************************/
+    const arch = {
+        column,
+        columnSimple,
+        arc,
+        topElem
+    }
 
     const v = []
     const uv = []
     const c = []
 
     const st = createStructure()
+    console.log(st)
     for (let i = 0; i < st.length; ++i) {
         const { type, h, r, color1, color2, x, y, z, rot } = st[i]
-
-        let e
-        if (type === 'column') {
-            e = column({ h, r,  color1, color2  })
-        }
-        if (type === 'columnSimple') {
-            e = columnSimple({ h, r,  color1, color2  })
-        }
-        if (type === 'topElem') {
-            e = createTopElem({ h, r,  color1, color2  })
-        }
-        M.rotateVerticesY(e.v, rot)
+        const e = arch[type](st[i])
+        console.log(type, e)
+        M.rotateVerticesY(e.v, rot + hPI)
         M.translateVertices(e.v, x, y, z)
         v.push(...e.v)
         uv.push(...e.uv)
@@ -146,8 +144,6 @@ async function initApp () {
     const mesh3 = createMesh(v, uv, c, materials.brickColor)
     mesh3.position.set(0, 0, 0)
     studio.addToScene(mesh3)
-
-
 }
 
 

@@ -66,5 +66,7 @@ export const arc = ({
     v.push(...copy)
     c.push(...c)
     uv.push(...uv)
+
+    M.translateVertices(v, w / 2, 0, 0)
     return {v, c, uv}
 }

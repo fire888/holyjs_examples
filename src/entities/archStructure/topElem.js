@@ -2,7 +2,7 @@ import { M } from './M'
 const { sin, cos, random, PI } = Math
 const PI2 = PI * 2
 
-export const createTopElem = ({ color1, color2, h, r }) => {
+export const topElem = ({ color1 = [1, 0, 0], color2 = [0, 0, 1], h = 1, r = .1 }) => {
     const v = []
     const c = []
     const uv = []
