@@ -78,6 +78,7 @@ const createStructure = () => {
     }
     return arr
 }
+
 const M = {
     createPolygon:(v0, v1, v2, v3) => [...v0, ...v1, ...v2, ...v0, ...v2, ...v3],
     fillColorFace: c => [...c, ...c, ...c, ...c, ...c, ...c],
@@ -229,6 +230,7 @@ const M = {
         return { vArr, cArr, uArr }
     },
 }
+
 const arc = ({ h = 1, beltH = .05, w = 2, d = 0.03, n = 15, color1 = [1, 0, 0], color2 = [0, 1, 1] }) => {
     const v = []
     const uv = []
@@ -600,6 +602,7 @@ const column = ({ h = 2, r = .1, color1 = [1, 0, 0], color2 = [0, 1, 0] }) => {
     return { v, c, uv }
 }
 const ARCH = { arc, topElem, columnSimple, column, createDataSideColumn }
+
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
     const vF32 = new Float32Array(v)
