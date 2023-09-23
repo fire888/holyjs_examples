@@ -2,9 +2,10 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { createColumnData } from '../entities/structure/arrElemColumn'
-import { createPlatformData } from "../entities/structure/arrElemPlatform";
-import { createElemArcData } from "../entities/structure/arrElemArc";
+import { createColumnData } from '../entities/structure/elemColumn'
+import { createPlatformData } from "../entities/structure/elemPlatform";
+import { createElemArcData } from "../entities/structure/elemArc";
+import { tileI } from '../entities/structure/tileI'
 
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
@@ -44,27 +45,27 @@ async function initApp () {
 
     /** CUSTOM 00 **************************/
     {
-        const { v, uv, c } = createColumnData({})
+        const { v, uv, c } = createElemArcData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
-        mesh.position.set(.5, 0, 0)
+        mesh.position.set(0, 0, 0)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = createPlatformData({
-            nX_pZ: [-.3, 0, .3],
-            pX_pZ: [.3, 0, .3],
-            pX_nZ: [.3, 0, -.3],
-            nX_nZ: [-.3, 0, -.3],
-            minusH: -.1
-        })
+        const { v, uv, c } = createColumnData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(1, 0, 0)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = createElemArcData({ w: .5, h: .5, d: .25 })
+        const { v, uv, c } = createPlatformData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
-        mesh.position.set(0, 0, 0)
+        mesh.position.set(2, 0, 0)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tileI()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(0, 0, - 3)
         studio.addToScene(mesh)
     }
 }

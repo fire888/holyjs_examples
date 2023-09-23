@@ -7,9 +7,9 @@ const { sin, cos } = Math
 
 export const createColumnData = ({
                                      h = H,
-                                     w = .02,
-                                     bottomW = .05,
-                                     bottomH = .05,
+                                     w = H * 0.025,
+                                     bottomW = H * 0.04,
+                                     bottomH = H * 0.05,
                                      topH = .1,
                                  }) => {
     const v = []

@@ -6,9 +6,8 @@ const { sin, cos } = Math
 
 export const createElemArcData = ({
                                       w = W / 3,
-                                      h = H - H * .1,
+                                      h = 0,
                                       d = W / 3 / 2,
-                                      segmentsNum = 5,
                                   }) => {
     const v = []
     const c = []

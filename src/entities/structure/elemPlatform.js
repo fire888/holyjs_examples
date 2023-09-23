@@ -2,14 +2,14 @@ import { M } from "./M";
 import {tileUv} from "./atlas";
 import { COLOR_00, H, W } from './constants'
 
-const hpW = W / 6
+const r = W / 6
 
 export const createPlatformData = ({
-                                       nX_pZ = [-hpW, 0, hpW],
-                                       pX_pZ = [hpW, 0, hpW],
-                                       pX_nZ = [hpW, 0, -hpW],
-                                       nX_nZ = [-hpW, 0, -hpW],
-                                       minusH = -.02,
+                                       nX_pZ = [-r, 0, r],
+                                       pX_pZ = [r, 0, r],
+                                       pX_nZ = [r, 0, -r],
+                                       nX_nZ = [-r, 0, -r],
+                                       minusH = -r * .2,
                                        color = COLOR_00
                                    }) => {
     const v = []
