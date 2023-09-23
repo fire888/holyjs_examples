@@ -4,13 +4,11 @@ const isStrokesNotCompared = (s1, s2) => {
     ) {
         return false
     }
-
     if (
         (s1 === '1' && s2 !== '_')
     ) {
         return false
     }
-
     if (
         (s1 === '_' && s2 !== '_') ||
         (s1 !== '_' && s2 === '_')
@@ -18,18 +16,13 @@ const isStrokesNotCompared = (s1, s2) => {
         return true
     }
 
-
-
     let isClosed = false
     if (s1.includes('closed')) {
         const arrS1 = s1.split('.')
-        arrS1.shift()
         const arrS2 = s2.split('.')
-
         arrS1.forEach(n1 => {
             arrS2.forEach(n2 => {
                 if (n1 === n2) {
-                    //console.log('___', n1, n2)
                     isClosed = true
                 }
             })
@@ -38,7 +31,6 @@ const isStrokesNotCompared = (s1, s2) => {
 
     return isClosed
 }
-
 
 
 const compareSides = (s1, s2) => {
@@ -51,22 +43,15 @@ const compareSides = (s1, s2) => {
     const arrS1 = s1.split('|')
     const arrS2 = s2.split('|')
 
-    arrS1.forEach(item1 => {
-        arrS2.forEach(item2 => {
-            const isNotComparedElements = isStrokesNotCompared(item1, item2)
-            if (isNotComparedElements) {
-                isCompared = false
-            }
-        })
+    arrS1.forEach((item1, i) => {
+        const isNotComparedElements = isStrokesNotCompared(arrS1[i], arrS2[i])
+        if (isNotComparedElements) {
+            isCompared = false
+        }
     })
 
     return isCompared
 }
-
-
-
-
-
 
 
 const prepareConnectionTiles = arrTiles => {
