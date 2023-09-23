@@ -13,6 +13,7 @@ import { tile_H } from '../entities/structure/tile_H'
 import { tile_H_toH } from '../entities/structure/tile_H_toH'
 import { tile_T } from '../entities/structure/tile_T'
 import { tile_STAIRS } from '../entities/structure/tile_STAIRS'
+import { tile_B } from '../entities/structure/tile_B'
 
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
@@ -114,7 +115,13 @@ async function initApp () {
     {
         const { v, uv, c } = tile_STAIRS()
         const mesh = createMesh(v, uv, c, materials.brickColor)
-        mesh.position.set(19.5, 0, - 3)
+        mesh.position.set(20, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_B()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(23, 0, - 3)
         studio.addToScene(mesh)
     }
 }

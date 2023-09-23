@@ -2,10 +2,9 @@ import { W, H, THICKNESS_PLATFORM } from './constants'
 import { M } from './M'
 import { createColumnData } from './elemColumn'
 import { createPlatformData } from './elemPlatform'
-import {createElemArcData} from "./elemArc"
+import { createElemArcData } from "./elemArc"
 
 const hpW = W / 6
-
 
 export const tile_STAIRS = () => {
     const v = []
@@ -67,71 +66,75 @@ export const tile_STAIRS = () => {
     }
     {
         const platform = createPlatformData({
-            nX_pZ: [-hpW * 2 , H / 2.5, -60],
-            pX_pZ: [-hpW, H / 4, -60],
-            pX_nZ: [-hpW, H / 4, -80],
-            nX_nZ: [-hpW * 2, H / 2.5, -80],
+            nX_pZ: [-hpW * 2 , H / 2.5, -hpW - W / 6],
+            pX_pZ: [-hpW, H / 4, -hpW - W / 6],
+            pX_nZ: [-hpW, H / 4, -W / 2],
+            nX_nZ: [-hpW * 2, H / 2.5, -W / 2],
         })
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
         col.push(...platform.col)
     }
+    /** NX NZ */
     {
         const platform = createPlatformData({
-            nX_pZ: [-80, H / 2.5, -60],
-            pX_pZ: [-hpW * 2, H / 2.5, -60],
-            pX_nZ: [-hpW * 2, H / 2.5, -80],
-            nX_nZ: [-80, H / 2.5, -80],
+            nX_pZ: [-W / 2, H / 2.5, -hpW - W / 6],
+            pX_pZ: [-hpW * 2, H / 2.5, -hpW - W / 6],
+            pX_nZ: [-hpW * 2, H / 2.5, -W / 2],
+            nX_nZ: [-W / 2, H / 2.5, -W / 2],
         })
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
         col.push(...platform.col)
     }
+
     {
         const platform = createPlatformData({
-            nX_pZ: [-80, H / 2, -hpW],
+            nX_pZ: [-W / 2, H / 2, -hpW],
             pX_pZ: [-hpW * 2, H / 2, -hpW],
-            pX_nZ: [-hpW * 2, H / 2.5, -60],
-            nX_nZ: [-80, H / 2.5, -60],
+            pX_nZ: [-hpW * 2, H / 2.5, -hpW - W / 6],
+            nX_nZ: [-W / 2, H / 2.5, -hpW - W / 6],
         })
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
         col.push(...platform.col)
     }
-    /** L */
+    /** NX **/
     {
         const platform = createPlatformData({
-            nX_pZ: [-80, H / 2, hpW],
+            nX_pZ: [-W / 2, H / 2, hpW],
             pX_pZ: [-hpW * 2, H / 2, hpW],
             pX_nZ: [-hpW * 2, H / 2, -hpW],
-            nX_nZ: [-80, H / 2, -hpW],
+            nX_nZ: [-W / 2, H / 2, -hpW],
         })
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
         col.push(...platform.col)
     }
+
     {
         const platform = createPlatformData({
-            nX_pZ: [-80, H * .75, hpW * 2],
+            nX_pZ: [-W / 2, H * .75, hpW * 2],
             pX_pZ: [-hpW * 2, H * .75, hpW * 2],
             pX_nZ: [-hpW * 2, H / 2, hpW],
-            nX_nZ: [-80, H / 2, hpW],
+            nX_nZ: [-W / 2, H / 2, hpW],
         })
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
         col.push(...platform.col)
     }
+    /** NX PZ * ***/
     {
         const platform = createPlatformData({
-            nX_pZ: [-80, H * .75, 80],
-            pX_pZ: [-hpW * 2, H * .75, 80],
+            nX_pZ: [-W / 2, H * .75, W / 2],
+            pX_pZ: [-hpW * 2, H * .75, W / 2],
             pX_nZ: [-hpW * 2, H * .75, hpW * 2],
-            nX_nZ: [-80, H * .75, hpW * 2],
+            nX_nZ: [-W / 2, H * .75, hpW * 2],
         })
         v.push(...platform.v)
         c.push(...platform.c)
@@ -140,8 +143,8 @@ export const tile_STAIRS = () => {
     }
     {
         const platform = createPlatformData({
-            nX_pZ: [-hpW * 2, H * .75, 80],
-            pX_pZ: [-hpW, H * .85, 80],
+            nX_pZ: [-hpW * 2, H * .75, W / 2],
+            pX_pZ: [-hpW, H * .85, W / 2],
             pX_nZ: [-hpW, H * .85, hpW * 2],
             nX_nZ: [-hpW * 2, H * .75, hpW * 2],
         })
@@ -152,8 +155,8 @@ export const tile_STAIRS = () => {
     }
     {
         const platform = createPlatformData({
-            nX_pZ: [-hpW, H * .85, 80],
-            pX_pZ: [hpW, H * .85, 80],
+            nX_pZ: [-hpW, H * .85, W / 2],
+            pX_pZ: [hpW, H * .85, W / 2],
             pX_nZ: [hpW, H * .85, hpW * 2],
             nX_nZ: [-hpW, H * .85, hpW * 2],
         })
