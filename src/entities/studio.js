@@ -31,7 +31,7 @@ export const createStudio = (startCameraCoord = 3) => {
     dir2.position.set(0, -5, -3)
     scene.add(dir2)
 
-    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.0001, 2000)
+    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2000)
     camera.position.set(0, startCameraCoord, startCameraCoord)
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.target.set(0, 0, 0)

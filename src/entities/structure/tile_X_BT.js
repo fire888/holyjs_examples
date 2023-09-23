@@ -47,8 +47,8 @@ export const tile_X_BT = () => {
         const platform = createPlatformData({
             nX_pZ: [-hpW , 0, -hpW],
             pX_pZ: [hpW, 0, -hpW ],
-            pX_nZ: [hpW, H / 2, -W / 3],
-            nX_nZ: [-hpW, H / 2, -W / 3],
+            pX_nZ: [hpW, H / 2, -W / 2],
+            nX_nZ: [-hpW, H / 2, -W / 2],
         })
         v.push(...platform.v)
         c.push(...platform.c)
