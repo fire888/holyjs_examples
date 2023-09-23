@@ -1,6 +1,6 @@
 import { M } from "./M";
 import {tileUv} from "./atlas";
-import { COLOR_00, H, W } from './constants'
+import { COLOR_00, H, W, THICKNESS_PLATFORM } from './constants'
 
 const r = W / 6
 
@@ -9,7 +9,7 @@ export const createPlatformData = ({
                                        pX_pZ = [r, 0, r],
                                        pX_nZ = [r, 0, -r],
                                        nX_nZ = [-r, 0, -r],
-                                       minusH = -r * .2,
+                                       minusH = -THICKNESS_PLATFORM,
                                        color = COLOR_00
                                    }) => {
     const v = []

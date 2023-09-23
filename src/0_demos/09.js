@@ -5,7 +5,14 @@ import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { createColumnData } from '../entities/structure/elemColumn'
 import { createPlatformData } from "../entities/structure/elemPlatform";
 import { createElemArcData } from "../entities/structure/elemArc";
-import { tileI } from '../entities/structure/tileI'
+import { tile_I } from '../entities/structure/tile_I'
+import { tile_X } from '../entities/structure/tile_X'
+import { tile_L } from '../entities/structure/tile_L'
+import { tile_X_BT } from '../entities/structure/tile_X_BT'
+import { tile_H } from '../entities/structure/tile_H'
+import { tile_H_toH } from '../entities/structure/tile_H_toH'
+import { tile_T } from '../entities/structure/tile_T'
+import { tile_STAIRS } from '../entities/structure/tile_STAIRS'
 
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
@@ -63,9 +70,51 @@ async function initApp () {
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tileI()
+        const { v, uv, c } = tile_I()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(0, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_X()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(3, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_L()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(5.5, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_X_BT()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(9.2, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_H()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(12.4, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_H_toH()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(14.5, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_T()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(16.5, 0, - 3)
+        studio.addToScene(mesh)
+    }
+    {
+        const { v, uv, c } = tile_STAIRS()
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        mesh.position.set(19.5, 0, - 3)
         studio.addToScene(mesh)
     }
 }
