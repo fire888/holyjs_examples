@@ -79,9 +79,9 @@ async function initApp () {
 
     const arrTiles = createDataTiles()
     const dataForMap = {
-        numW: 5,
-        numH: 8,
-        numD: 5,
+        numW: 7,
+        numH: 10,
+        numD: 7,
         tileW: W,
         tileH: H,
         tileD: W,

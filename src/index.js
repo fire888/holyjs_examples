@@ -11,5 +11,7 @@
 //import './0_demos/08'
 //import './0_demos/09'
 //import './0_demos/09_1'
-import './0_demos/11'
+//import './0_demos/10_collisions'
+//import './0_demos/11_tilesConnect'
+import './0_demos/12_waveFuncAll'
 
