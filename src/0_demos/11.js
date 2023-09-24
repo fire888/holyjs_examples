@@ -18,6 +18,7 @@ import { createDataTiles } from '../entities/structure/dataTiles'
 import { createLabel } from '../entities/structure/label'
 import { createBoxesLines } from '../entities/structure/gabarites'
 import { generateStructureScheme } from '../entities/structureSheme/structureScheme'
+import {Player} from "../entities/player";
 
 const TILES = {
     tile_I,
@@ -114,6 +115,10 @@ async function initApp () {
 
         const meshCollision = createMesh(vCollision, uv, c, materials.simple)
         studio.addToScene(meshCollision)
+
+        const player = new Player(6, 5,6, [meshCollision])
+        studio.setCam(player)
+        updateFunctions.push(() => { player.update() })
     })
 }
 
