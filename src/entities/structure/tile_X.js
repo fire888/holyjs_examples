@@ -14,6 +14,7 @@ export const tile_X = () => {
     v.push(...tileIData.v)
     uv.push(...tileIData.uv)
     c.push(...tileIData.c)
+    col.push(...tileIData.col)
 
     {
         const platform = createPlatformData({})

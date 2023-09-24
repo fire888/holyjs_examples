@@ -15,6 +15,7 @@ export const tile_H_toH = () => {
     v.push(...t.v)
     uv.push(...t.uv)
     c.push(...t.c)
+    col.push(...t.col)
 
     {
         const platform = createPlatformData({

@@ -315,7 +315,5 @@ export const createDataTiles = () => {
         sidePZ: '_|_|_',
     })
     prepareConnectionTiles(arrTiles)
-
-    console.log(arrTiles)
     return arrTiles
 }
