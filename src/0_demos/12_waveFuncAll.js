@@ -15,8 +15,7 @@ import { tile_STAIRS } from '../entities/structure/tile_STAIRS'
 import { tile_B } from '../entities/structure/tile_B'
 import { tile_EMPTY } from '../entities/structure/tile_EMPTY'
 import { createDataTiles } from '../entities/structure/dataTiles'
-import { generateStructureScheme } from '../entities/structureSheme/structureScheme'
-import {Player} from "../entities/player";
+import { generateStructureScheme } from '../entities/structureScheme12/structureScheme'
 
 const TILES = {
     tile_I,
@@ -72,8 +71,6 @@ async function initApp () {
         studio.render()
     }
     animate()
-
-    const offset = W * 1.5
 
     const arrTiles = createDataTiles()
     const dataForMap = {
