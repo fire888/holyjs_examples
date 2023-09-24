@@ -39,6 +39,11 @@ async function initApp () {
             bumpScale: .02,
             vertexColors: true,
         }),
+        'simple': new THREE.MeshPhongMaterial({
+            color: 0xFF4444,
+            transparent: true,
+            opacity: .8,
+        }),
     }
     const updateFunctions = []
     let n = 0
@@ -53,77 +58,151 @@ async function initApp () {
 
     /** CUSTOM 00 **************************/
     {
-        const { v, uv, c } = createElemArcData({})
+        const { v, uv, c, col } = createElemArcData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(0, 0, 0)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = createColumnData({})
+        const { v, uv, c, col } = createColumnData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(1, 0, 0)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = createPlatformData({})
+        const { v, uv, c, col } = createPlatformData({})
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(2, 0, 0)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_I()
+        const { v, uv, c, col } = tile_I()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(0, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_X()
+        const { v, uv, c, col } = tile_X()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(3, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_L()
+        const { v, uv, c, col } = tile_L()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(5.5, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_X_BT()
+        const { v, uv, c, col } = tile_X_BT()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(9.2, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_H()
+        const { v, uv, c, col } = tile_H()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(12.4, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_H_toH()
+        const { v, uv, c, col } = tile_H_toH()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(14.5, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_T()
+        const { v, uv, c, col } = tile_T()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(16.5, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_STAIRS()
+        const { v, uv, c, col } = tile_STAIRS()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(20, 0, - 3)
         studio.addToScene(mesh)
     }
     {
-        const { v, uv, c } = tile_B()
+        const { v, uv, c, col } = tile_B()
         const mesh = createMesh(v, uv, c, materials.brickColor)
         mesh.position.set(23, 0, - 3)
         studio.addToScene(mesh)
     }
+
+    /** HIDDEN GEOM ******************************/
+    // {
+    //     const { v, uv, c, col } = createElemArcData({})
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(0, .1, 0)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = createColumnData({})
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(1, .1, 0)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = createPlatformData({})
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(2, .1, 0)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_I()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(0, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_X()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(3, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_L()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(5.5, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_X_BT()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(9.2, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_H()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(12.4, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_H_toH()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(14.5, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_T()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(16.5, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_STAIRS()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(20, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
+    // {
+    //     const { v, uv, c, col } = tile_B()
+    //     const mesh2 = createMesh(col, uv, c, materials.simple)
+    //     mesh2.position.set(23, .1, -3)
+    //     studio.addToScene(mesh2)
+    // }
 }
 
 
