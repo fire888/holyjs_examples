@@ -66,7 +66,7 @@ const prepareConnectionTiles = arrTiles => {
         const connectPZ = []
 
 
-        const { sideNX, sidePX, sideNY, sideNZ, sidePZ, } = arrTiles[i]
+        const { sideNX, sidePX, sideNY, sidePY, sideNZ, sidePZ } = arrTiles[i]
 
         for (let j = 0; j < arrTiles.length; ++j) {
             const tileCompare = arrTiles[j]
@@ -79,6 +79,9 @@ const prepareConnectionTiles = arrTiles => {
             if (compareSides(sideNY, tileCompare.sidePY)) {
                 connectNY.push(j)
             }
+            if (compareSides(tileCompare.sideNY, sidePY)) {
+                connectPY.push(j)
+            }
             if (sideNZ === tileCompare.sidePZ) {
                 connectNZ.push(j)
             }
@@ -89,9 +92,9 @@ const prepareConnectionTiles = arrTiles => {
         tile.connectNX = connectNX
         tile.connectPX = connectPX
         tile.connectNY = connectNY
+        tile.connectPY = connectPY
         tile.connectNZ = connectNZ
         tile.connectPZ = connectPZ
-        console.log('--------------------------------', i)
     }
 }
 

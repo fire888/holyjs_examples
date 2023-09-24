@@ -3,6 +3,7 @@ import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { M } from '../entities/structure/M'
+import { W, H } from '../entities/structure/constants'
 import { tile_I } from '../entities/structure/tile_I'
 import { tile_X } from '../entities/structure/tile_X'
 import { tile_L } from '../entities/structure/tile_L'
@@ -14,6 +15,9 @@ import { tile_STAIRS } from '../entities/structure/tile_STAIRS'
 import { tile_B } from '../entities/structure/tile_B'
 import { tile_EMPTY } from '../entities/structure/tile_EMPTY'
 import { createDataTiles } from '../entities/structure/dataTiles'
+import { createLabel } from '../entities/structure/label'
+import { createBoxesLines } from '../entities/structure/gabarites'
+
 const TILES = {
     tile_I,
     tile_X,
@@ -64,19 +68,62 @@ async function initApp () {
     }
     animate()
 
+    const offset = W * 1.5
+
     const arrTiles = createDataTiles()
     const v = []
     const uv = []
     const c = []
     for (let i = 0; i < arrTiles.length; ++i) {
         const data = TILES[arrTiles[i].keyModel]({})
+
+        const pos = [Math.floor( i / 5) * offset, Math.floor( i % 5) * (-offset) ]
+
         M.rotateVerticesY(data.v, arrTiles[i].rotationY)
-        M.translateVertices(data.v, i * 3.1, 0, 0)
+        M.translateVertices(data.v, pos[0], 0, pos[1])
         v.push(...data.v)
         uv.push(...data.uv)
         c.push(...data.c)
 
+        const l = createLabel(i)
+        l.position.set(pos[0] - W / 2, H + .1, pos[1] - W / 2)
+        studio.addToScene(l)
 
+        const boxLines = createBoxesLines(W / 3, H / 2, W / 3)
+        boxLines.position.set(pos[0] - W / 2, 0,  pos[1] - W / 2)
+        studio.addToScene(boxLines)
+
+        const { connectNX, connectPX, connectNZ, connectPZ, connectNY, connectPY } = arrTiles[i]
+        for (let c = 0; c < connectNX.length; ++c) {
+            const l = createLabel(connectNX[c], '#cc0000')
+            l.position.set(pos[0] - W * .55, H / 2, pos[1] -c * .2 + W * 0.4)
+            studio.addToScene(l)
+        }
+        for (let c = 0; c < connectPX.length; ++c) {
+            const l = createLabel(connectPX[c], '#cc0000')
+            l.position.set(pos[0] + W * .55, H / 2, pos[1] -c * .2 + W * 0.4)
+            studio.addToScene(l)
+        }
+        for (let c = 0; c < connectNZ.length; ++c) {
+            const l = createLabel(connectNZ[c], '#0000ff')
+            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2, pos[1] - W / 2)
+            studio.addToScene(l)
+        }
+        for (let c = 0; c < connectPZ.length; ++c) {
+            const l = createLabel(connectPZ[c], '#0000ff')
+            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2, pos[1] + W / 2)
+            studio.addToScene(l)
+        }
+        for (let c = 0; c < connectNY.length; ++c) {
+            const l = createLabel(connectNY[c], '#00aa00')
+            l.position.set(pos[0] - W * 0.4 + c * .28, -.3, pos[1])
+            studio.addToScene(l)
+        }
+        for (let c = 0; c < connectPY.length; ++c) {
+            const l = createLabel(connectPY[c], '#00aa00')
+            l.position.set(pos[0] - W * 0.4 + c * .28, H + .3, pos[1] )
+            studio.addToScene(l)
+        }
     }
     const mesh = createMesh(v, uv, c, materials.brickColor)
     studio.addToScene(mesh)
