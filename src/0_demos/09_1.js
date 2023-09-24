@@ -75,6 +75,7 @@ async function initApp () {
     const uv = []
     const c = []
     for (let i = 0; i < arrTiles.length; ++i) {
+
         const data = TILES[arrTiles[i].keyModel]({})
 
         const pos = [Math.floor( i / 5) * offset, Math.floor( i % 5) * (-offset) ]
@@ -106,12 +107,12 @@ async function initApp () {
         }
         for (let c = 0; c < connectNZ.length; ++c) {
             const l = createLabel(connectNZ[c], '#0000ff')
-            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2, pos[1] - W / 2)
+            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2 + .2, pos[1] - W / 2)
             studio.addToScene(l)
         }
         for (let c = 0; c < connectPZ.length; ++c) {
             const l = createLabel(connectPZ[c], '#0000ff')
-            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2, pos[1] + W / 2)
+            l.position.set(pos[0] - W * 0.4 + c * .28, H / 2 - .2, pos[1] + W / 2)
             studio.addToScene(l)
         }
         for (let c = 0; c < connectNY.length; ++c) {
