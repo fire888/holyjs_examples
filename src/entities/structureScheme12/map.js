@@ -134,7 +134,7 @@ const createPipelineActionsWithMapItem = (y, z, x, map) => {
 
 
 
-export const createMap = (tiles) => {
+export const createMap = (tiles, studio) => {
     let map
 
     return {
@@ -145,79 +145,81 @@ export const createMap = (tiles) => {
                 console.log('!!! tiles', tiles)
                 /** create start map */
 
-                map = createMap3X(tiles, dataStructure)
-                console.log('!!! map', map)
+                createMap3X(tiles, dataStructure, studio).then(mapR => {
+                    map = mapR
+                    console.log('!!! map', map)
 
-                /** set existing tiles */
-                // const { mapFill } = dataStructure
-                // for (let i = 0; i < mapFill.length; ++i) {
-                //     const { place } = mapFill[i]
-                //     map.items[place[0]][place[1]][place[2]].resultTileIndex = 0
-                //     map.items[place[0]][place[1]][place[2]].maybeTilesInds = [0]
-                // }
+                    /** set existing tiles */
+                    // const { mapFill } = dataStructure
+                    // for (let i = 0; i < mapFill.length; ++i) {
+                    //     const { place } = mapFill[i]
+                    //     map.items[place[0]][place[1]][place[2]].resultTileIndex = 0
+                    //     map.items[place[0]][place[1]][place[2]].maybeTilesInds = [0]
+                    // }
 
 
-                /** pipeline actions with tile */
-                const pipelineActions = (y, z, x, map) => {
-                    return new Promise(res => {
-                        const actions = createPipelineActionsWithMapItem(y, z, x, map)
-                        const iterateAction = (indAction) => {
-                            if (!actions[indAction]) {
-                                return res();
+                    /** pipeline actions with tile */
+                    const pipelineActions = (y, z, x, map) => {
+                        return new Promise(res => {
+                            const actions = createPipelineActionsWithMapItem(y, z, x, map)
+                            const iterateAction = (indAction) => {
+                                if (!actions[indAction]) {
+                                    return res();
+                                }
+                                const action = actions[indAction]
+                                actionsWithMapItem[action.action](action, map.items, tiles)
+
+                                // if (f) {
+                                //     button.removeEventListener('click', f)
+                                // }
+                                // f = () => {
+                                //     iterateAction(indAction + 1)
+                                // }
+                                // button.addEventListener('click', f)
+                                //setTimeout(() => {iterateAction(indAction + 1)}, 0)
+                                iterateAction(indAction + 1)
                             }
-                            const action = actions[indAction]
-                            actionsWithMapItem[action.action](action, map.items, tiles)
-
-                            // if (f) {
-                            //     button.removeEventListener('click', f)
-                            // }
-                            // f = () => {
-                            //     iterateAction(indAction + 1)
-                            // }
-                            // button.addEventListener('click', f)
-                            //setTimeout(() => {iterateAction(indAction + 1)}, 0)
-                            iterateAction(indAction + 1)
-                        }
-                        iterateAction(0)
-                    })
-                }
-
-
-                const calculateMapItem = (y, z, x) => {
-                    return new Promise((res, rej) => {
-                        --maxCallStack
-                        if (maxCallStack < 0) {
-                            console.log('max stack:', maxCallStack )
-                            return rej();
-                        }
-
-                        /** choice tile and filter neighbours */
-                        pipelineActions(y, z, x, map).then(() => {
-                            /** add mesh to scene */
-                            if (map.items[y][z][x].hasOwnProperty('resultTileIndex') && Number.isInteger(map.items[y][z][x].resultTileIndex)) {
-                                map.items[y][z][x].tileData = tiles[map.items[y][z][x].resultTileIndex]
-                                //makerMesh.addMesh(map.items[y][z][x])
-                            }
-                            res()
+                            iterateAction(0)
                         })
-                    })
-                }
-
-                const nextItem = () => {
-                    const {nextY, nextZ, nextX} = map.checkNextMapItemIndexes()
-                    if (
-                        Number.isInteger(nextY) &&
-                        Number.isInteger(nextZ) &&
-                        Number.isInteger(nextX)
-                    ) {
-                        calculateMapItem(nextY, nextZ, nextX).then(nextItem)
-                        //setTimeout(() => {  }, 0)
-                    } else {
-                        res(map)
                     }
-                }
 
-                nextItem()
+
+                    const calculateMapItem = (y, z, x) => {
+                        return new Promise((res, rej) => {
+                            --maxCallStack
+                            if (maxCallStack < 0) {
+                                console.log('max stack:', maxCallStack )
+                                return rej();
+                            }
+
+                            /** choice tile and filter neighbours */
+                            pipelineActions(y, z, x, map).then(() => {
+                                /** add mesh to scene */
+                                if (map.items[y][z][x].hasOwnProperty('resultTileIndex') && Number.isInteger(map.items[y][z][x].resultTileIndex)) {
+                                    map.items[y][z][x].tileData = tiles[map.items[y][z][x].resultTileIndex]
+                                    //makerMesh.addMesh(map.items[y][z][x])
+                                }
+                                res()
+                            })
+                        })
+                    }
+
+                    const nextItem = () => {
+                        const {nextY, nextZ, nextX} = map.checkNextMapItemIndexes()
+                        if (
+                            Number.isInteger(nextY) &&
+                            Number.isInteger(nextZ) &&
+                            Number.isInteger(nextX)
+                        ) {
+                            calculateMapItem(nextY, nextZ, nextX).then(nextItem)
+                            //setTimeout(() => {  }, 0)
+                        } else {
+                            res(map)
+                        }
+                    }
+
+                    nextItem()
+                })
             })
         },
         destroyMap: () => {

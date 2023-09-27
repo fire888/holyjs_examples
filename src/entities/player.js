@@ -49,7 +49,7 @@ export class Player extends THREE.PerspectiveCamera {
         }
 
         if (this._forward) {
-            this.translateZ(-.01)
+            this.translateZ(-.04)
         }
     }
 

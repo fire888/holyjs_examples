@@ -16,6 +16,7 @@ import { tile_B } from '../entities/structure/tile_B'
 import { tile_EMPTY } from '../entities/structure/tile_EMPTY'
 import { createDataTiles } from '../entities/structure/dataTiles'
 import { generateStructureScheme } from '../entities/structureScheme12/structureScheme'
+import {Player} from "../entities/player";
 
 const TILES = {
     tile_I,
@@ -82,7 +83,7 @@ async function initApp () {
         tileD: W,
         tiles: arrTiles,
     }
-    generateStructureScheme(dataForMap).then(result => {
+    generateStructureScheme(dataForMap, studio).then(result => {
         const v = []
         const uv = []
         const c = []
@@ -98,11 +99,23 @@ async function initApp () {
                 v.push(...elem.v)
                 uv.push(...elem.uv)
                 c.push(...elem.c)
+
+                M.rotateVerticesY(elem.col, tileData.rotationY)
+                M.translateVertices(elem.col, numX * W, numY * H + .1, numZ * W)
+                vCollision.push(...elem.col)
             }
         })
 
         const mesh = createMesh(v, uv, c, materials.brickColor)
         studio.addToScene(mesh)
+
+        // const meshCollision = createMesh(vCollision, uv, c, materials.simple)
+        // meshCollision.visible = false
+        // studio.addToScene(meshCollision)
+        //
+        // const player = new Player(6, 5,6, [meshCollision])
+        // studio.setCam(player)
+        // updateFunctions.push(() => { player.update() })
     })
 }
 
