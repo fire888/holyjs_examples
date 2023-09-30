@@ -10,23 +10,23 @@ export const createBoxesLines = (w, h, d, countW = 3, countH = 3, countD = 3) =>
             for (let k = 0; k < countD; ++k) {
                 v.push(
                     new THREE.Vector3(w * i, h * j, d * k,),
-                    new THREE.Vector3(w * i + 1, h * j, d * k,),
+                    new THREE.Vector3(w * (i + 1), h * j, d * k,),
 
                     new THREE.Vector3(  w * i, h * j, d * k),
-                    new THREE.Vector3(   w * i, h * j, d * k + 1,),
+                    new THREE.Vector3(   w * i, h * j, d * (k + 1),),
                 )
 
                 if (i === countW - 1) {
                     v.push(
-                        new THREE.Vector3(w * i + 1, h * j, d * k),
-                        new THREE.Vector3(w * i + 1, h * j, d * k + 1,)
+                        new THREE.Vector3(w * (i + 1), h * j, d * k),
+                        new THREE.Vector3(w * (i + 1), h * j, d * (k + 1),)
                     )
                 }
 
                 if (k === countD - 1) {
                     v.push(
-                        new THREE.Vector3(w * i, h * j, d * k + 1,),
-                        new THREE.Vector3(w * i + 1, h * j, d * k + 1,)
+                        new THREE.Vector3(w * i, h * j, d * (k + 1),),
+                        new THREE.Vector3(w * (i + 1), h * j, d * (k + 1),)
                     )
                 }
             }

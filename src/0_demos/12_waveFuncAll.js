@@ -16,7 +16,8 @@ import { tile_B } from '../entities/structure/tile_B'
 import { tile_EMPTY } from '../entities/structure/tile_EMPTY'
 import { createDataTiles } from '../entities/structure/dataTiles'
 import { generateStructureScheme } from '../entities/structureScheme12/structureScheme'
-import {Player} from "../entities/player";
+import { Player } from "../entities/player";
+import { createBoxesLines } from '../entities/structure/gabarites'
 
 const TILES = {
     tile_I,
@@ -48,6 +49,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
+    studio.setCamPos(10, 10, 10)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({
@@ -72,6 +74,9 @@ async function initApp () {
         studio.render()
     }
     animate()
+
+    const l = createBoxesLines(W, H, W, 7, 10, 7)
+    studio.addToScene(l)
 
     const arrTiles = createDataTiles()
     const dataForMap = {
@@ -109,13 +114,13 @@ async function initApp () {
         const mesh = createMesh(v, uv, c, materials.brickColor)
         studio.addToScene(mesh)
 
-        // const meshCollision = createMesh(vCollision, uv, c, materials.simple)
-        // meshCollision.visible = false
-        // studio.addToScene(meshCollision)
-        //
-        // const player = new Player(6, 5,6, [meshCollision])
-        // studio.setCam(player)
-        // updateFunctions.push(() => { player.update() })
+        const meshCollision = createMesh(vCollision, uv, c, materials.simple)
+        meshCollision.visible = false
+        studio.addToScene(meshCollision)
+
+        const player = new Player(6, 5,6, [meshCollision])
+        studio.setCam(player)
+        updateFunctions.push(() => { player.update() })
     })
 }
 

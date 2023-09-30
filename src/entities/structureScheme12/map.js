@@ -139,7 +139,7 @@ export const createMap = (tiles, studio) => {
 
     return {
         generateMap: (dataStructure) => {
-            let maxCallStack = 10000
+            let maxCallStack = 30000
 
             return new Promise(res => {
                 console.log('!!! tiles', tiles)

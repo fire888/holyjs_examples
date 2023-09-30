@@ -6,7 +6,7 @@ export const createStudio = (startCameraCoord = 3) => {
         canvas: document.getElementById( 'webgl-canvas' ),
         antialias: true,
     })
-    renderer.setClearColor(0xffffff)
+    renderer.setClearColor(0x000000)
     renderer.setPixelRatio( window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.shadowMap.enabled = true
@@ -62,6 +62,10 @@ export const createStudio = (startCameraCoord = 3) => {
         },
         setCam(cam) {
             camera = cam
-        }
+        },
+        setCamPos(x, y, z) {
+            camera.position.set(x, y, z)
+            controls.update()
+        },
     }
 }
