@@ -124,7 +124,6 @@ async function initApp () {
             if (
                 tileData.keyModel === 'tile_EMPTY'
             ) {
-                console.log('$%%$%$%$%$%', result)
                 if (
                     result.items[numY - 1] &&
                     result.items[numY - 1][numZ][numX].tileData.keyModel !== 'tile_EMPTY' &&
