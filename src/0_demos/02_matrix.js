@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import {translateArr} from "../helpers/geomHelpers";
 
 const { sin, cos } = Math
 

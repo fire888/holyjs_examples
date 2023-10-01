@@ -7,6 +7,7 @@ import {
     createFaceWithSquare,
     createUv,
 } from '../helpers/geomHelpers'
+import { M } from './M'
 import { createPanel } from './geomWallPanno'
 
 const uv6 = [
@@ -36,7 +37,6 @@ export const createWall = (data, root) => {
 
     const segment = createSegment({
         l,
-        //asset: root.assets['walls'].children[0],
         leftOffset: true,
         rightOffset: true,
         segment: izSegmentsDoors ? 'top' : 'full',

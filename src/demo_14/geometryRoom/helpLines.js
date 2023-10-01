@@ -77,7 +77,5 @@ export const createHelpLines = (resultArr) => {
         }
     }
 
-    console.log(mesh)
-
     return mesh
 }

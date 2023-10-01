@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import {translateArr} from "../helpers/geomHelpers";
 
 
 const atlas = (() => {
@@ -228,7 +227,7 @@ async function initApp () {
     for (let i = 0; i < 150; ++i) {
         const H = Math.random() * 10
         const house1 = createTower(H, Math.random() * 1 + .3, Math.random() * 5 + 4, Math.random() * 3 + .5)
-        translateArr(house1.v, Math.random() * 20 - 10, 0, Math.random() * 20 - 10)
+        m.translateVertices(house1.v, Math.random() * 20 - 10, 0, Math.random() * 20 - 10)
         v.push(...house1.v)
         uv.push(...house1.uv)
     }

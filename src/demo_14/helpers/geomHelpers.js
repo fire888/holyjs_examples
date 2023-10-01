@@ -186,39 +186,83 @@ export const scaleArr = (arr, sX, sY, sZ) => {
     }
 }
 
-export const inverseVertexOrder = copyV => {
-    for (let i = 0; i < copyV.length; i += 18) {
-        const n0_0 = copyV[i]
-        const n0_1 = copyV[i + 1]
-        const n0_2 = copyV[i + 2]
+// export const inverseVertexOrder = copyV => {
+//     for (let i = 0; i < copyV.length; i += 18) {
+//         const n0_0 = copyV[i]
+//         const n0_1 = copyV[i + 1]
+//         const n0_2 = copyV[i + 2]
+//
+//         const n1_0 = copyV[i + 3]
+//         const n1_1 = copyV[i + 3 + 1]
+//         const n1_2 = copyV[i + 3 + 2]
+//
+//         const n4_0 = copyV[i + 12]
+//         const n4_1 = copyV[i + 12 + 1]
+//         const n4_2 = copyV[i + 12 + 2]
+//
+//         const n5_0 = copyV[i + 15]
+//         const n5_1 = copyV[i + 15 + 1]
+//         const n5_2 = copyV[i + 15 + 2]
+//
+//         copyV[i] = n1_0
+//         copyV[i + 1] = n1_1
+//         copyV[i + 2] = n1_2
+//
+//         copyV[i + 3] = n0_0
+//         copyV[i + 3 + 1] = n0_1
+//         copyV[i + 3 + 2] = n0_2
+//
+//         copyV[i + 12] = n5_0
+//         copyV[i + 12 + 1] = n5_1
+//         copyV[i + 12 + 2] = n5_2
+//
+//         copyV[i + 15] = n4_0
+//         copyV[i + 15 + 1] = n4_1
+//         copyV[i + 15 + 2] = n4_2
+//     }
+// }
 
-        const n1_0 = copyV[i + 3]
-        const n1_1 = copyV[i + 3 + 1]
-        const n1_2 = copyV[i + 3 + 2]
+export const inverseVertexOrder = v => {
+    for (let i = 0; i < v.length; i += 18) {
+        const n0_0 = v[i]
+        const n0_1 = v[i + 1]
+        const n0_2 = v[i + 2]
 
-        const n4_0 = copyV[i + 12]
-        const n4_1 = copyV[i + 12 + 1]
-        const n4_2 = copyV[i + 12 + 2]
+        const n1_0 = v[i + 3]
+        const n1_1 = v[i + 3 + 1]
+        const n1_2 = v[i + 3 + 2]
 
-        const n5_0 = copyV[i + 15]
-        const n5_1 = copyV[i + 15 + 1]
-        const n5_2 = copyV[i + 15 + 2]
+        const n4_0 = v[i + 12]
+        const n4_1 = v[i + 12 + 1]
+        const n4_2 = v[i + 12 + 2]
 
+        const n5_0 = v[i + 15]
+        const n5_1 = v[i + 15 + 1]
+        const n5_2 = v[i + 15 + 2]
 
-        copyV[i] = n1_0
-        copyV[i + 1] = n1_1
-        copyV[i + 2] = n1_2
+        v[i] = n1_0
+        v[i + 1] = n1_1
+        v[i + 2] = n1_2
 
-        copyV[i + 3] = n0_0
-        copyV[i + 3 + 1] = n0_1
-        copyV[i + 3 + 2] = n0_2
+        v[i + 3] = n0_0
+        v[i + 3 + 1] = n0_1
+        v[i + 3 + 2] = n0_2
 
-        copyV[i + 12] = n5_0
-        copyV[i + 12 + 1] = n5_1
-        copyV[i + 12 + 2] = n5_2
+        v[i + 6] = n5_0
+        v[i + 6 + 1] = n5_1
+        v[i + 6 + 2] = n5_2
 
-        copyV[i + 15] = n4_0
-        copyV[i + 15 + 1] = n4_1
-        copyV[i + 15 + 2] = n4_2
+        v[i + 9] = n1_0
+        v[i + 9 + 1] = n1_1
+        v[i + 9 + 2] = n1_2
+
+        v[i + 12] = n5_0
+        v[i + 12 + 1] = n5_1
+        v[i + 12 + 2] = n5_2
+
+        v[i + 15] = n4_0
+        v[i + 15 + 1] = n4_1
+        v[i + 15 + 2] = n4_2
     }
 }
+
