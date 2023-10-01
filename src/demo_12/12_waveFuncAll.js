@@ -2,23 +2,22 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { M } from '../demo_12/structure/M'
-import { W, H } from '../demo_12/structure/constants'
-import { tile_I } from '../demo_12/structure/tile_I'
-import { tile_X } from '../demo_12/structure/tile_X'
-import { tile_L } from '../demo_12/structure/tile_L'
-import { tile_X_BT } from '../demo_12/structure/tile_X_BT'
-import { tile_H } from '../demo_12/structure/tile_H'
-import { tile_H_toH } from '../demo_12/structure/tile_H_toH'
-import { tile_T } from '../demo_12/structure/tile_T'
-import { tile_STAIRS } from '../demo_12/structure/tile_STAIRS'
-import { tile_B } from '../demo_12/structure/tile_B'
-import { tile_EMPTY } from '../demo_12/structure/tile_EMPTY'
-import { createDataTiles } from '../demo_12/structure/dataTiles'
-import { createLabel } from '../demo_12/structure/label'
-import { createBoxesLines } from '../demo_12/structure/gabarites'
-import { generateStructureScheme } from '../entities/structureSheme/structureScheme'
-import {Player} from "../entities/player";
+import { M } from './structure/M'
+import { W, H } from './structure/constants'
+import { tile_I } from './structure/tile_I'
+import { tile_X } from './structure/tile_X'
+import { tile_L } from './structure/tile_L'
+import { tile_X_BT } from './structure/tile_X_BT'
+import { tile_H } from './structure/tile_H'
+import { tile_H_toH } from './structure/tile_H_toH'
+import { tile_T } from './structure/tile_T'
+import { tile_STAIRS } from './structure/tile_STAIRS'
+import { tile_B } from './structure/tile_B'
+import { tile_EMPTY } from './structure/tile_EMPTY'
+import { createDataTiles } from './structure/dataTiles'
+import { generateStructureScheme } from './structureScheme12/structureScheme'
+import { Player } from "../entities/player";
+import { createBoxesLines } from './structure/gabarites'
 
 const TILES = {
     tile_I,
@@ -50,6 +49,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
+    studio.setCamPos(10, 10, 10)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({
@@ -75,8 +75,6 @@ async function initApp () {
     }
     animate()
 
-    const offset = W * 1.5
-
     const arrTiles = createDataTiles()
     const dataForMap = {
         numW: 7,
@@ -87,7 +85,12 @@ async function initApp () {
         tileD: W,
         tiles: arrTiles,
     }
-    generateStructureScheme(dataForMap).then(result => {
+
+    const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
+    l.position.set(-W / 2, 0, -W / 2)
+    studio.addToScene(l)
+
+    generateStructureScheme(dataForMap, studio, materials).then(result => {
         const v = []
         const uv = []
         const c = []
@@ -110,10 +113,11 @@ async function initApp () {
             }
         })
 
-        const mesh = createMesh(v, uv, c, materials.brickColor)
-        studio.addToScene(mesh)
+        // const mesh = createMesh(v, uv, c, materials.brickColor)
+        // studio.addToScene(mesh)
 
         const meshCollision = createMesh(vCollision, uv, c, materials.simple)
+        meshCollision.visible = false
         studio.addToScene(meshCollision)
 
         const player = new Player(6, 5,6, [meshCollision])
