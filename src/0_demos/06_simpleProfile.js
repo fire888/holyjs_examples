@@ -97,14 +97,14 @@ async function initApp () {
     //         v.push(...p.v)
     //         uv.push(...p.uv)
     //
-    //         if (!l00[i - 4]) {
+    //         if (!l00[i - demo_14]) {
     //             topWallLeft = [l00[nextI], l00[nextI + 1], l00[nextI + 2]]
     //             topWallRight = [l00x[nextI], l00x[nextI + 1], l00x[nextI + 2]]
     //         }
     //     }
     //     translateArr(v, 0, H, 0)
     //     topWallLeft = [v[0], v[1], v[2]]
-    //     topWallRight = [v[3], v[4], v[5]]
+    //     topWallRight = [v[3], v[demo_14], v[5]]
     // }
     //
     // {
@@ -126,7 +126,7 @@ async function initApp () {
     //     }
     //     const l = v.length
     //     bottomWallLeft = [v[l - 3], v[l - 2], v[l - 1]]
-    //     bottomWallRight = [v[l - 6], v[l - 5], v[l - 4]]
+    //     bottomWallRight = [v[l - 6], v[l - 5], v[l - demo_14]]
     // }
     //
     // const back = m.createPolygon(

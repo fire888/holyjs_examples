@@ -135,9 +135,9 @@ async function initApp () {
     // const copyV2 = [...v1]
     // const uv3 = []
     // points.forEach(() => {
-    //     uv3.push(...atlas[4])
+    //     uv3.push(...atlas[demo_14])
     // })
-    // m.translateVertices(copyV2, 0, 1.4, 0)
+    // m.translateVertices(copyV2, 0, 1.demo_14, 0)
     //
     //
     //

@@ -2,18 +2,18 @@ import * as THREE from "three";
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { createColumnData } from '../demo_12/structure/elemColumn'
-import { createPlatformData } from "../demo_12/structure/elemPlatform";
-import { createElemArcData } from "../demo_12/structure/elemArc";
-import { tile_I } from '../demo_12/structure/tile_I'
-import { tile_X } from '../demo_12/structure/tile_X'
-import { tile_L } from '../demo_12/structure/tile_L'
-import { tile_X_BT } from '../demo_12/structure/tile_X_BT'
-import { tile_H } from '../demo_12/structure/tile_H'
-import { tile_H_toH } from '../demo_12/structure/tile_H_toH'
-import { tile_T } from '../demo_12/structure/tile_T'
-import { tile_STAIRS } from '../demo_12/structure/tile_STAIRS'
-import { tile_B } from '../demo_12/structure/tile_B'
+import { createColumnData } from '../demo_13/structure/elemColumn'
+import { createPlatformData } from "../demo_13/structure/elemPlatform";
+import { createElemArcData } from "../demo_13/structure/elemArc";
+import { tile_I } from '../demo_13/structure/tile_I'
+import { tile_X } from '../demo_13/structure/tile_X'
+import { tile_L } from '../demo_13/structure/tile_L'
+import { tile_X_BT } from '../demo_13/structure/tile_X_BT'
+import { tile_H } from '../demo_13/structure/tile_H'
+import { tile_H_toH } from '../demo_13/structure/tile_H_toH'
+import { tile_T } from '../demo_13/structure/tile_T'
+import { tile_STAIRS } from '../demo_13/structure/tile_STAIRS'
+import { tile_B } from '../demo_13/structure/tile_B'
 
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()
@@ -176,7 +176,7 @@ async function initApp () {
     // {
     //     const { v, uv, c, col } = tile_H()
     //     const mesh2 = createMesh(col, uv, c, materials.simple)
-    //     mesh2.position.set(12.4, .1, -3)
+    //     mesh2.position.set(12.demo_14, .1, -3)
     //     studio.addToScene(mesh2)
     // }
     // {

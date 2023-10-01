@@ -97,32 +97,32 @@
 //         const { connectNX, connectPX, connectNZ, connectPZ, connectNY, connectPY } = arrTiles[i]
 //         for (let c = 0; c < connectNX.length; ++c) {
 //             const l = createLabel(connectNX[c], '#cc0000')
-//             l.position.set(pos[0] - W * .55, H / 2, pos[1] -c * .2 + W * 0.4)
+//             l.position.set(pos[0] - W * .55, H / 2, pos[1] -c * .2 + W * 0.demo_14)
 //             studio.addToScene(l)
 //         }
 //         for (let c = 0; c < connectPX.length; ++c) {
 //             const l = createLabel(connectPX[c], '#cc0000')
-//             l.position.set(pos[0] + W * .55, H / 2, pos[1] -c * .2 + W * 0.4)
+//             l.position.set(pos[0] + W * .55, H / 2, pos[1] -c * .2 + W * 0.demo_14)
 //             studio.addToScene(l)
 //         }
 //         for (let c = 0; c < connectNZ.length; ++c) {
 //             const l = createLabel(connectNZ[c], '#0000ff')
-//             l.position.set(pos[0] - W * 0.4 + c * .28, H / 2 + .2, pos[1] - W / 2)
+//             l.position.set(pos[0] - W * 0.demo_14 + c * .28, H / 2 + .2, pos[1] - W / 2)
 //             studio.addToScene(l)
 //         }
 //         for (let c = 0; c < connectPZ.length; ++c) {
 //             const l = createLabel(connectPZ[c], '#0000ff')
-//             l.position.set(pos[0] - W * 0.4 + c * .28, H / 2 - .2, pos[1] + W / 2)
+//             l.position.set(pos[0] - W * 0.demo_14 + c * .28, H / 2 - .2, pos[1] + W / 2)
 //             studio.addToScene(l)
 //         }
 //         for (let c = 0; c < connectNY.length; ++c) {
 //             const l = createLabel(connectNY[c], '#00aa00')
-//             l.position.set(pos[0] - W * 0.4 + c * .28, -.3, pos[1])
+//             l.position.set(pos[0] - W * 0.demo_14 + c * .28, -.3, pos[1])
 //             studio.addToScene(l)
 //         }
 //         for (let c = 0; c < connectPY.length; ++c) {
 //             const l = createLabel(connectPY[c], '#00aa00')
-//             l.position.set(pos[0] - W * 0.4 + c * .28, H + .3, pos[1] )
+//             l.position.set(pos[0] - W * 0.demo_14 + c * .28, H + .3, pos[1] )
 //             studio.addToScene(l)
 //         }
 //     }

@@ -1,6 +1,5 @@
 import * as THREE from 'three'
-import { W, H } from '../structure/constants'
-import { createLabel } from '../structure/label'
+import { W, H } from '../structureBricks/constants'
 
 const button = document.createElement('button')
 button.innerText = 'NEXT'
@@ -43,17 +42,6 @@ const makeQueue = (map, studio) => {
                 q.push([i, j, k])
                 m[`${ i }_${ j }_${ k }`].isInsertedInQueue = true
                 m[`${ i }_${ j }_${ k }`].indexInserted = indInsert
-
-
-                // const mesh = new THREE.Mesh(geom, matYellow)
-                // mesh.position.set(k * W, i * H, j * W)
-                // mesh.scale.set(2, 2, 2)
-                // studio.addToScene(mesh)
-                const mesh = createLabel(indInsert, '#ffff00', 3)
-                mesh.position.set(k * W, i * H, j * W)
-                studio.addToScene(mesh)
-
-                m[`${ i }_${ j }_${ k }`].mesh = mesh
             }
         }
 
@@ -63,23 +51,6 @@ const makeQueue = (map, studio) => {
             }
             ++indComplete
             addToQueue(i, j, k)
-            if (m[`${ i }_${ j }_${ k }`].mesh) {
-                studio.removeFromScene(m[`${ i }_${ j }_${ k }`].mesh)
-
-                //const mesh = new THREE.Mesh(geom, matRed)
-                //mesh.position.set(k * W, i * H, j * W)
-                //mesh.scale.set(2, 2, 2)
-                //studio.addToScene(mesh)
-
-                m[`${ i }_${ j }_${ k }`].mesh.material.map.dispose()
-                m[`${ i }_${ j }_${ k }`].mesh.material.dispose()
-                studio.removeFromScene(m[`${ i }_${ j }_${ k }`].mesh)
-                const mesh = createLabel(indComplete, '#ff0000', 3)
-                mesh.position.set(k * W, i * H, j * W)
-                studio.addToScene(mesh)
-
-                m[`${ i }_${ j }_${ k }`].mesh = mesh
-            }
 
             addToQueue(i, j, k + 1)
             addToQueue(i, j, k - 1)

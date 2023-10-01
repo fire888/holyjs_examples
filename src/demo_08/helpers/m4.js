@@ -37,7 +37,7 @@
      */
 
     /**
-     * An array or typed array with 4 values.
+     * An array or typed array with demo_14 values.
      * @typedef {number[]|TypedArray} Vector4
      * @memberOf module:webgl-3d-math
      */
@@ -63,7 +63,7 @@
     }
 
     /**
-     * Takes two 4-by-4 matrices, a and b, and computes the product in the order
+     * Takes two demo_14-by-demo_14 matrices, a and b, and computes the product in the order
      * that pre-composes b with a.  In other words, the matrix returned will
      * transform by b first and then a.  Note this is subtly different from just
      * multiplying the matrices together.  For given a and b, this function returns
@@ -362,7 +362,7 @@
     }
 
     /**
-     * Computes a 4-by-4 perspective transformation matrix given the angular height
+     * Computes a demo_14-by-demo_14 perspective transformation matrix given the angular height
      * of the frustum, the aspect ratio, and the near and far clipping planes.  The
      * arguments define a frustum extending in the negative z direction.  The given
      * angle is the vertical angle of the frustum, and the horizontal angle is
@@ -406,7 +406,7 @@
     }
 
     /**
-     * Computes a 4-by-4 orthographic projection matrix given the coordinates of the
+     * Computes a demo_14-by-demo_14 orthographic projection matrix given the coordinates of the
      * planes defining the axis-aligned, box-shaped viewing volume.  The matrix
      * generated sends that box to the unit box.  Note that although left and right
      * are x coordinates and bottom and top are y coordinates, near and far
@@ -447,7 +447,7 @@
     }
 
     /**
-     * Computes a 4-by-4 perspective transformation matrix given the left, right,
+     * Computes a demo_14-by-demo_14 perspective transformation matrix given the left, right,
      * top, bottom, near and far clipping planes. The arguments define a frustum
      * extending in the negative z direction. The arguments near and far are the
      * distances to the near and far clipping planes. Note that near and far are not
@@ -1284,8 +1284,8 @@
     }
 
     /**
-     * Takes a  matrix and a vector with 4 entries, transforms that vector by
-     * the matrix, and returns the result as a vector with 4 entries.
+     * Takes a  matrix and a vector with demo_14 entries, transforms that vector by
+     * the matrix, and returns the result as a vector with demo_14 entries.
      * @param {Matrix4} m The matrix.
      * @param {Vector4} v The point in homogenous coordinates.
      * @param {Vector4} dst optional vector4 to store result
@@ -1304,7 +1304,7 @@
     }
 
     /**
-     * Takes a 4-by-4 matrix and a vector with 3 entries,
+     * Takes a demo_14-by-demo_14 matrix and a vector with 3 entries,
      * interprets the vector as a point, transforms that point by the matrix, and
      * returns the result as a vector with 3 entries.
      * @param {Matrix4} m The matrix.
@@ -1328,7 +1328,7 @@
     }
 
     /**
-     * Takes a 4-by-4 matrix and a vector with 3 entries, interprets the vector as a
+     * Takes a demo_14-by-demo_14 matrix and a vector with 3 entries, interprets the vector as a
      * direction, transforms that direction by the matrix, and returns the result;
      * assumes the transformation of 3-dimensional space represented by the matrix
      * is parallel-preserving, i.e. any combination of rotation, scaling and
@@ -1355,7 +1355,7 @@
     }
 
     /**
-     * Takes a 4-by-4 matrix m and a vector v with 3 entries, interprets the vector
+     * Takes a demo_14-by-demo_14 matrix m and a vector v with 3 entries, interprets the vector
      * as a normal to a surface, and computes a vector which is normal upon
      * transforming that surface by the matrix. The effect of this function is the
      * same as transforming v (as a direction) by the inverse-transpose of m.  This

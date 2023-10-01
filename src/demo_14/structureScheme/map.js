@@ -1,5 +1,4 @@
 import { createMap3X } from './map3SHelper'
-import { createMakerMesh } from './makerMesh'
 //import { map3SArtifactsFilter } from './map3SArtefactsFilter'
 
 // const button = document.createElement('button')
@@ -155,7 +154,7 @@ const createPipelineActionsWithMapItem = (y, z, x, map) => {
 
 
 export const createMap = (tiles, studio, materials) => {
-    const make = createMakerMesh(materials)
+    //const make = createMakerMesh(materials)
     let map
 
     return {
@@ -222,8 +221,8 @@ export const createMap = (tiles, studio, materials) => {
                                     if (mapR.labels[`${ y }_${ z }_${ x }`].mesh) {
                                         studio.removeFromScene(mapR.labels[`${ y }_${ z }_${ x }`].mesh)
                                     }
-                                    const m = make(map.items[y][z][x])
-                                    m && studio.addToScene(m)
+                                    // const m = make(map.items[y][z][x])
+                                    // m && studio.addToScene(m)
                                 }
                                 setTimeout(res, 15)
                             })

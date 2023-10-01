@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { createStudio } from './studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { M } from '../demo_12/structure/M'
+import { M } from '../demo_13/structure/M'
 import { W, H } from './structureBricks/constants'
 import { tile_I } from './structureBricks/tile_I'
 import { tile_X } from './structureBricks/tile_X'

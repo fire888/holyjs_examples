@@ -11,17 +11,17 @@ export const createStudio = (startCameraCoord = 3) => {
     renderer.setSize(window.innerWidth, window.innerHeight)
 
     const scene = new THREE.Scene()
-    scene.fog = new THREE.Fog(0x1a323b, 5, 15)
+    //scene.fog = new THREE.Fog(0x1a323b, 5, 15)
 
     // const axesHelper = new THREE.AxesHelper(1)
     // scene.add(axesHelper)
     // const gridHelper = new THREE.GridHelper(1, 10)
     // scene.add(gridHelper)
 
-    const lightA = new THREE.AmbientLight( 0xffffff, 1)
+    const lightA = new THREE.AmbientLight( 0xffffff, .2)
     scene.add( lightA )
 
-    const dir1 = new THREE.DirectionalLight( 0xffffff, 1)
+    const dir1 = new THREE.DirectionalLight( 0xffffff, .5)
     dir1.position.set(0, 5, 3)
     scene.add(dir1)
 
@@ -29,7 +29,7 @@ export const createStudio = (startCameraCoord = 3) => {
     dir2.position.set(0, -5, -3)
     scene.add(dir2)
 
-    let camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2000)
+    let camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 5000)
     camera.position.set(0, startCameraCoord, startCameraCoord)
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.target.set(0, 0, 0)

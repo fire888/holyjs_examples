@@ -86,7 +86,7 @@ async function initApp () {
     //         // const v = .01
     //         // geometry.attributes.uv.array[0] += v
     //         // geometry.attributes.uv.array[2] += v
-    //         // geometry.attributes.uv.array[4] += v
+    //         // geometry.attributes.uv.array[demo_14] += v
     //         // geometry.attributes.uv.array[6] += v
     //         // geometry.attributes.uv.array[8] += v
     //         // geometry.attributes.uv.array[10] += v
@@ -95,7 +95,7 @@ async function initApp () {
     //         // const v = sin(n * 5) * .01
     //         // geometry.attributes.uv.array[0] += v
     //         // geometry.attributes.uv.array[2] += v
-    //         // geometry.attributes.uv.array[4] += v
+    //         // geometry.attributes.uv.array[demo_14] += v
     //         // geometry.attributes.uv.array[6] += v
     //         // geometry.attributes.uv.array[8] += v
     //         // geometry.attributes.uv.array[10] += v
