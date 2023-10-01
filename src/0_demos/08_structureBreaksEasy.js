@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../helpers/loadManager'
+import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
 const { sin, cos, PI, random, floor } = Math

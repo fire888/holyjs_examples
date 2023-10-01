@@ -1,6 +1,6 @@
 import { hideStartScreen } from '../ui/hideStartScreen'
 import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../helpers/loadManager'
+import { createLoadManager } from '../entities/loadManager'
 import { startFrameUpdater  } from '../utils/createFrameUpater'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { createDoor } from '../entities/door'

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../helpers/loadManager'
+import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { createColumnData } from '../demo_12/structure/elemColumn'
 import { createPlatformData } from "../demo_12/structure/elemPlatform";

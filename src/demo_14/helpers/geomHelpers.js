@@ -1,10 +1,10 @@
 import { m4 } from './m4'
 
 const {
-    //floor,
+    floor,
     random,
 } = Math
-//const ranN = (start, end) => start + floor(random() * (end - start))
+const ranN = (start, end) => start + floor(random() * (end - start))
 export const ran = (start, end) => start + random() * (end - start)
 
 
@@ -68,6 +68,8 @@ export const createFaceWithSquare = (v1, v2, v3, v4, color1, color2, offset) => 
             [.5, 1],
         ),
 
+
+        
         ...createUv(
             [0, .5],
             [.5, .5],
