@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { W, H } from '../structure/constants'
+import { createLabel } from '../structure/label'
 
 const button = document.createElement('button')
 button.innerText = 'NEXT'
@@ -11,7 +12,7 @@ let f = null
 
 const geom = new THREE.BoxGeometry(.3, .3, .3)
 const matRed = new THREE.MeshBasicMaterial({ color: 0xFF0000 })
-const matYellow = new THREE.MeshBasicMaterial({ color: 0xFFFF00 })
+const matYellow = new THREE.MeshBasicMaterial({ color: 0x00FF00 })
 
 const makeQueue = (map, studio) => {
     return new Promise(res => {
@@ -29,19 +30,30 @@ const makeQueue = (map, studio) => {
 
         let currentY = 0
 
-        let indInsert = 0 /** was calculated by neighbour */
-        let indComplete = 0 /** complete calculate around */
+        let indInsert = -1 /** was calculated by neighbour */
+        let indComplete = -1 /** complete calculate around */
         const q = []
 
         const addToQueue = (i, j, k) => {
-            if (m[`${ i }_${ j }_${ k }`] && !m[`${ i }_${ j }_${ k }`].queue) {
-                const mesh = new THREE.Mesh(geom, matYellow)
+            if (
+                m[`${ i }_${ j }_${ k }`] &&
+                !m[`${ i }_${ j }_${ k }`].isInsertedInQueue
+            ) {
+                ++indInsert
+                q.push([i, j, k])
+                m[`${ i }_${ j }_${ k }`].isInsertedInQueue = true
+                m[`${ i }_${ j }_${ k }`].indexInserted = indInsert
+
+
+                // const mesh = new THREE.Mesh(geom, matYellow)
+                // mesh.position.set(k * W, i * H, j * W)
+                // mesh.scale.set(2, 2, 2)
+                // studio.addToScene(mesh)
+                const mesh = createLabel(indInsert, '#ffff00', 3)
                 mesh.position.set(k * W, i * H, j * W)
                 studio.addToScene(mesh)
 
-                q.push([i, j, k])
-                ++indInsert
-                m[`${ i }_${ j }_${ k }`].queue = { ind: indInsert, mesh }
+                m[`${ i }_${ j }_${ k }`].mesh = mesh
             }
         }
 
@@ -49,18 +61,26 @@ const makeQueue = (map, studio) => {
             if (!m[`${ i }_${ j }_${ k }`]) {
                 return;
             }
-            addToQueue(i, j, k)
             ++indComplete
-            if (m[`${ i }_${ j }_${ k }`].queue && m[`${ i }_${ j }_${ k }`].queue.mesh) {
-                studio.removeFromScene(m[`${ i }_${ j }_${ k }`].queue.mesh)
-                const mesh = new THREE.Mesh(geom, matRed)
+            addToQueue(i, j, k)
+            if (m[`${ i }_${ j }_${ k }`].mesh) {
+                studio.removeFromScene(m[`${ i }_${ j }_${ k }`].mesh)
+
+                //const mesh = new THREE.Mesh(geom, matRed)
+                //mesh.position.set(k * W, i * H, j * W)
+                //mesh.scale.set(2, 2, 2)
+                //studio.addToScene(mesh)
+
+                m[`${ i }_${ j }_${ k }`].mesh.material.map.dispose()
+                m[`${ i }_${ j }_${ k }`].mesh.material.dispose()
+                studio.removeFromScene(m[`${ i }_${ j }_${ k }`].mesh)
+                const mesh = createLabel(indComplete, '#ff0000', 3)
                 mesh.position.set(k * W, i * H, j * W)
                 studio.addToScene(mesh)
-                m[`${ i }_${ j }_${ k }`].queue.mesh = mesh
+
+                m[`${ i }_${ j }_${ k }`].mesh = mesh
             }
 
-
-            /** current floor */
             addToQueue(i, j, k + 1)
             addToQueue(i, j, k - 1)
             addToQueue(i, j + 1, k)
@@ -69,18 +89,9 @@ const makeQueue = (map, studio) => {
             addToQueue(i, j - 1, k + 1)
             addToQueue(i, j + 1, k - 1)
             addToQueue(i, j - 1, k - 1)
-            /** next floor */
-            addToQueue(i + 1, j, k + 1)
-            addToQueue(i + 1, j, k - 1)
-            addToQueue(i + 1, j + 1, k)
-            addToQueue(i + 1, j - 1, k)
-            addToQueue(i + 1, j + 1, k + 1)
-            addToQueue(i + 1, j - 1, k + 1)
-            addToQueue(i + 1, j + 1, k - 1)
-            addToQueue(i + 1, j - 1, k - 1)
 
             if (f) {
-            //    button.removeEventListener('click', f)
+                button.removeEventListener('click', f)
             }
             f = () => {
                 if (q[indComplete + 1]) {
@@ -88,18 +99,16 @@ const makeQueue = (map, studio) => {
                 } else {
                     currentY += 1
                     if (currentY === sY) {
-                        console.log('!!!!', sY)
-                        res(q)
+                        res({ queue: q ,m })
                         return
                     }
                     iterate(currentY, Math.floor(sZ / 2), Math.floor(sX / 2))
                 }
             }
             //button.addEventListener('click', f)
-            setTimeout(f, 30)
+            setTimeout(f, 0)
         }
         iterate(currentY, Math.floor(sZ / 2), Math.floor(sX / 2))
-
     })
 }
 
@@ -134,12 +143,12 @@ export const createMap3X = (tiles, dataStructure, studio) => {
         }
 
 
-        //const queue = makeQueue(arrY, SIZE_X, SIZE_Y, SIZE_Z, studio)
-        makeQueue(arrY, studio).then(queue  => {
-            console.log('queue', queue)
+        makeQueue(arrY, studio).then(({ queue, m }) => {
+           // console.log('$%^%$^$^', m)
             let ind = 0
 
             res({
+                labels: m,
                 sizeZ: SIZE_Z,
                 sizeY: SIZE_Y,
                 sizeX: SIZE_X,

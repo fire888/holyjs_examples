@@ -1,4 +1,5 @@
 import { createMap3X } from './map3SHelper'
+import { createMakerMesh } from './makerMesh'
 //import { map3SArtifactsFilter } from './map3SArtefactsFilter'
 
 // const button = document.createElement('button')
@@ -18,7 +19,7 @@ const choiceFinalTileFromExists = (dataAction, map) => {
         return;
     }
     if (!mapItem.maybeTilesInds.length) {
-        mapItem.resultTileIndex = -1 //Math.floor(Math.random() * 16)
+        mapItem.resultTileIndex = -1
         mapItem.maybeTilesInds = []
         return;
     }
@@ -120,13 +121,32 @@ const createPipelineActionsWithMapItem = (y, z, x, map) => {
 
         /** -- Y */
 
-        /** ++Y */
+        /** ++Y with Y */
         { action: 'filterMaybeArrByCompare', src: [y + 1, z, x], with: [y, z, x], withProp: 'connectPY' },
-
-        { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y, z - 1, x], withProp: 'connectPY' },
-        { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z + 1, x], withProp: 'connectPY' },
-        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y, z, x - 1], withProp: 'connectPY' },
-        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y, z, x - 1], withProp: 'connectPY' },
+        // /** Z + 1, Z - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y, z - 1, x], withProp: 'connectPY' },
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z + 1, x], withProp: 'connectPY' },
+        // /** X + 1, X - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y, z, x - 1], withProp: 'connectPY' },
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z, x + 1], withProp: 'connectPY' },
+        // /** X - 1, Z - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x - 1], with: [y, z - 1, x - 1], withProp: 'connectPY' },
+        // /** X - 1, Z + 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x - 1], with: [y, z + 1, x - 1], withProp: 'connectPY' },
+        // /** X + 1, Z - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x + 1], with: [y, z - 1, x + 1], withProp: 'connectPY' },
+        // /** X + 1, Z + 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x + 1], with: [y, z + 1, x + 1], withProp: 'connectPY' },
+        //
+        // /** ++Y with ++Y */
+        // /** X - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y + 1, z, x], withProp: 'connectNX' },
+        // /** X + 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z - 1, x], withProp: 'connectPX' },
+        // /** Z - 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y + 1, z, x], withProp: 'connectNZ' },
+        // /** Z + 1 */
+        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z - 1, x], withProp: 'connectPZ' },
     ]
 
     return actions
@@ -134,7 +154,8 @@ const createPipelineActionsWithMapItem = (y, z, x, map) => {
 
 
 
-export const createMap = (tiles, studio) => {
+export const createMap = (tiles, studio, materials) => {
+    const make = createMakerMesh(materials)
     let map
 
     return {
@@ -197,9 +218,14 @@ export const createMap = (tiles, studio) => {
                                 /** add mesh to scene */
                                 if (map.items[y][z][x].hasOwnProperty('resultTileIndex') && Number.isInteger(map.items[y][z][x].resultTileIndex)) {
                                     map.items[y][z][x].tileData = tiles[map.items[y][z][x].resultTileIndex]
-                                    //makerMesh.addMesh(map.items[y][z][x])
+
+                                    if (mapR.labels[`${ y }_${ z }_${ x }`].mesh) {
+                                        studio.removeFromScene(mapR.labels[`${ y }_${ z }_${ x }`].mesh)
+                                    }
+                                    const m = make(map.items[y][z][x])
+                                    m && studio.addToScene(m)
                                 }
-                                res()
+                                setTimeout(res, 15)
                             })
                         })
                     }

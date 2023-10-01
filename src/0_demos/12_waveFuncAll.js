@@ -75,9 +75,6 @@ async function initApp () {
     }
     animate()
 
-    const l = createBoxesLines(W, H, W, 7, 10, 7)
-    studio.addToScene(l)
-
     const arrTiles = createDataTiles()
     const dataForMap = {
         numW: 7,
@@ -88,7 +85,12 @@ async function initApp () {
         tileD: W,
         tiles: arrTiles,
     }
-    generateStructureScheme(dataForMap, studio).then(result => {
+
+    const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
+    l.position.set(-W / 2, 0, -W / 2)
+    studio.addToScene(l)
+
+    generateStructureScheme(dataForMap, studio, materials).then(result => {
         const v = []
         const uv = []
         const c = []
@@ -111,8 +113,8 @@ async function initApp () {
             }
         })
 
-        const mesh = createMesh(v, uv, c, materials.brickColor)
-        studio.addToScene(mesh)
+        // const mesh = createMesh(v, uv, c, materials.brickColor)
+        // studio.addToScene(mesh)
 
         const meshCollision = createMesh(vCollision, uv, c, materials.simple)
         meshCollision.visible = false

@@ -1,6 +1,6 @@
 import { createMap } from './map'
 
-export const generateStructureScheme = (data, studio) => {
+export const generateStructureScheme = (data, studio, materials) => {
     return new Promise(res => {
         console.log('dataTiles', data)
         const o = {
@@ -8,7 +8,7 @@ export const generateStructureScheme = (data, studio) => {
             SIZE_Y: data.numH,
             SIZE_Z: data.numD,
         }
-        const generator = createMap(data.tiles, studio)
+        const generator = createMap(data.tiles, studio, materials)
         generator.generateMap(o).then(r => {
             console.log('resultStructure', r)
             res(r)

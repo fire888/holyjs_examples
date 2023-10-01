@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 let geomLabel = new THREE.PlaneGeometry(.3, .3)
 
-export const createLabel = (t, color = "#FFFF00") => {
+export const createLabel = (t, color = "#FFFF00", scale = 1) => {
     const canvas = document.createElement( 'canvas' );
     const ctx = canvas.getContext( '2d' );
     canvas.width = 128;
@@ -17,6 +17,8 @@ export const createLabel = (t, color = "#FFFF00") => {
     ctx.fillText(t, 64, 100)
 
     const map = new THREE.CanvasTexture( canvas )
-    const material = new THREE.MeshBasicMaterial( { map: map, transparent: true } );
-    return new THREE.Mesh(geomLabel, material)
+    const material = new THREE.MeshBasicMaterial( { map: map, transparent: true } )
+    const mesh = new THREE.Mesh(geomLabel, material)
+    mesh.scale.set(scale, scale, scale)
+    return mesh
 }
