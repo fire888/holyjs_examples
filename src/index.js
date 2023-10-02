@@ -8,6 +8,7 @@
 //import './0_demos/05_manyFigures'
 //import './0_demos/06_simpleProfile'
 //import './0_demos/07_profileByPoints'
+//import './0_demos/07_z1_doubleProfile'
 import './0_demos/08_structureRooms'
 //import './0_demos/09_structureBreaksEasy'
 //import './0_demos/10_tiles'
