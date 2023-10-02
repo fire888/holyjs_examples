@@ -14,13 +14,13 @@ const white6 = M.fillColorFace(white1)
 
 export const createRooms = (root) => {
     const {
-        arrOuterWalls,
+        wallsOuter,
+        walls,
         doors,
-        arrWallsPrepared,
         floors,
     } = createTown2Scheme(root)
 
-    const l = createHelpLines(arrWallsPrepared)
+    const l = createHelpLines(walls)
     root.studio.addToScene(l)
 
     const v = []
@@ -29,8 +29,8 @@ export const createRooms = (root) => {
     const u = []
 
     /** ROOMS MESHES */
-    for (let i = 0; i < arrWallsPrepared.length; ++i) {
-        const dataWall = createWall(arrWallsPrepared[i], root)
+    for (let i = 0; i < walls.length; ++i) {
+        const dataWall = createWall(walls[i], root)
         v.push(...dataWall.v)
         c.push(...dataWall.c)
         b.push(...dataWall.b)
@@ -53,8 +53,8 @@ export const createRooms = (root) => {
     }
 
     /** OUTER WALLS MESH */
-    for (let i = 0; i < arrOuterWalls.length; ++i) {
-        const wall = createOuterWall(arrOuterWalls[i], null)
+    for (let i = 0; i < wallsOuter.length; ++i) {
+        const wall = createOuterWall(wallsOuter[i], null)
         v.push(...wall.v)
         c.push(...wall.c)
         b.push(...wall.b)

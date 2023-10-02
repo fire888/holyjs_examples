@@ -3,7 +3,6 @@ import { createStudio } from './studio'
 import { createRooms } from './createRooms'
 import consA0Src from '../assets/broken_down_concrete2_ao.jpg'
 import consNormSrc from '../assets/broken_down_concrete2_Normal-dx.jpg'
-import {Player} from "../entities/player";
 
 async function initApp () {
     const studio = createStudio(3)
@@ -13,7 +12,6 @@ async function initApp () {
         'iron' : new THREE.MeshPhongMaterial({
             color: 0xcccccc,
             lightMapIntensity: .35,
-            map: new THREE.TextureLoader().load(consA0Src),
             aoMap: new THREE.TextureLoader().load(consA0Src),
             normalMap: new THREE.TextureLoader().load(consNormSrc),
             normalScale: new THREE.Vector2(.1, .1),
@@ -23,7 +21,6 @@ async function initApp () {
             vertexColors: true,
         }),
     }
-
 
     const updateFunctions = []
     let n = 0
