@@ -1,14 +1,7 @@
-import {createFace, createFaceWithSquare} from "../helpers/geomHelpers";
+import { M } from './M'
+import { WHITE_1 } from "./constants";
 
-const white1 = [1, 1, 1]
-const white6 = [
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-]
+const white6 = M.fillColorFace(WHITE_1)
 
 const h0 = 57
 const h1 = h0 + 2
@@ -28,10 +21,7 @@ export const createPanel = ({
     const x0 = leftOffset
     const x1 = l - rightOffset
 
-    const colorRoom6 = [
-        ...colorRoom, ...colorRoom, ...colorRoom,
-        ...colorRoom, ...colorRoom, ...colorRoom,
-    ]
+    const colorRoom6 = M.fillColorFace(colorRoom)
 
     const c = []
     const v = []
@@ -40,7 +30,7 @@ export const createPanel = ({
 
     if (l < 30) {
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [x0, h0, z],
                 [x1, h0, z],
                 [x1, h1, z],
@@ -51,7 +41,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [x0, h0 - 5, z - 10],
                 [x1, h0 - 5, z - 10],
                 [x1, h0, z],
@@ -59,24 +49,15 @@ export const createPanel = ({
             )
         )
         c.push(...white6)
-        u.push(
-            0, 0,
-            1, 0,
-            1, 1,
-            0, 0,
-            1, 1,
-            0, 1
-        )
+        u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
     }
-
-
 
     if (l > 30) {
         const lengthWall =  l - (leftOffset + rightOffset)
         const rPanel = lengthWall * .2
         const center = leftOffset + lengthWall / 2
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel, ph0, z + 1],
                 [center + rPanel, ph0, z + 1],
                 [center + rPanel, ph1, z + 1],
@@ -84,19 +65,11 @@ export const createPanel = ({
             )
         )
         c.push(...colorRoom6)
-        u.push(
-            0, 0,
-            1, 0,
-            1, 1,
-            0, 0,
-            1, 1,
-            0, 1
-        )
-
+        u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         /** panel frame ***/
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel - frameW, ph0 - frameW, z + 2],
                 [center + rPanel + frameW, ph0 - frameW, z + 2],
                 [center + rPanel, ph0, z + 1],
@@ -106,7 +79,7 @@ export const createPanel = ({
         c.push(...white6)
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel - frameW, ph0 - frameW - 1, z - 10],
                 [center + rPanel + frameW, ph0 - frameW - 1, z - 10],
                 [center + rPanel + frameW, ph0 - frameW, z + 2],
@@ -114,17 +87,11 @@ export const createPanel = ({
             )
         )
         c.push(...white6)
-        u.push(
-            0, 0,
-            1, 0,
-            1, 1,
-            0, 0,
-            1, 1,
-            0, 1
-        )
+        u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+
         ////////////////////
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center + rPanel, ph0, z + 1],
                 [center + rPanel + frameW, ph0 - frameW, z + 2],
                 [center + rPanel + frameW, ph1 + frameW, z + 2],
@@ -135,7 +102,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center + rPanel + frameW, ph0 - frameW, z + 2],
                 [center + rPanel + frameW, ph0 - frameW - 1, z - 10],
                 [center + rPanel + frameW, ph1 + frameW + 1, z - 10],
@@ -146,9 +113,8 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         ////
-
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel - frameW, ph0 - frameW, z + 2],
                 [center - rPanel, ph0, z + 1],
                 [center - rPanel, ph1, z + 1],
@@ -159,7 +125,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel - frameW, ph0 - frameW - 1, z  - 10],
                 [center - rPanel - frameW, ph0 - frameW, z + 2],
                 [center - rPanel - frameW, ph1 + frameW, z + 2],
@@ -169,9 +135,8 @@ export const createPanel = ({
         c.push(...white6)
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
-
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center - rPanel, ph1, z + 1],
                 [center + rPanel, ph1, z + 1],
                 [center + rPanel + frameW, ph1 + frameW, z + 2],
@@ -181,12 +146,9 @@ export const createPanel = ({
         c.push(...white6)
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
-
-
-
         /** gor */
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [x0, h0, z],
                 [center - rPanel - frameW, h0, z],
                 [center - rPanel - frameW, h1, z],
@@ -197,7 +159,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [x0, h0 - 5, z - 10],
                 [center - rPanel - frameW, h0 - 5, z - 10],
                 [center - rPanel - frameW, h0, z],
@@ -208,7 +170,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center + rPanel + frameW, h0, z],
                 [x1, h0, z],
                 [x1, h1, z],
@@ -219,7 +181,7 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
         v.push(
-            ...createFace(
+            ...M.createPolygon(
                 [center + rPanel + frameW, h0 - 5, z - 10],
                 [x1, h0 - 5, z - 10],
                 [x1, h0, z],
@@ -230,16 +192,6 @@ export const createPanel = ({
         u.push(0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
 
     }
-
-
-
-
-
-
-
-
-
-
 
     return { v, c, u }
 }

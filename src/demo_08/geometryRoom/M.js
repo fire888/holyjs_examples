@@ -1,4 +1,5 @@
 import * as THREE from "three"
+const { PI } = Math
 
 export const M = {
     createPolygon:(v0, v1, v2, v3) => [...v0, ...v1, ...v2, ...v0, ...v2, ...v3],
@@ -30,9 +31,9 @@ export const M = {
         let rad = Math.atan(y / x)
         x < 0 && y > 0 && (rad = PI - Math.abs(rad))
         x < 0 && y <= 0 && (rad = PI + Math.abs(rad))
-        rad += Math.PI * 6
+        rad += Math.PI * 8
         rad = rad % (Math.PI * 2)
-        return -rad
+        return rad
     },
     getUvByLen: arr => {
         const uv = []

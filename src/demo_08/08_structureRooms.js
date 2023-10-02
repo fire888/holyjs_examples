@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { createStudio } from './studio'
-import { createTown2 } from './town2'
+import { createRooms } from './createRooms'
 import consA0Src from '../assets/broken_down_concrete2_ao.jpg'
 import consNormSrc from '../assets/broken_down_concrete2_Normal-dx.jpg'
 import {Player} from "../entities/player";
@@ -35,7 +35,7 @@ async function initApp () {
     }
     animate()
 
-    const town = createTown2(root)
+    const town = createRooms(root)
 
     // const meshCollision = createMesh(vCollision, uv, c, materials.simple)
     // meshCollision.visible = false

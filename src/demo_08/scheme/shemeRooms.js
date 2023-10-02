@@ -1,5 +1,5 @@
-import {tryToDivideRoom, roomStart, regenerate, getId} from './town2TryToDivide'
-import { createHelpLines} from './geometryRoom/helpLines'
+import { tryToDivideRoom, roomStart, regenerate, getId } from './roomTryToDivide'
+import { createHelpLines } from '../geometryRoom/meshHelpLines'
 const DOOR_SIZE = 30
 const DOOR_SIZE_FULL = 60
 
@@ -19,7 +19,6 @@ export const createTown2Scheme = (root) => {
             if (arr[i].notDivide) {
                 continue;
             }
-
 
             const newDataRooms = tryToDivideRoom(arr[i])
             if (!newDataRooms) {
@@ -250,8 +249,6 @@ export const createTown2Scheme = (root) => {
     /** prepare ResultArr to make walls */
     const arrWallsPrepared = []
     for (let i = 0; i < resultArr.length; ++i) {
-        //const colorRoom = [Math.random(), Math.random(), Math.random()]
-        //const colorRoom = [0, 0, 0]
         const colorRoom = [Math.random() * .4, Math.random() * .4, Math.random() * .4]
 
         const nData = resultArr[i].walls['n']
@@ -362,8 +359,6 @@ export const createTown2Scheme = (root) => {
         }
     }
 
-
-
     /** CREATE OUTER WALLS DATA **/
     const outerWallsData = JSON.parse(JSON.stringify(roomStart))
     const arrOuterWalls = []
@@ -402,7 +397,6 @@ export const createTown2Scheme = (root) => {
             arrOuterWalls.push({ p0: outerWallsData.walls[key].p0, p1: outerWallsData.walls[key].p1 })
         }
     }
-
 
     return {
         arrOuterWalls,

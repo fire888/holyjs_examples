@@ -1,10 +1,6 @@
 let minS = 250
-//const S1 = 500
 let S2 = 3000
 let S1 = 3000
-//const S2 = 2000
-//const S2 = 1500
-
 
 let count = 0
 export const getId = () => {
@@ -29,12 +25,6 @@ export const regenerate = () => {
     }
 
 }
-
-
-
-
-
-
 
 export const tryToDivideRoom = (roomData) => {
     const { walls } = roomData

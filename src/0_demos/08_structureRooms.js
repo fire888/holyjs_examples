@@ -1,1 +1,1 @@
-import '../demo_08/14_structureRooms'
+import '../demo_08/08_structureRooms'

@@ -1,8 +1,8 @@
 import { M } from './M'
+import { WHITE_1 } from "./constants";
 
 const y0 = -61
-const white1 = [1, 1, 1]
-const white6 = M.fillColorFace(white1)
+const white6 = M.fillColorFace(WHITE_1)
 
 export const createFloor = (data) => {
     data.colorRoom[0] *= 1.2

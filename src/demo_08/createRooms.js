@@ -1,36 +1,18 @@
 import { createWall } from './geometryRoom/geomWall'
 import { createDoorData } from './geometryRoom/geomDoor'
-import { createOuterWall } from './geometryRoom/outerWall'
-import {rotateArrY, translateArr, createFace} from "./helpers/geomHelpers";
-import { createMeshFromBuffer } from './helpers/createBufferMesh'
-import { createTown2Scheme } from './town2shemeRooms'
 import { createFloor } from './geometryRoom/geometryFloor'
-import { createHelpLines } from './geometryRoom/helpLines'
+import { createOuterWall } from './geometryRoom/geomOuterWall'
+import { createMeshFromBuffer } from './geometryRoom/meshBuffer'
+import { createTown2Scheme } from './scheme/shemeRooms'
+import { createHelpLines } from './geometryRoom/meshHelpLines'
+import { M } from './geometryRoom/M'
 
 
 const y0 = -61
 const white1 = [1, 1, 1]
-const white6 = [
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-    ...white1,
-]
-const gr1 = [1, 0, 0]
-const gr6 = [
-    ...gr1,
-    ...gr1,
-    ...gr1,
-    ...gr1,
-    ...gr1,
-    ...gr1,
-]
+const white6 = M.fillColorFace(white1)
 
-
-
-export const createTown2 = (root) => {
+export const createRooms = (root) => {
     const {
         arrOuterWalls,
         doors,
@@ -58,18 +40,17 @@ export const createTown2 = (root) => {
     /** DOORS MESH **/
     for (let key in doors) {
         const door = createDoorData(root, null, doors[key].l, doors[key].keyMode || null)
-        rotateArrY(door.v,  doors[key].angle)
-        translateArr(door.v, doors[key].p0[0], y0, doors[key].p0[1])
+        M.rotateVerticesY(door.v, doors[key].angle)
+        M.translateVertices(door.v, doors[key].p0[0], y0, doors[key].p0[1])
         v.push(...door.v)
 
-        rotateArrY(door.b,  doors[key].angle)
-        translateArr(door.b, doors[key].p0[0], y0, doors[key].p0[1])
+        M.rotateVerticesY(door.b, doors[key].angle)
+        M.translateVertices(door.b, doors[key].p0[0], y0, doors[key].p0[1])
         b.push(...door.b)
 
         u.push(...door.u)
         c.push(...door.c)
     }
-
 
     /** OUTER WALLS MESH */
     for (let i = 0; i < arrOuterWalls.length; ++i) {
@@ -104,11 +85,11 @@ export const createTown2 = (root) => {
         for (let i = 0; i < nX; ++i) {
             for (let j = 0; j < nZ; ++j) {
                 v.push(
-                    ...createFace(
-                        [data.p0[0] + i * stepX,          h,     data.p2[1] - (j) * stepZ],
-                        [data.p0[0] + (i + 1) * stepX,    h,     data.p2[1] - (j) * stepZ],
-                        [data.p0[0] + (i + 1) * stepX,    h,     data.p2[1] - (j + 1) * stepZ],
-                        [data.p0[0] + i * stepX,          h,     data.p2[1] - (j + 1) * stepZ],
+                    ...M.createPolygon(
+                        [data.p0[0] + i * stepX, h, data.p2[1] - (j) * stepZ],
+                        [data.p0[0] + (i + 1) * stepX, h, data.p2[1] - (j) * stepZ],
+                        [data.p0[0] + (i + 1) * stepX, h, data.p2[1] - (j + 1) * stepZ],
+                        [data.p0[0] + i * stepX, h, data.p2[1] - (j + 1) * stepZ],
                     )
                 )
                 c.push(...white6)
@@ -117,26 +98,12 @@ export const createTown2 = (root) => {
         }
     }
 
-    console.log(root)
-
-    console.log()
-
-
-    const mesh = createMeshFromBuffer({
-        v,
-        c,
-        u,
-        mat: root.materials.iron
-    })
+    const mesh = createMeshFromBuffer({v, c, u, mat: root.materials.iron})
     root.studio.addToScene(mesh)
 
-    const mCollision = createMeshFromBuffer({ v: b })
+    const mCollision = createMeshFromBuffer({v: b})
     mCollision.visible = false
     root.studio.addToScene(mCollision)
 
-
-    return {
-        mesh,
-        mCollision,
-    }
+    return {mesh, mCollision}
 }

@@ -613,9 +613,6 @@ const createMesh = (v, uv, c, material) => {
     return new THREE.Mesh(geometry, material)
 }
 
-
-
-
 async function initApp () {
     const studio = createStudio(20)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
@@ -681,7 +678,6 @@ async function initApp () {
     const mesh4 = createMesh(v, uv, c, materials.brickColor)
     studio.addToScene(mesh4)
 }
-
 
 window.addEventListener('load', () => {
     initApp().then()
