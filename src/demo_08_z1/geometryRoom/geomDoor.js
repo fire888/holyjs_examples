@@ -110,6 +110,31 @@ export const createDoorData = (root, lineData, l, mode = 'simple') => {
             )
             u.push(...uv6)
             c.push(...white6)
+
+            v.push(
+                ...M.createPolygon(
+                    [rightProfile[i], rightProfile[i + 1], 0],
+                    [l / 2, rightProfile[i + 1], 0],
+                    [l / 2, rightProfile[i + 1], rightProfile[i + 2]],
+                    [rightProfile[i], rightProfile[i + 1], rightProfile[i + 2]],
+                )
+            )
+            u.push(...uv6)
+            c.push(...white6)
+        }
+
+        if (count === 12) {
+            v.push(
+                ...M.createPolygon(
+                    [leftProfile[i], leftProfile[i + 1], leftProfile[i + 2]],
+                    [l / 2, leftProfile[i + 1], leftProfile[i + 2]],
+                    [l / 2, leftProfile[i + 1], 0],
+                    [leftProfile[i], leftProfile[i + 1], 0],
+
+                )
+            )
+            u.push(...uv6)
+            c.push(...white6)
         }
 
         if (count === 0) {

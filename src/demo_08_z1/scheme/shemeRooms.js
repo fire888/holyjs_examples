@@ -7,6 +7,8 @@ const MIN_S = Math.random() * 200 + 180
 const MIN_CAN_NOT_DIVIDE_S = 800
 const S2 = Math.random() * 1500 + 1200
 const S1 = Math.random() * 1500 + 1200
+//const S2 = 400
+//const S1 = 400
 
 let count = 0
 const getId = () => ++count

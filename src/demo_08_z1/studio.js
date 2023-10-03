@@ -21,7 +21,7 @@ export const createStudio = (startCameraCoord = 3) => {
     const lightA = new THREE.AmbientLight( 0xffffff, .2)
     scene.add( lightA )
 
-    const dir1 = new THREE.DirectionalLight( 0xffffff, .5)
+    const dir1 = new THREE.DirectionalLight( 0xffffff, .8)
     dir1.position.set(0, 5, 3)
     scene.add(dir1)
 
