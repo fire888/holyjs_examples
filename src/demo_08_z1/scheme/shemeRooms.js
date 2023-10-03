@@ -236,7 +236,6 @@ const makeScheme = (root) => {
     })
 }
 
-
 const makeDoors = (root, arrRooms) => {
     return new Promise(res => {
         let i = 0
@@ -321,9 +320,10 @@ const makeDoors = (root, arrRooms) => {
             }
         }
 
+        let savedI = i
         const iterate = () => {
             drawDoor()
-            setTimeout(() => {
+            const next = () => {
                 ++j
                 if (arrRooms.length === j) {
                     root.lineHelpers.createLines(arrRooms).then(() => {})
@@ -335,7 +335,14 @@ const makeDoors = (root, arrRooms) => {
                     }
                 }
                 iterate()
-            }, 0)
+            }
+
+            if (savedI !== i) {
+                savedI = i
+                setTimeout(next, 70)
+            } else {
+                next()
+            }
         }
         iterate()
     })
