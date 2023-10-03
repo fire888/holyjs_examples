@@ -339,7 +339,7 @@ const makeDoors = (root, arrRooms) => {
 
             if (savedI !== i) {
                 savedI = i
-                setTimeout(next, 70)
+                setTimeout(next, 0)
             } else {
                 next()
             }
@@ -348,296 +348,314 @@ const makeDoors = (root, arrRooms) => {
     })
 }
 
-
-
-export const createTown2Scheme = (root) => {
+const makeDoorsOuter = (root, arrRooms) => {
     return new Promise(res => {
-        root.lineHelpers = createLineHelpers(root)
-        makeScheme(root).then(arrWalls => {
-            makeDoors(root, arrWalls).then(arrWalls => {
-                const outerDoors = []
-                for (let i = 0; i < arrWalls.length; ++i) {
-                    const sData = arrWalls[i].walls['n']
-                    if (sData.p0[1] === 0) {
-                        const xx = [sData.p0[0], sData.p1[0]]
-                        const d = xx[1] - xx[0]
-                        if (d > DOOR_SIZE_FULL) {
-                            const doorData = {
-                                id: getId(),
-                                x0: xx[0] + (d / 2) - DOOR_SIZE * .5,
-                                x1: xx[0] + (d / 2) + DOOR_SIZE * .5,
-                                keyMode: 'bigDoor',
-                            }
-                            if (!sData.doors) {
-                                sData.doors = []
-                            }
-                            sData.doors.push(doorData)
-                            outerDoors.push(doorData)
-                        }
+        const outerDoors = []
+        for (let i = 0; i < arrRooms.length; ++i) {
+            const sData = arrRooms[i].walls['n']
+            if (sData.p0[1] === 0) {
+                const xx = [sData.p0[0], sData.p1[0]]
+                const d = xx[1] - xx[0]
+                if (d > DOOR_SIZE_FULL) {
+                    const doorData = {
+                        id: getId(),
+                        x0: xx[0] + (d / 2) - DOOR_SIZE * .5,
+                        x1: xx[0] + (d / 2) + DOOR_SIZE * .5,
+                        keyMode: 'bigDoor',
                     }
+                    if (!sData.doors) {
+                        sData.doors = []
+                    }
+                    sData.doors.push(doorData)
+                    outerDoors.push(doorData)
                 }
-                //root.lineHelpers.createLines(arrWalls)
-
-                /** divide walls by doors */
-                for (let i = 0; i < arrWalls.length; ++i) {
-                    const nData = arrWalls[i].walls['n']
-                    if (nData.doors) {
-                        nData.doors.sort((a, b) => a.x0 - b.x0)
-                        nData.wallSegments = []
-                        for (let j = 0; j < nData.doors.length; ++j) {
-                            if (j === 0) {
-                                nData.wallSegments.push({
-                                    p0: [...nData.p0],
-                                    p1: [nData.doors[j].x0, nData.p0[1]],
-                                })
-                            }
-                            if (nData.doors[j - 1]) {
-                                nData.wallSegments.push({
-                                    p0: [nData.doors[j - 1].x1, nData.p0[1]],
-                                    p1: [nData.doors[j].x0, nData.p0[1]],
-                                })
-                            }
-                            if (j === nData.doors.length - 1) {
-                                nData.wallSegments.push({
-                                    p0: [nData.doors[nData.doors.length - 1].x1, nData.p0[1]],
-                                    p1: [...nData.p1],
-                                })
-                            }
-                        }
-                    }
-                    const sData = arrWalls[i].walls['s']
-                    if (sData.doors) {
-                        sData.doors.sort((a, b) => a.x0 - b.x0)
-                        sData.wallSegments = []
-                        for (let j = sData.doors.length - 1; j > -1; --j) {
-                            if (j === sData.doors.length - 1) {
-                                sData.wallSegments.push({
-                                    p0: [...sData.p1],
-                                    p1: [sData.doors[j].x1, sData.p1[1]],
-                                })
-                            }
-                            if (sData.doors[j - 1]) {
-                                sData.wallSegments.push({
-                                    p0: [sData.doors[j].x0, sData.p1[1]],
-                                    p1: [sData.doors[j - 1].x1, sData.p1[1]],
-                                })
-                            }
-                            if (j === 0) {
-                                sData.wallSegments.push({
-                                    p0: [sData.doors[j].x0, sData.p1[1]],
-                                    p1: [...sData.p0],
-                                })
-                            }
-                        }
-                    }
-                    const eData = arrWalls[i].walls['e']
-                    if (eData.doors) {
-                        eData.doors.sort((a, b) => a.z0 - b.z0)
-                        eData.wallSegments = []
-                        for (let j = 0; j < eData.doors.length; ++j) {
-                            if (j === 0) {
-                                eData.wallSegments.push({
-                                    p0: [...eData.p0],
-                                    p1: [eData.p0[0], eData.doors[j].z0],
-                                })
-                            }
-                            if (eData.doors[j - 1]) {
-                                eData.wallSegments.push({
-                                    p0: [eData.p0[0], eData.doors[j - 1].z1],
-                                    p1: [eData.p0[0], eData.doors[j].z0],
-                                })
-                            }
-                            if (j === eData.doors.length - 1) {
-                                eData.wallSegments.push({
-                                    p0: [eData.p0[0], eData.doors[j].z1],
-                                    p1: [...eData.p1],
-                                })
-                            }
-                        }
-                    }
-                    const wData = arrWalls[i].walls['w']
-                    if (wData.doors) {
-                        wData.doors.sort((a, b) => a.z0 - b.z0)
-                        wData.wallSegments = []
-                        for (let j = wData.doors.length - 1; j > -1; --j) {
-                            if (j === wData.doors.length - 1) {
-                                wData.wallSegments.push({
-                                    p0: [...wData.p1],
-                                    p1: [wData.p1[0], wData.doors[j].z1],
-                                })
-                            }
-                            if (wData.doors[j - 1]) {
-                                wData.wallSegments.push({
-                                    p0: [wData.p1[0], wData.doors[j].z0],
-                                    p1: [wData.p1[0], wData.doors[j- 1].z1],
-                                })
-                            }
-                            if (j === 0) {
-                                wData.wallSegments.push({
-                                    p0: [wData.p1[0], wData.doors[j].z0],
-                                    p1: [...wData.p0],
-                                })
-                            }
-                        }
-                    }
-                }
-
-                const floors = []
-
-                /** prepare ResultArr to make walls */
-                const walls = []
-                for (let i = 0; i < arrWalls.length; ++i) {
-                    const colorRoom = [Math.random() * .4, Math.random() * .4, Math.random() * .4]
-
-                    const nData = arrWalls[i].walls['n']
-                    {
-                        const data = {
-                            p0: nData.p0,
-                            p1: nData.p1,
-                            segments: [],
-                            colorRoom,
-                        }
-                        if (nData.wallSegments) {
-                            for (let i = 0; i < nData.wallSegments.length; ++i) {
-                                data.segments.push(nData.wallSegments[i])
-                            }
-                        }
-                        walls.push(data)
-                    }
-                    const sData = arrWalls[i].walls['s']
-                    {
-                        const data = {
-                            p0: sData.p1,
-                            p1: sData.p0,
-                            segments: [],
-                            colorRoom,
-                        }
-                        if (sData.wallSegments) {
-                            for (let i = 0; i < sData.wallSegments.length; ++i) {
-                                data.segments.push(sData.wallSegments[i])
-                            }
-                        }
-                        walls.push(data)
-                    }
-                    const eData = arrWalls[i].walls['e']
-                    {
-                        const data = {
-                            p0: eData.p0,
-                            p1: eData.p1,
-                            segments: [],
-                            colorRoom,
-                        }
-                        if (eData.wallSegments) {
-                            for (let i = 0; i < eData.wallSegments.length; ++i) {
-                                data.segments.push(eData.wallSegments[i])
-                            }
-                        }
-                        walls.push(data)
-                    }
-                    const wData = arrWalls[i].walls['w']
-                    {
-                        const data = {
-                            p0: wData.p1,
-                            p1: wData.p0,
-                            segments: [],
-                            colorRoom,
-                        }
-                        if (wData.wallSegments) {
-                            for (let i = 0; i < wData.wallSegments.length; ++i) {
-                                data.segments.push(wData.wallSegments[i])
-                            }
-                        }
-                        walls.push(data)
-                    }
-
-                    const floorData = {
-                        p0: sData.p0,
-                        p1: sData.p1,
-                        p2: nData.p1,
-                        p3: nData.p0,
-                        colorRoom,
-                    }
-                    floors.push(floorData)
-                }
-
-                /** CREATE DOORS DATA */
-                const doors = {}
-                for (let i = 0; i < arrWalls.length; ++i) {
-                    for (let key in arrWalls[i].walls) {
-                        if (arrWalls[i].walls[key].doors) {
-                            for (let j = 0; j < arrWalls[i].walls[key].doors.length; ++j) {
-                                let x = null, z = null
-                                if (key === 'n' || key === 's') {
-                                    z = arrWalls[i].walls[key].p0[1]
-                                }
-                                if (key === 'e' || key === 'w') {
-                                    x = arrWalls[i].walls[key].p0[0]
-                                }
-
-                                doors[arrWalls[i].walls[key].doors[j].id] = {
-                                    ...arrWalls[i].walls[key].doors[j],
-                                    dir: key,
-                                    x, z,
-                                }
-                            }
-                        }
-                    }
-                }
-                for (let key in doors) {
-                    if (doors[key].x0) {
-                        doors[key].l = doors[key].x1 - doors[key].x0
-                        doors[key].p0 = [doors[key].x0, doors[key].z]
-                        doors[key].p1 = [doors[key].x1, doors[key].z]
-                        doors[key].angle = 0
-                    } else {
-                        doors[key].l = doors[key].z1 - doors[key].z0
-                        doors[key].p0 = [doors[key].x, doors[key].z0]
-                        doors[key].p1 = [doors[key].x, doors[key].z1]
-                        doors[key].angle = -Math.PI / 2
-                    }
-                }
-
-                /** CREATE OUTER WALLS DATA **/
-                const outerWallsData = JSON.parse(JSON.stringify(firstRoom))
-                const wallsOuter = []
-                for (let key in outerWallsData.walls) {
-                    if (key === 'n') {
-                        outerDoors.sort((a, b) => a.x0 - b.x0)
-                        const doorOffset = 10
-                        for (let i = outerDoors.length - 1; i > -1; --i) {
-                            if (i === outerDoors.length - 1) {
-                                wallsOuter.push({
-                                    p0: [...outerWallsData.walls[key].p1],
-                                    p1: [outerDoors[i].x1 + doorOffset, outerWallsData.walls[key].p1[1]]
-                                })
-                            }
-                            if (outerDoors[i - 1]) {
-                                wallsOuter.push({
-                                    p0: [outerDoors[i].x0 - doorOffset, outerWallsData.walls[key].p1[1]],
-                                    p1: [outerDoors[i - 1].x1 + doorOffset, outerWallsData.walls[key].p1[1]]
-                                })
-                            }
-                            if (i === 0) {
-                                wallsOuter.push({
-                                    p0: [outerDoors[i].x0 - doorOffset, outerWallsData.walls[key].p1[1]],
-                                    p1: [...outerWallsData.walls[key].p0]
-                                })
-                            }
-                        }
-                    }
-                    if (key === 's') {
-                        wallsOuter.push({ p0: outerWallsData.walls[key].p0, p1: outerWallsData.walls[key].p1 })
-                    }
-                    if (key === 'e') {
-                        wallsOuter.push({ p0: outerWallsData.walls[key].p1, p1: outerWallsData.walls[key].p0 })
-                    }
-                    if (key === 'w') {
-                        wallsOuter.push({ p0: outerWallsData.walls[key].p0, p1: outerWallsData.walls[key].p1 })
-                    }
-                }
-
-                res({ wallsOuter, walls, doors, floors })
-            })
-        })
+            }
+        }
+        res(outerDoors)
     })
+}
+
+const divideWallsByDoors = (arrWalls) => {
+    /** divide walls by doors */
+    for (let i = 0; i < arrWalls.length; ++i) {
+        const nData = arrWalls[i].walls['n']
+        if (nData.doors) {
+            nData.doors.sort((a, b) => a.x0 - b.x0)
+            nData.wallSegments = []
+            for (let j = 0; j < nData.doors.length; ++j) {
+                if (j === 0) {
+                    nData.wallSegments.push({
+                        p0: [...nData.p0],
+                        p1: [nData.doors[j].x0, nData.p0[1]],
+                    })
+                }
+                if (nData.doors[j - 1]) {
+                    nData.wallSegments.push({
+                        p0: [nData.doors[j - 1].x1, nData.p0[1]],
+                        p1: [nData.doors[j].x0, nData.p0[1]],
+                    })
+                }
+                if (j === nData.doors.length - 1) {
+                    nData.wallSegments.push({
+                        p0: [nData.doors[nData.doors.length - 1].x1, nData.p0[1]],
+                        p1: [...nData.p1],
+                    })
+                }
+            }
+        }
+        const sData = arrWalls[i].walls['s']
+        if (sData.doors) {
+            sData.doors.sort((a, b) => a.x0 - b.x0)
+            sData.wallSegments = []
+            for (let j = sData.doors.length - 1; j > -1; --j) {
+                if (j === sData.doors.length - 1) {
+                    sData.wallSegments.push({
+                        p0: [...sData.p1],
+                        p1: [sData.doors[j].x1, sData.p1[1]],
+                    })
+                }
+                if (sData.doors[j - 1]) {
+                    sData.wallSegments.push({
+                        p0: [sData.doors[j].x0, sData.p1[1]],
+                        p1: [sData.doors[j - 1].x1, sData.p1[1]],
+                    })
+                }
+                if (j === 0) {
+                    sData.wallSegments.push({
+                        p0: [sData.doors[j].x0, sData.p1[1]],
+                        p1: [...sData.p0],
+                    })
+                }
+            }
+        }
+        const eData = arrWalls[i].walls['e']
+        if (eData.doors) {
+            eData.doors.sort((a, b) => a.z0 - b.z0)
+            eData.wallSegments = []
+            for (let j = 0; j < eData.doors.length; ++j) {
+                if (j === 0) {
+                    eData.wallSegments.push({
+                        p0: [...eData.p0],
+                        p1: [eData.p0[0], eData.doors[j].z0],
+                    })
+                }
+                if (eData.doors[j - 1]) {
+                    eData.wallSegments.push({
+                        p0: [eData.p0[0], eData.doors[j - 1].z1],
+                        p1: [eData.p0[0], eData.doors[j].z0],
+                    })
+                }
+                if (j === eData.doors.length - 1) {
+                    eData.wallSegments.push({
+                        p0: [eData.p0[0], eData.doors[j].z1],
+                        p1: [...eData.p1],
+                    })
+                }
+            }
+        }
+        const wData = arrWalls[i].walls['w']
+        if (wData.doors) {
+            wData.doors.sort((a, b) => a.z0 - b.z0)
+            wData.wallSegments = []
+            for (let j = wData.doors.length - 1; j > -1; --j) {
+                if (j === wData.doors.length - 1) {
+                    wData.wallSegments.push({
+                        p0: [...wData.p1],
+                        p1: [wData.p1[0], wData.doors[j].z1],
+                    })
+                }
+                if (wData.doors[j - 1]) {
+                    wData.wallSegments.push({
+                        p0: [wData.p1[0], wData.doors[j].z0],
+                        p1: [wData.p1[0], wData.doors[j- 1].z1],
+                    })
+                }
+                if (j === 0) {
+                    wData.wallSegments.push({
+                        p0: [wData.p1[0], wData.doors[j].z0],
+                        p1: [...wData.p0],
+                    })
+                }
+            }
+        }
+    }
+}
+
+const getWallsFromRooms = (arrWalls) => {
+    return new Promise(res => {
+        const floors = []
+        const walls = []
+        for (let i = 0; i < arrWalls.length; ++i) {
+            const colorRoom = [Math.random() * .4, Math.random() * .4, Math.random() * .4]
+
+            const nData = arrWalls[i].walls['n']
+            {
+                const data = {
+                    p0: nData.p0,
+                    p1: nData.p1,
+                    segments: [],
+                    colorRoom,
+                }
+                if (nData.wallSegments) {
+                    for (let i = 0; i < nData.wallSegments.length; ++i) {
+                        data.segments.push(nData.wallSegments[i])
+                    }
+                }
+                walls.push(data)
+            }
+            const sData = arrWalls[i].walls['s']
+            {
+                const data = {
+                    p0: sData.p1,
+                    p1: sData.p0,
+                    segments: [],
+                    colorRoom,
+                }
+                if (sData.wallSegments) {
+                    for (let i = 0; i < sData.wallSegments.length; ++i) {
+                        data.segments.push(sData.wallSegments[i])
+                    }
+                }
+                walls.push(data)
+            }
+            const eData = arrWalls[i].walls['e']
+            {
+                const data = {
+                    p0: eData.p0,
+                    p1: eData.p1,
+                    segments: [],
+                    colorRoom,
+                }
+                if (eData.wallSegments) {
+                    for (let i = 0; i < eData.wallSegments.length; ++i) {
+                        data.segments.push(eData.wallSegments[i])
+                    }
+                }
+                walls.push(data)
+            }
+            const wData = arrWalls[i].walls['w']
+            {
+                const data = {
+                    p0: wData.p1,
+                    p1: wData.p0,
+                    segments: [],
+                    colorRoom,
+                }
+                if (wData.wallSegments) {
+                    for (let i = 0; i < wData.wallSegments.length; ++i) {
+                        data.segments.push(wData.wallSegments[i])
+                    }
+                }
+                walls.push(data)
+            }
+
+            const floorData = {
+                p0: sData.p0,
+                p1: sData.p1,
+                p2: nData.p1,
+                p3: nData.p0,
+                colorRoom,
+            }
+            floors.push(floorData)
+        }
+        res({ walls, floors })
+    })
+}
+
+const prepareDoors = arrWalls => {
+    return new Promise(res => {
+        const doors = {}
+        for (let i = 0; i < arrWalls.length; ++i) {
+            for (let key in arrWalls[i].walls) {
+                if (arrWalls[i].walls[key].doors) {
+                    for (let j = 0; j < arrWalls[i].walls[key].doors.length; ++j) {
+                        let x = null, z = null
+                        if (key === 'n' || key === 's') {
+                            z = arrWalls[i].walls[key].p0[1]
+                        }
+                        if (key === 'e' || key === 'w') {
+                            x = arrWalls[i].walls[key].p0[0]
+                        }
+
+                        doors[arrWalls[i].walls[key].doors[j].id] = {
+                            ...arrWalls[i].walls[key].doors[j],
+                            dir: key,
+                            x, z,
+                        }
+                    }
+                }
+            }
+        }
+        for (let key in doors) {
+            if (doors[key].x0) {
+                doors[key].l = doors[key].x1 - doors[key].x0
+                doors[key].p0 = [doors[key].x0, doors[key].z]
+                doors[key].p1 = [doors[key].x1, doors[key].z]
+                doors[key].angle = 0
+            } else {
+                doors[key].l = doors[key].z1 - doors[key].z0
+                doors[key].p0 = [doors[key].x, doors[key].z0]
+                doors[key].p1 = [doors[key].x, doors[key].z1]
+                doors[key].angle = -Math.PI / 2
+            }
+        }
+        res(doors)
+    })
+}
+
+const prepareOuterDoors = (firstRoom, outerDoors) => {
+    return new Promise(res => {
+        const outerWallsData = JSON.parse(JSON.stringify(firstRoom))
+        const wallsOuter = []
+        for (let key in outerWallsData.walls) {
+            if (key === 'n') {
+                outerDoors.sort((a, b) => a.x0 - b.x0)
+                const doorOffset = 10
+                for (let i = outerDoors.length - 1; i > -1; --i) {
+                    if (i === outerDoors.length - 1) {
+                        wallsOuter.push({
+                            p0: [...outerWallsData.walls[key].p1],
+                            p1: [outerDoors[i].x1 + doorOffset, outerWallsData.walls[key].p1[1]]
+                        })
+                    }
+                    if (outerDoors[i - 1]) {
+                        wallsOuter.push({
+                            p0: [outerDoors[i].x0 - doorOffset, outerWallsData.walls[key].p1[1]],
+                            p1: [outerDoors[i - 1].x1 + doorOffset, outerWallsData.walls[key].p1[1]]
+                        })
+                    }
+                    if (i === 0) {
+                        wallsOuter.push({
+                            p0: [outerDoors[i].x0 - doorOffset, outerWallsData.walls[key].p1[1]],
+                            p1: [...outerWallsData.walls[key].p0]
+                        })
+                    }
+                }
+            }
+            if (key === 's') {
+                wallsOuter.push({ p0: outerWallsData.walls[key].p0, p1: outerWallsData.walls[key].p1 })
+            }
+            if (key === 'e') {
+                wallsOuter.push({ p0: outerWallsData.walls[key].p1, p1: outerWallsData.walls[key].p0 })
+            }
+            if (key === 'w') {
+                wallsOuter.push({ p0: outerWallsData.walls[key].p0, p1: outerWallsData.walls[key].p1 })
+            }
+        }
+        res(wallsOuter)
+    })
+}
+
+export async function createTown2Scheme (root) {
+    root.lineHelpers = createLineHelpers(root)
+
+    const arrRooms = await makeScheme(root)
+    const arrWalls = await makeDoors(root, arrRooms)
+    const outerDoors = await makeDoorsOuter(root, arrWalls)
+    await divideWallsByDoors(arrWalls)
+    const { walls, floors } = await getWallsFromRooms(arrWalls)
+    const doors = await prepareDoors(arrWalls)
+    const wallsOuter = await prepareOuterDoors(firstRoom, outerDoors)
+
+    return { wallsOuter, walls, doors, floors }
 }
