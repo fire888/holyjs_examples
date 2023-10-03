@@ -1,7 +1,81 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+const createStudio = (startCameraCoord = 3) => {
+    const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById( 'webgl-canvas' ),
+        antialias: true,
+    })
+    renderer.setClearColor(0x000000)
+    renderer.setPixelRatio( window.devicePixelRatio)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+    const scene = new THREE.Scene()
+    scene.fog = new THREE.Fog(0x000000, 300, 3000)
+
+    const axesHelper = new THREE.AxesHelper(1)
+    scene.add(axesHelper)
+    const gridHelper = new THREE.GridHelper(1, 10)
+    scene.add(gridHelper)
+
+    const lightA = new THREE.AmbientLight( 0xffffff, .5)
+    scene.add( lightA )
+
+    const dir1 = new THREE.DirectionalLight( 0xffffff, 1.2)
+    dir1.position.set(0, 5, 3)
+    scene.add(dir1)
+
+    const dir2 = new THREE.DirectionalLight( 0xffffff, 1)
+    dir2.position.set(0, -5, -3)
+    scene.add(dir2)
+
+    let camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 2000)
+    camera.position.set(0, startCameraCoord, startCameraCoord)
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.target.set(0, 0, 0)
+    controls.update()
+
+    const resize = () => {
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        if (camera) {
+            camera.aspect = window.innerWidth / window.innerHeight
+            camera.updateProjectionMatrix()
+        }
+    }
+    window.addEventListener('resize', resize)
+
+    return {
+        camera,
+        render: () => {
+            if (!camera ) {
+                return;
+            }
+            renderer.render(scene, camera)
+        },
+        addToScene: mesh => {
+            scene.add(mesh)
+        },
+        removeFromScene: mesh => {
+            scene.remove(mesh)
+        },
+        setCam(cam) {
+            camera = cam
+        },
+        setCamPos(x, y, z) {
+            camera.position.set(x, y, z)
+            controls.update()
+        },
+        setCamTargetPos (x, y, z) {
+            controls.target.set(x, y, z)
+            controls.update()
+        }
+    }
+}
+
 
 const { sin, cos, PI, random, floor } = Math
 const PI2 = PI * 2
@@ -29,7 +103,7 @@ const createStructure = () => {
     }
 
     /** create data central tower */
-    const floorsCenterNum = floor(random() * 10) + 2
+    const floorsCenterNum = floor(random() * 5) + 5
     let y = 0
     const floors = []
     for (let i = 0; i < floorsCenterNum; ++i) {
@@ -44,13 +118,13 @@ const createStructure = () => {
         createPart({ hArc, hCol, r: .3, w: 0, x: 0, y, z: 0, rot: 9, isArc: false, isTop: i === floors.length - 1 })
     }
     /** rays */
-    for (let i = 0; i < floor(random() * 10) + 2; ++i) {
+    for (let i = 0; i < floor(random() * 15) + 15; ++i) {
         const rot = random() * PI2
         let currentD = 0
-        const lenRay = Math.floor(random() * 10) + 1
+        const lenRay = Math.floor(random() * 4) + 1
         /**  ray tower */
         for (let nR = 0; nR < lenRay; ++nR) {
-            const newD = currentD + random() * 3 + .5
+            const newD = currentD + random() * 7 + .5
             const w = newD - currentD
             const x = sin(rot) * newD
             const z = cos(rot) * newD
@@ -614,7 +688,9 @@ const createMesh = (v, uv, c, material) => {
 }
 
 async function initApp () {
-    const studio = createStudio(20)
+    const studio = createStudio()
+    studio.setCamPos(0, 5, 15)
+    studio.setCamTargetPos(0, 10, 0)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({
@@ -658,16 +734,22 @@ async function initApp () {
     // const c2 = ARCH.columnSimple({ h: .5, r: .05, color1, color2 })
     // const mesh3 = createMesh(c2.v, c2.uv, c2.c, materials.brickColor)
     // mesh3.position.set(1.5, 0, 0)
-    // studio.setCamPos(.5, 1, 2)
     // studio.addToScene(mesh3)
+    //
+    // studio.setCamPos(.5, 1, 2)
 
     /** CUSTOM 02 ************************************/
-    const v = []
-    const uv = []
-    const c = []
+
 
     const st = createStructure()
-    for (let i = 0; i < st.length; ++i) {
+
+    const iterateItem = (i) => {
+        if (!st[i]) {
+            return;
+        }
+        const v = []
+        const uv = []
+        const c = []
         const { type, x, y, z, rot } = st[i]
         const e = ARCH[type](st[i])
         M.rotateVerticesY(e.v, rot + hPI)
@@ -675,9 +757,13 @@ async function initApp () {
         v.push(...e.v)
         uv.push(...e.uv)
         c.push(...e.c)
+        const mesh4 = createMesh(v, uv, c, materials.brickColor)
+        studio.addToScene(mesh4)
+        //studio.setCamTargetPos(x, 15, z)
+        setTimeout(() => { iterateItem(i + 1)}, 30)
     }
-    const mesh4 = createMesh(v, uv, c, materials.brickColor)
-    studio.addToScene(mesh4)
+    iterateItem(0)
+
 }
 
 window.addEventListener('load', () => {

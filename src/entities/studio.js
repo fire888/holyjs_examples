@@ -67,5 +67,9 @@ export const createStudio = (startCameraCoord = 3) => {
             camera.position.set(x, y, z)
             controls.update()
         },
+        setCamTargetPos (x, y, z) {
+            controls.target.set(x, y, z)
+            controls.update()
+        }
     }
 }
