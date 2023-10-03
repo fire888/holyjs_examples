@@ -1,4 +1,5 @@
 import { createHelpLines } from '../geometryRoom/meshHelpLines'
+import * as THREE from "three";
 
 const DOOR_SIZE = 30
 const DOOR_SIZE_FULL = 60
@@ -10,6 +11,56 @@ const S1 = Math.random() * 1500 + 1200
 let count = 0
 const getId = () => ++count
 
+const createLineHelpers = (root) => {
+    let l = null
+    return {
+        createLines: arr => {
+            return new Promise(res => {
+                if (l) {
+                    for (let i = 0; i < l.children.length; ++i) {
+                        l.children[i].geometry.dispose()
+                        l.remove(l.children[i])
+                    }
+                    root.studio.removeFromScene(l)
+                }
+                l = createHelpLines(arr)
+                l.position.y = 350
+                root.studio.addToScene(l)
+                res()
+            })
+        }
+    }
+}
+const createNumbers = (root) => {
+    let geomLabel = new THREE.PlaneGeometry(.3, .3)
+    let num = 0
+    return {
+        createLabel: (t, color = "#FFFF00", scale = 10, pos = [0, 400, 0]) => {
+            ++num
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 128;
+            canvas.height = 128;
+
+            // ctx.fillStyle = bgColor;
+            // ctx.fillRect( 0, 0, 128, 128 );
+
+            ctx.fillStyle = color
+            ctx.font = 'bold 60pt arial'
+            ctx.textAlign = "center"
+            ctx.fillText(num, 64, 100)
+
+            const map = new THREE.CanvasTexture(canvas)
+            const material = new THREE.MeshBasicMaterial({map: map, transparent: true})
+            const mesh = new THREE.Mesh(geomLabel, material)
+            mesh.scale.set(scale, scale, scale)
+            mesh.position.set(...pos)
+            mesh.rotation.y = Math.PI
+            root.studio.addToScene(mesh)
+        },
+    }
+}
+
 const firstRoom = {
     id: getId(),
     walls: {
@@ -20,7 +71,7 @@ const firstRoom = {
     }
 }
 
-const tryToDivideRoom = (roomData, minS = 250) => {
+const tryToDivideRoom = (roomData, minS = 250, root) => {
     const { walls } = roomData
     let isXBig = false
     let isZBig = false
@@ -45,6 +96,7 @@ const tryToDivideRoom = (roomData, minS = 250) => {
     const newRooms = []
     if (divideAxis === 'x') {
         const newX = (walls['s'].p1[0] - walls['s'].p0[0]) * (0.3 + Math.random() * .4) + walls['s'].p0[0]
+        root.numbersLabels.createLabel(count, "#FFFF00",200,[newX, 320, walls['s'].p1[1] - 50])
         newRooms.push(
             {
                 id: getId(),
@@ -100,6 +152,7 @@ const tryToDivideRoom = (roomData, minS = 250) => {
     }
     if (divideAxis === 'z') {
         const newZ = (walls['e'].p1[1] - walls['e'].p0[1]) * (0.3 + Math.random() * .4) + walls['e'].p0[1]
+        root.numbersLabels.createLabel(count, "#FFFF00",200,[walls['e'].p1[0] - 50, 320, newZ])
         newRooms.push(
             {
                 id: getId(),
@@ -157,32 +210,11 @@ const tryToDivideRoom = (roomData, minS = 250) => {
     return newRooms
 }
 
-const createLineHelpers = (root) => {
-    let l = null
-    return {
-        createLines: arr => {
-            return new Promise(res => {
-                if (l) {
-                    for (let i = 0; i < l.children.length; ++i) {
-                        l.children[i].geometry.dispose()
-                        l.remove(l.children[i])
-                    }
-                    root.studio.removeFromScene(l)
-                }
-                l = createHelpLines(arr)
-                l.position.y = 350
-                root.studio.addToScene(l)
-                res()
-            })
-        }
-    }
-}
-
 const makeScheme = (root) => {
     return new Promise(res => {
         root.studio.setCamTargetPos(S1 / 2, 0, S2 / 2)
         let arrWalls = [firstRoom]
-        let maxIterate = 10000
+        let num = 0
 
         const checkIsComplete = (arr) => {
             let isComplete = true
@@ -195,8 +227,8 @@ const makeScheme = (root) => {
         }
 
         const iterateDivide = () => {
-            --maxIterate
-            if (maxIterate === 0) {
+            ++num
+            if (num === 10000) {
                 return;
             }
             if (checkIsComplete(arrWalls)) {
@@ -220,7 +252,7 @@ const makeScheme = (root) => {
 
             if (indexToDivide !== -1) {
                 arrWalls[indexToDivide].notDivide = true
-                const newDataRooms = tryToDivideRoom(arrWalls[indexToDivide], MIN_S)
+                const newDataRooms = tryToDivideRoom(arrWalls[indexToDivide], MIN_S, root)
                 if (newDataRooms) {
                     const newArr = arrWalls.filter(item => item.id !== arrWalls[indexToDivide].id)
                     newArr.push(...newDataRooms)
@@ -229,7 +261,7 @@ const makeScheme = (root) => {
             }
 
             root.lineHelpers.createLines(arrWalls).then(() => {
-                setTimeout(() => iterateDivide(arrWalls), 4)
+                setTimeout(() => iterateDivide(arrWalls), 40)
             })
         }
         iterateDivide(arrWalls)
@@ -339,7 +371,7 @@ const makeDoors = (root, arrRooms) => {
 
             if (savedI !== i) {
                 savedI = i
-                setTimeout(next, 0)
+                setTimeout(next, 50)
             } else {
                 next()
             }
@@ -647,14 +679,15 @@ const prepareOuterDoors = (firstRoom, outerDoors) => {
 }
 
 export async function createTown2Scheme (root) {
+    root.numbersLabels = createNumbers(root)
     root.lineHelpers = createLineHelpers(root)
 
     const arrRooms = await makeScheme(root)
-    const arrWalls = await makeDoors(root, arrRooms)
-    const outerDoors = await makeDoorsOuter(root, arrWalls)
-    await divideWallsByDoors(arrWalls)
-    const { walls, floors } = await getWallsFromRooms(arrWalls)
-    const doors = await prepareDoors(arrWalls)
+    const arrRoomsWithDoors = await makeDoors(root, arrRooms)
+    const outerDoors = await makeDoorsOuter(root, arrRoomsWithDoors)
+    await divideWallsByDoors(arrRoomsWithDoors)
+    const { walls, floors } = await getWallsFromRooms(arrRoomsWithDoors)
+    const doors = await prepareDoors(arrRoomsWithDoors)
     const wallsOuter = await prepareOuterDoors(firstRoom, outerDoors)
 
     return { wallsOuter, walls, doors, floors }
