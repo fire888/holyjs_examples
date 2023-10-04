@@ -8,7 +8,6 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import * as THREE from "three";
 import { ARR_STATES } from './constants/animations'
 
-
 const PARAMS = {
     door: {
         openAngle: -.5,
@@ -28,7 +27,6 @@ const PARAMS = {
         tBox: 7,
     }
 }
-
 
 const PARAMS_GUI = {
     animate: false,
