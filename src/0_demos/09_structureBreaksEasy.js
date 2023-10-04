@@ -1,11 +1,20 @@
-import * as THREE from "three";
+import * as THREE from 'three'
+import { GLTFExporter } from '../entities/GLTFExporter'
 import { createStudio } from '../entities/studio'
 import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
+
 const { sin, cos, PI, random, floor } = Math
 const PI2 = PI * 2
 const hPI = PI / 2
+
+const button = document.createElement('button')
+button.innerText = 'DOWNLOAD'
+document.body.appendChild(button)
+button.style.position = 'absolute'
+button.style.zIndex = '100'
+button.style.top = '0'
 
 const createStructure = () => {
     const color1 =  [.3, .3, .5]
@@ -678,6 +687,24 @@ async function initApp () {
     }
     const mesh4 = createMesh(v, uv, c, materials.brickColor)
     studio.addToScene(mesh4)
+
+    const exporter = new GLTFExporter()
+    button.addEventListener('click', () => {
+        console.log(studio.scene)
+        exporter.parse(
+            studio.scene, gltf => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gltf))
+                const dlAnchorElem = document.createElement('a')
+                document.body.appendChild(dlAnchorElem)
+                dlAnchorElem.setAttribute("href", dataStr)
+                dlAnchorElem.setAttribute("download", "scene.gltf")
+                dlAnchorElem.click()
+            },
+            () => {
+                console.log('An error happened')
+            },
+        )
+    })
 }
 
 window.addEventListener('load', () => {

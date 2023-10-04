@@ -689,8 +689,8 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio()
-    studio.setCamPos(0, 5, 15)
-    studio.setCamTargetPos(0, 10, 0)
+    studio.setCamPos(0, 10, 10)
+    studio.setCamTargetPos(0, 10, -20)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({
@@ -740,30 +740,40 @@ async function initApp () {
 
     /** CUSTOM 02 ************************************/
 
+    let count = 0
+    const createStructureItem = () => {
+        const st = createStructure()
 
-    const st = createStructure()
+        const obj = new THREE.Group()
+        obj.position.set(Math.random() * 25 - 13, 0, Math.random() - 13)
+        studio.addToScene(obj)
 
-    const iterateItem = (i) => {
-        if (!st[i]) {
-            return;
+        const iterateItem = (i) => {
+            if (!st[i]) {
+                if (count < 20) {
+                    ++count
+                    createStructureItem()
+                }
+                return;
+            }
+            const v = []
+            const uv = []
+            const c = []
+            const { type, x, y, z, rot } = st[i]
+            const e = ARCH[type](st[i])
+            M.rotateVerticesY(e.v, rot + hPI)
+            M.translateVertices(e.v, x, y, z)
+            v.push(...e.v)
+            uv.push(...e.uv)
+            c.push(...e.c)
+            const mesh4 = createMesh(v, uv, c, materials.brickColor)
+            obj.add(mesh4)
+            //studio.setCamTargetPos(x, 15, z)
+            setTimeout(() => { iterateItem(i + 1)}, 30)
         }
-        const v = []
-        const uv = []
-        const c = []
-        const { type, x, y, z, rot } = st[i]
-        const e = ARCH[type](st[i])
-        M.rotateVerticesY(e.v, rot + hPI)
-        M.translateVertices(e.v, x, y, z)
-        v.push(...e.v)
-        uv.push(...e.uv)
-        c.push(...e.c)
-        const mesh4 = createMesh(v, uv, c, materials.brickColor)
-        studio.addToScene(mesh4)
-        //studio.setCamTargetPos(x, 15, z)
-        setTimeout(() => { iterateItem(i + 1)}, 30)
+        iterateItem(0)
     }
-    iterateItem(0)
-
+    createStructureItem()
 }
 
 window.addEventListener('load', () => {

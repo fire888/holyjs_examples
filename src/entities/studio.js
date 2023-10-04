@@ -48,6 +48,7 @@ export const createStudio = (startCameraCoord = 3) => {
 
     return {
         camera,
+        scene,
         render: () => {
             if (!camera ) {
                 return;
