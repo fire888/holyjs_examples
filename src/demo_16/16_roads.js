@@ -193,33 +193,33 @@ async function initApp () {
                 }
             }
 
-            const lastInd = v.length
-            const capV = m.createPolygon(
-                [
-                    vB[lastInd - 3],
-                    vB[lastInd - 2],
-                    vB[lastInd - 1],
-                ],
-                [
-                    vB[lastInd - 6],
-                    vB[lastInd - 5],
-                    vB[lastInd - 4],
-                ],
-                [
-                    v[lastInd - 3],
-                    v[lastInd - 2],
-                    v[lastInd - 1],
-                ],
-                [
-                    v[lastInd - 6],
-                    v[lastInd - 5],
-                    v[lastInd - 4],
-                ],
-            )
+            //const lastInd = v.length
+            // const capV = m.createPolygon(
+            //     [
+            //         vB[lastInd - 3],
+            //         vB[lastInd - 2],
+            //         vB[lastInd - 1],
+            //     ],
+            //     [
+            //         vB[lastInd - 6],
+            //         vB[lastInd - 5],
+            //         vB[lastInd - 4],
+            //     ],
+            //     [
+            //         v[lastInd - 3],
+            //         v[lastInd - 2],
+            //         v[lastInd - 1],
+            //     ],
+            //     [
+            //         v[lastInd - 6],
+            //         v[lastInd - 5],
+            //         v[lastInd - 4],
+            //     ],
+            // )
             v.push(...vB)
-            v.push(...capV.v)
-            uv.push(...uvEmpty)
-            c.push(...color1_6)
+            //v.push(...capV.v)
+            //uv.push(...uvEmpty)
+            //c.push(...color1_6)
 
             return { v, uv, c }
         }
