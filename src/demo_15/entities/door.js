@@ -56,8 +56,6 @@ const createDoorGeometry = (params) => {
             frame + frame2 + frame3, h - frame - frame2 - frame3, z2 + z3, // 19
         )
 
-
-
         vG = []
         vG.push(
             0, 0, 0,
@@ -81,7 +79,6 @@ const createDoorGeometry = (params) => {
     }
 
     updatePoints()
-
 
     const i = []
     const uv = []
@@ -120,7 +117,6 @@ const createDoorGeometry = (params) => {
         4, 8, 11, 4, 11, 7, // right
         11, 10, 6, 11, 6, 7, // top
     )
-
 
     uv.push(
         .2, .2, // 8
@@ -175,7 +171,7 @@ const createDoorGeometry = (params) => {
 
 
     const geometryGeom = new THREE.BufferGeometry()
-    const vG_F32 = new  Float32Array(vG)
+    const vG_F32 = new Float32Array(vG)
     geometryGeom.setAttribute('position', new THREE.BufferAttribute(vG_F32, 3))
 
     const updateParams = () => {
@@ -210,7 +206,6 @@ export const createDoor = (root, params) => {
         geometryDoor.geometry,
         root.materials,
     )
-
 
     const material = new THREE.LineBasicMaterial({ color: 0x888888 })
     const meshGeom = new THREE.Line(geometryDoor.geometryGeom, material)

@@ -1,5 +1,5 @@
 import { createStudio } from './entities/studio'
-import { createLoadManager } from './helpers/loadManager'
+import { createLoadManager } from '../entities/loadManager'
 import { startFrameUpdater  } from './utils/createFrameUpater'
 import { ASSETS_TO_LOAD } from './constants/constants_assetsToLoad'
 import { createDoor } from './entities/door'
@@ -78,15 +78,11 @@ const PARAMS_GUI = {
     },
 }
 
-
-
 const root = {}
 
 const initApp = () => {
     root.studio = createStudio(root)
-    root.loadManager = createLoadManager()
-
-    root.loadManager.startLoad(ASSETS_TO_LOAD).then(assets => {
+    createLoadManager(ASSETS_TO_LOAD).then(assets => {
         root.assets = assets
 
         root.materials = [
@@ -118,6 +114,7 @@ const initApp = () => {
 
 
         const door = createDoor(root, PARAMS.door)
+        console.log('^^^^', door)
         door.mesh.receiveShadow = PARAMS_GUI.receiveShadow
         door.mesh.castShadow = true
         root.studio.addToScene(door.mesh)
@@ -130,10 +127,6 @@ const initApp = () => {
         box.mesh.receiveShadow = PARAMS_GUI.receiveShadow
         box.mesh.castShadow = true
         root.studio.addToScene(box.mesh)
-
-        box.meshGeom.position.x = -300
-        root.studio.addToScene(box.meshGeom)
-
 
         let updaterParams = null
         let currentStateIndex = 0

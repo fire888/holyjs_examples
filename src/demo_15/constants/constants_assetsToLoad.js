@@ -14,28 +14,28 @@ import wNormalMap from '../../assets/streaky-plywood_normal-ogl.png'
 
 export const ASSETS_TO_LOAD = [
     {
-        type: 'cubeTextures',
-        filename: [px, nx, py, ny, nz, pz],
+        assetType: 'CUBE_IMG',
+        fileName: [px, nx, py, ny, nz, pz],
         key: 'skyBox'
     },
     {
-        type: 'img',
-        filename: wMap,
+        assetType: 'IMG',
+        fileName: wMap,
         key: 'wMap',
     },
     {
-        type: 'img',
-        filename: wAOMap,
+        assetType: 'IMG',
+        fileName: wAOMap,
         key: 'wAOMap',
     },
     {
-        type: 'img',
-        filename: wNormalMap,
+        assetType: 'IMG',
+        fileName: wNormalMap,
         key: 'wNormalMap',
     },
     {
-        type: 'img',
-        filename: wHeightMap,
+        assetType: 'IMG',
+        fileName: wHeightMap,
         key: 'wHeightMap',
     },
 ]

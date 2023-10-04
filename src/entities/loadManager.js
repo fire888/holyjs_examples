@@ -12,7 +12,7 @@ export const createLoadManager = dataAssets => {
             [KEYS_LOADERS.GLB]: new GLTFLoader(),
             [KEYS_LOADERS.FBX]: new FBXLoader(),
             [KEYS_LOADERS.OBJ]: new OBJLoader(),
-            [KEYS_LOADERS.CUBE_IMG]: new OBJLoader(),
+            [KEYS_LOADERS.CUBE_IMG]: new THREE.CubeTextureLoader(),
         }
         const assets = {}
 
@@ -22,6 +22,7 @@ export const createLoadManager = dataAssets => {
             }
 
             const { assetType, fileName, key } = dataAssets[index]
+            console.log(assetType)
             loaders[assetType].load(fileName, asset => {
                 assets[key] = asset
                 loadAsset(++index)
