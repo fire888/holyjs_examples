@@ -12,15 +12,18 @@ import { ARR_STATES } from './constants/animations'
 const PARAMS = {
     door: {
         openAngle: -.5,
-        w: 80,
-        h: 80,
+        w: 130,
+        h: 150,
         z: 5,
+        facet1: {
+            type: 'FACET11'
+        },
         frame: 15,
+        facet2: {
+            type: 'FACET12',
+        },
         z2: 3,
-        frame2: 5,
-        z3: 3,
-        frame3: 5,
-
+        frame2: 20,
         zBox: -50,
         tBox: 7,
     }
@@ -28,12 +31,12 @@ const PARAMS = {
 
 
 const PARAMS_GUI = {
-    animate: true,
+    animate: false,
     receiveShadow: false,
     door: {
         w: {
             min: 30,
-            max: 150,
+            max: 300,
         },
         h: {
             min: 30,
@@ -45,23 +48,15 @@ const PARAMS_GUI = {
         },
         frame: {
             min: 5,
-            max: 30,
+            max: 70,
         },
         z2: {
             min: 1,
-            max: 30,
+            max: 80,
         },
         frame2: {
-            min: 0,
-            max: 15,
-        },
-        z3: {
-            min: 0,
-            max: 40,
-        },
-        frame3: {
-            min: 0,
-            max: 15,
+            min: 1,
+            max: 80,
         },
         openAngle: {
             min: -Math.PI,
@@ -73,7 +68,13 @@ const PARAMS_GUI = {
         },
         tBox: {
             min: 1,
-            max: 15,
+            max: 35,
+        },
+        facet1: {
+            dropDown: ['FACET11', 'FACET12', 'FACET13'],
+        },
+        facet2: {
+            dropDown: ['FACET11', 'FACET12', 'FACET13'],
         },
     },
 }
@@ -114,14 +115,10 @@ const initApp = () => {
 
 
         const door = createDoor(root, PARAMS.door)
-        console.log('^^^^', door)
         door.mesh.receiveShadow = PARAMS_GUI.receiveShadow
         door.mesh.castShadow = true
         root.studio.addToScene(door.mesh)
         door.mesh.rotation.y = PARAMS.door.openAngle
-        door.meshGeom.rotation.y = PARAMS.door.openAngle
-        door.meshGeom.position.x = -300
-        root.studio.addToScene(door.meshGeom)
 
         const box = createBox(root, PARAMS.door)
         box.mesh.receiveShadow = PARAMS_GUI.receiveShadow
@@ -138,7 +135,6 @@ const initApp = () => {
             updaterParams = animateToNew(ARR_STATES[currentStateIndex], v => {
                 door.setParams(v)
                 door.mesh.rotation.y = v.openAngle
-                door.meshGeom.rotation.y = v.openAngle
                 box.setParams(v)
                 for (let key in v) {
                     PARAMS.door[key] = v[key]
@@ -162,15 +158,25 @@ const initApp = () => {
             door.mesh.receiveShadow = v
         })
         for (let key in PARAMS.door) {
-            gui.add(PARAMS.door, key).min( PARAMS_GUI.door[key].min).max(PARAMS_GUI.door[key].max).onChange(v => {
-                PARAMS.door[key] = v
-                door.setParams(PARAMS.door)
-                box.setParams(PARAMS.door)
-                door.mesh.rotation.y = PARAMS.door.openAngle
-                door.meshGeom.rotation.y = PARAMS.door.openAngle
-            }).listen()
+            if (PARAMS_GUI.door[key] && PARAMS_GUI.door[key].min) {
+                gui.add(PARAMS.door, key).min(PARAMS_GUI.door[key].min).max(PARAMS_GUI.door[key].max).onChange(v => {
+                    PARAMS.door[key] = v
+                    door.setParams(PARAMS.door)
+                    box.setParams(PARAMS.door)
+                    door.mesh.rotation.y = PARAMS.door.openAngle
+                }).listen()
+            }
+            if (PARAMS_GUI.door[key] && PARAMS_GUI.door[key].dropDown) {
+                gui.add(PARAMS.door[key], 'type', PARAMS_GUI.door[key].dropDown)
+                    .onChange(v => {
+                        PARAMS.door[key].type = v
+                        door.setParams(PARAMS.door)
+                        box.setParams(PARAMS.door)
+                        door.mesh.rotation.y = PARAMS.door.openAngle
+                    })
+                    .listen()
+            }
         }
-        gui.open()
     })
 }
 

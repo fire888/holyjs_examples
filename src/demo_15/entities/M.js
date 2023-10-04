@@ -22,6 +22,10 @@ export const M = {
         const m4 = new THREE.Matrix4().makeRotationY(angle)
         this.applyMatrixToArray(m4, v)
     },
+    rotateVerticesX(v, angle) {
+        const m4 = new THREE.Matrix4().makeRotationX(angle)
+        this.applyMatrixToArray(m4, v)
+    },
     angleFromCoords (x, y) {
         let rad = Math.atan(y / x)
         x < 0 && y > 0 && (rad = PI - Math.abs(rad))
@@ -47,7 +51,7 @@ export const M = {
         }
         arr.push(...arr2)
     },
-    getUvByLen: arr => {
+    getUvByLen: (arr, n = 1) => {
         const uv = []
         let minX = 1000
         let minY = 1000
@@ -60,11 +64,11 @@ export const M = {
             if (maxX < arr[i]) {
                 maxX = arr[i]
             }
-            if (minY > arr[i + 1]) {
-                minY = arr[i + 1]
+            if (minY > arr[i + n]) {
+                minY = arr[i + n]
             }
-            if (maxY < arr[i + 1]) {
-                maxY = arr[i + 1]
+            if (maxY < arr[i + n]) {
+                maxY = arr[i + n]
             }
         }
 
@@ -73,7 +77,7 @@ export const M = {
 
         for (let i = 0; i < arr.length; i += 3) {
             const x = (arr[i] - minX) / lx
-            const y = (arr[i + 1] - minY) / ly
+            const y = (arr[i + n] - minY) / ly
             uv.push(x, y)
         }
         return uv
