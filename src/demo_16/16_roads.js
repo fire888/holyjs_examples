@@ -4,7 +4,8 @@ import { createLoadManager } from '../entities/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { ClickerOnScene } from "../entities/clickerOnScene"
 import diff from '../assets/map_brick_diff_1.jpg'
-import consA0Src from "../assets/broken_down_concrete2_ao.jpg";
+import { createSchemeLines } from './schemeLines'
+
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -64,7 +65,7 @@ const uvFull = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]
 const uvHalf = [0, 0, 1, 0, 1, .2, 0, 0, 1, .2, 0, .2]
 
 async function initApp () {
-    const studio = createStudio(10)
+    const studio = createStudio(30)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
@@ -94,6 +95,9 @@ async function initApp () {
     animate()
 
     /** CUSTOM 00 **************************/
+
+    const l = createSchemeLines(studio)
+
 
     let currentWall
 
