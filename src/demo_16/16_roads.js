@@ -5,6 +5,7 @@ import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { ClickerOnScene } from "../entities/clickerOnScene"
 import diff from '../assets/map_brick_diff_1.jpg'
 import { createSchemeLines } from './schemeLines'
+import { M } from './M'
 
 
 const m = {
@@ -65,7 +66,7 @@ const uvFull = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]
 const uvHalf = [0, 0, 1, 0, 1, .2, 0, 0, 1, .2, 0, .2]
 
 async function initApp () {
-    const studio = createStudio(30)
+    const studio = createStudio(7)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
@@ -96,181 +97,39 @@ async function initApp () {
 
     /** CUSTOM 00 **************************/
 
-    const l = createSchemeLines(studio)
-
-
-    let currentWall
-
-    const createWalls = (path) => {
-        const createDataWalls = path => {
-            const pathV = path.map(item => new THREE.Vector3().fromArray(item))
-            const dataWalls = pathV.map((item, i, arr) => {
-                const prevIndex = arr[i - 1] ? i - 1 : arr.length - 1
-                const v = new THREE.Vector3().copy(item).sub(arr[prevIndex])
-                const angle = m.angleFromCoords(v.x, v.z)
-                return {
-                    angle,
-                    w: arr[prevIndex].distanceTo(item),
-                    p1: arr[prevIndex],
-                    p2: item,
-                }
-            })
-            dataWalls.forEach((item, i, arr) => {
-                const prevInd = arr[i - 1] ? i - 1 : arr.length - 1
-                const nextInd = arr[i + 1] ? i + 1 : 0
-                item.angle1 = -(item.angle - arr[prevInd].angle) / 2
-                if (Math.abs(item.angle1) > Math.PI / 2) {
-                    item.angle1 += Math.PI
-                }
-                item.angle2 = (arr[nextInd].angle - item.angle) / 2
-                if (Math.abs(item.angle2) > Math.PI / 2) {
-                    item.angle2 += Math.PI
-                }
-            })
-            return dataWalls
-        }
-
-        const D = .2
-        const createWall = (W, H, profileB, angle1, angle2) => {
-            const v = []
-            const uv = []
-            const c = []
-
-            const l = [...profileB]
-            const lx = [...profileB]
-            m.translateVertices(l, 0, 0, D)
-            m.rotateVerticesY(l, angle1)
-            m.translateVertices(lx, 0, 0, D)
-            m.rotateVerticesY(lx, angle2)
-            m.translateVertices(lx, W, 0, 0)
-            for (let i = 3; i < l.length; i += 3) {
-                const prevI = i - 3
-                const nextI = i
-
-                const p = m.createPolygon(
-                    [l[prevI], l[prevI + 1], l[prevI + 2]],
-                    [lx[prevI], lx[prevI + 1], lx[prevI + 2]],
-                    [lx[nextI], lx[nextI + 1], lx[nextI + 2]],
-                    [l[nextI], l[nextI + 1], l[nextI + 2]],
-                )
-                v.push(...p.v)
-
-                if (i > 306 && i < 330) {
-                    uv.push(...uvHalf)
-                    c.push(...color2_6)
-                } else if (i > 450 && i < 480) {
-                    uv.push(...uvFull)
-                    c.push(...color2_6)
-                } else {
-                    uv.push(...uvEmpty)
-                    c.push(...color3_6)
-                }
-            }
-
-
-            const vB = []
-            const r = [...profileB]
-            const rx = [...profileB]
-            m.rotateVerticesY(rx, angle2 + Math.PI)
-            m.translateVertices(rx, W, 0, 0)
-            m.rotateVerticesY(r, angle1 + Math.PI)
-            for (let i = 3; i < rx.length; i += 3) {
-                const prevI = i - 3
-                const nextI = i
-
-                const p = m.createPolygon(
-                    [rx[prevI], rx[prevI + 1], rx[prevI + 2]],
-                    [r[prevI], r[prevI + 1], r[prevI + 2]],
-                    [r[nextI], r[nextI + 1], r[nextI + 2]],
-                    [rx[nextI], rx[nextI + 1], rx[nextI + 2]],
-                )
-                vB.push(...p.v)
-                if (i > 306 && i < 330) {
-                    uv.push(...uvHalf)
-                    c.push(...color2_6)
-                } else if (i > 450 && i < 480) {
-                    uv.push(...uvFull)
-                    c.push(...color2_6)
-                } else {
-                    uv.push(...uvEmpty)
-                    c.push(...color3_6)
-                }
-            }
-
-            //const lastInd = v.length
-            // const capV = m.createPolygon(
-            //     [
-            //         vB[lastInd - 3],
-            //         vB[lastInd - 2],
-            //         vB[lastInd - 1],
-            //     ],
-            //     [
-            //         vB[lastInd - 6],
-            //         vB[lastInd - 5],
-            //         vB[lastInd - 4],
-            //     ],
-            //     [
-            //         v[lastInd - 3],
-            //         v[lastInd - 2],
-            //         v[lastInd - 1],
-            //     ],
-            //     [
-            //         v[lastInd - 6],
-            //         v[lastInd - 5],
-            //         v[lastInd - 4],
-            //     ],
-            // )
-            v.push(...vB)
-            //v.push(...capV.v)
-            //uv.push(...uvEmpty)
-            //c.push(...color1_6)
-
-            return { v, uv, c }
-        }
-
-        const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
-
-        const dataWalls = createDataWalls(path)
-
+    createSchemeLines(studio).then(result => {
         const v = []
         const uv = []
-        const c = []
-        for (let i = 0; i < dataWalls.length; ++i) {
-            const { w, angle, p1, angle1, angle2 } = dataWalls[i]
-            const wall = createWall(w, 3, fullP, angle1, angle2)
-            m.rotateVerticesY(wall.v, angle)
-            m.translateVertices(wall.v, p1.x, 0, p1.z)
-            v.push(...wall.v)
-            uv.push(...wall.uv)
-            c.push(...wall.c)
+        for(let i = 0; i < result.length; ++i) {
+            console.log(result[i])
+            if (result[i].type === 'corridor') {
+                const { leftLine, rightLine } = result[i]
+                v.push(...M.createPolygon(
+                    [leftLine.p0.x, 0, leftLine.p0.z],
+                    [leftLine.p1.x, 0, leftLine.p1.z],
+                    [leftLine.p1.x, 3, leftLine.p1.z],
+                    [leftLine.p0.x, 3, leftLine.p0.z],
+                ))
+                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+                v.push(...M.createPolygon(
+                    [rightLine.p1.x, 0, rightLine.p1.z],
+                    [rightLine.p0.x, 0, rightLine.p0.z],
+                    [rightLine.p0.x, 3, rightLine.p0.z],
+                    [rightLine.p1.x, 3, rightLine.p1.z],
+                ))
+                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+            }
         }
-
-        const mesh = createMesh(v, uv, c, materials.phongWhite)
-        studio.addToScene(mesh)
-
-        currentWall = mesh
-    }
-
-    const path = []
-
-    const clickerOnScene = new ClickerOnScene()
-    clickerOnScene.camera = studio.camera
-    studio.addToScene(clickerOnScene)
-    clickerOnScene.setCB(p => {
-        const ob = new THREE.Mesh(
-            new THREE.BoxGeometry(.2,.2, .2),
-            new THREE.MeshBasicMaterial({ color: 0xffff00 })
-        )
-        ob.position.copy(p)
-        studio.addToScene(ob)
-        path.push(p.toArray())
-        if (currentWall) {
-            studio.removeFromScene(currentWall)
-            currentWall.geometry.dispose()
-            currentWall.material.dispose()
-        }
-        path.length > 2 && createWalls(path)
+        const geometry = new THREE.BufferGeometry()
+        const vF32 = new Float32Array(v)
+        geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
+        geometry.computeVertexNormals()
+        const uvF32 = new Float32Array(uv)
+        geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
+        studio.addToScene(new THREE.Mesh(geometry, materials.atlasBrick))
     })
+
+
 }
 
 

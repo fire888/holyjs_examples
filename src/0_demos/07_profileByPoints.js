@@ -138,7 +138,6 @@ async function initApp () {
         }
 
         const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
-
         const dataWalls = createDataWalls(path)
 
         const v = []
