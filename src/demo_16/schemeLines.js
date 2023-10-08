@@ -7,6 +7,7 @@ let id = 0
 const getID = () => ++id
 let studio
 
+let meshes = []
 const addBox = (v, color = 0xFF0000) => {
     const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(.05, .05, .05),
@@ -14,6 +15,7 @@ const addBox = (v, color = 0xFF0000) => {
     )
     mesh.position.copy(v)
     studio.addToScene(mesh)
+    meshes.push(mesh)
 }
 const drawRoad = (r, y = 0) => {
     const x = r.axis.p0.x + (r.axis.p1.x - r.axis.p0.x) / 3
@@ -21,13 +23,17 @@ const drawRoad = (r, y = 0) => {
     const label = createLabel(r.id, "#ff0000", 1)
     label.position.set(x, y, z)
     studio.addToScene(label)
+    meshes.push(label)
 
     const l = createLineFromVectors(r.axis.p0, r.axis.p1, 0xFF0000)
     l.position.y = y
+    meshes.push(l)
     const l1 = createLineFromVectors(r.leftLine.p0, r.leftLine.p1, 0xFFFF00)
     l1.position.y = y
+    meshes.push(l1)
     const l2 = createLineFromVectors(r.rightLine.p0, r.rightLine.p1, 0x00FFFF)
     l2.position.y = y
+    meshes.push(l2)
     studio.addToScene(l)
     studio.addToScene(l1)
     studio.addToScene(l2)
@@ -107,9 +113,6 @@ const getConnectionsWithNears = lines => {
             lines[i].rightLine.p0 = interceptR.v
         }
     }
-    for (let i = 0; i < lines.length; ++i) {
-        drawRoad(lines[i])
-    }
     return lines
 }
 
@@ -145,12 +148,6 @@ const addCorners = lines => {
         }
     }
     lines.push(...corners)
-
-    for (let i = 0; i < corners.length; ++i) {
-        const l = createLineFromVectors(corners[i].p0, corners[i].p1, 0xFF0000)
-        studio.addToScene(l)
-    }
-
     return lines
 }
 
@@ -209,9 +206,8 @@ const checkFirstInterceptRoad = corridors => {
     })
 }
 
-let levelDraw = .5
 const createCrossByIntercept = (crossData, oldCorridors) => {
-    levelDraw += .3
+    //levelDraw += .3
     return new Promise(res => {
         const corridorCurrent = oldCorridors.filter(n => n.id === crossData.idCorridorCurrent)[0]
         const corridorWith = oldCorridors.filter(n => n.id === crossData.idCorridorWith)[0]
@@ -301,7 +297,7 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
             //drawRoad(r4, levelDraw)
 
             const newCorridors = [r1, r2, r3, r4]
-            return res({ newCorridors, crossData: { id: getID(), type: 'cross', p0, p1, p2, p3 } })
+            return res({ newCorridors, crossData: { id: getID(), type: 'cross', p0: p0.v, p1: p1.v, p2: p2.v, p3: p3.v } })
         } else {
             const p0 = getInterceptLines(corridorCurrent.leftLine, corridorWith.rightLine)
             const p1 = getInterceptLines(corridorCurrent.rightLine, corridorWith.rightLine)
@@ -380,7 +376,7 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
             //drawRoad(r4, levelDraw)
 
             const newCorridors = [r1, r2, r3, r4]
-            return res({ newCorridors, crossData: { id: getID(), type: 'cross', p0, p1, p2, p3 } })
+            return res({ newCorridors, crossData: { id: getID(), type: 'cross',  p0: p0.v, p1: p1.v, p2: p2.v, p3: p3.v } })
         }
     })
 }
@@ -428,13 +424,19 @@ const addCrosses = items => {
 export async function createSchemeLines (st, points) {
     studio = st
 
+    for (let i = 0; i < meshes.length; ++i) {
+        meshes[i].geometry.dispose()
+        meshes[i].material.dispose()
+        studio.removeFromScene(meshes[i])
+    }
+
     const lines = createLines(points)
     const linesClipped = getConnectionsWithNears(lines)
     const addedCorners = addCorners(linesClipped)
     const result = await addCrosses(addedCorners)
     for (let i = 0; i < result.length; ++i) {
         if (result[i].type === 'corridor') {
-            drawRoad(result[i])
+            drawRoad(result[i], -.5)
         }
         if (result[i].type === 'corner') {
             const l = createLineFromVectors(
@@ -442,6 +444,7 @@ export async function createSchemeLines (st, points) {
                 result[i].p1,
                 0x333333,
             )
+            l.position.y = -.5
             studio.addToScene(l)
         }
     }

@@ -8,6 +8,23 @@ import { createSchemeLines } from './schemeLines'
 import { M } from './M'
 
 
+const atlas = (() => {
+    const h = 1 / 4
+    const arr = []
+    for (let i = 1; i < 5; ++i) {
+        for (let j = 1; j < 5; ++j) {
+            arr.push([
+                (i - 1) * h, (j - 1) * h,
+                i * h, (j - 1) * h,
+                i * h, j * h,
+                (i - 1) * h, (j - 1) * h,
+                i * h, j * h,
+                (i - 1) * h, j * h
+            ])
+        }
+    }
+    return arr
+})()
 const m = {
     createPolygon(v0, v1, v2, v3) {
         return {
@@ -103,23 +120,65 @@ async function initApp () {
 
         const v = []
         const uv = []
+        const H = 1
         for(let i = 0; i < result.length; ++i) {
             if (result[i].type === 'corridor') {
                 const { leftLine, rightLine } = result[i]
                 v.push(...M.createPolygon(
                     [leftLine.p0.x, 0, leftLine.p0.z],
                     [leftLine.p1.x, 0, leftLine.p1.z],
-                    [leftLine.p1.x, 1, leftLine.p1.z],
-                    [leftLine.p0.x, 1, leftLine.p0.z],
+                    [leftLine.p1.x, H, leftLine.p1.z],
+                    [leftLine.p0.x, H, leftLine.p0.z],
                 ))
-                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
                 v.push(...M.createPolygon(
                     [rightLine.p1.x, 0, rightLine.p1.z],
                     [rightLine.p0.x, 0, rightLine.p0.z],
-                    [rightLine.p0.x, 1, rightLine.p0.z],
-                    [rightLine.p1.x, 1, rightLine.p1.z],
+                    [rightLine.p0.x, H, rightLine.p0.z],
+                    [rightLine.p1.x, H, rightLine.p1.z],
                 ))
-                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+                v.push(
+                    ...M.createPolygon(
+                        [leftLine.p0.x, 0, leftLine.p0.z],
+                        [rightLine.p0.x, 0, rightLine.p0.z],
+                        [rightLine.p1.x, 0, rightLine.p1.z],
+                        [leftLine.p1.x, 0, leftLine.p1.z],
+                    )
+                )
+                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+            }
+            if (result[i].type === 'cross') {
+                const { p0, p1, p2, p3 } = result[i]
+                v.push(...M.createPolygon(
+                        p0.toArray(),
+                        p1.toArray(),
+                        p2.toArray(),
+                        p3.toArray(),
+                ))
+                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+            }
+            if (result[i].type === 'corner') {
+                const { p0, p1, p2, dir } = result[i]
+                if (dir === 'p2_p1_p0') {
+                    v.push(...M.createPolygon(
+                        p0.toArray(),
+                        p1.toArray(),
+                        [p1.x, H, p1.z],
+                        [p0.x, H, p0.z],
+                    ))
+                    v.push(...p2.toArray(), ...p1.toArray(), ...p0.toArray())
+                } else {
+                    v.push(...M.createPolygon(
+                        p1.toArray(),
+                        p0.toArray(),
+                        [p0.x, H, p0.z],
+                        [p1.x, H, p1.z],
+                    ))
+                    v.push(...p0.toArray(), ...p1.toArray(), ...p2.toArray())
+                }
+                uv.push(...atlas[atlas.length - 1])
+                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
             }
         }
         const geometry = new THREE.BufferGeometry()
@@ -137,20 +196,17 @@ async function initApp () {
     }
 
 
-    const points = [
-        [0, 0, 0],
-        [11, 0, -2],
-        [5, 0, 5],
-        [3, 0, 5],
-        [10, 0, -5],
-        [5, 0, -3],
-        [2, 0, 3],
-        [15, 0, 3],
-    ]
-
-
-
-
+    // const path = [
+    //     [0, 0, 0],
+    //     [11, 0, -2],
+    //     [5, 0, 5],
+    //     [3, 0, 5],
+    //     [10, 0, -5],
+    //     [5, 0, -3],
+    //     [2, 0, 3],
+    //     [15, 0, 3],
+    // ]
+    // createStructure(path)
     const path = []
 
     const clickerOnScene = new ClickerOnScene()
@@ -161,7 +217,7 @@ async function initApp () {
             new THREE.BoxGeometry(.2,.2, .2),
             new THREE.MeshBasicMaterial({ color: 0xffff00 })
         )
-        ob.position.copy(p)
+        ob.position.set(p.x, -.5, p.z)
         studio.addToScene(ob)
         path.push(p.toArray())
         console.log(path)
