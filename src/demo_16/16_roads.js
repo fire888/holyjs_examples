@@ -23,6 +23,11 @@ const atlas = (() => {
             ])
         }
     }
+    arr.push(
+        [h * 3, h * 3,
+        h * 4, h * 3,
+        h * 3 + h / 2, h * 4,]
+    )
     return arr
 })()
 const m = {
@@ -90,8 +95,8 @@ async function initApp () {
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
         'atlasBrick': new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
-            map: assets.atlasBrickDiff,
-            bumpMap: assets.atlasBrickDiff,
+            map: assets.atlasBrickDiff2,
+            bumpMap: assets.atlasBrickDiff2,
             bumpScale: .02,
             //wireframe: true
         }),
@@ -115,6 +120,11 @@ async function initApp () {
     /** CUSTOM 00 **************************/
     let mesh = null
 
+    const wallMaxAtlas = 4
+
+    const cornerMinAtlas = 8
+    const cornerMaxAtlas = 8
+
     async function createStructure (points) {
         const result = await createSchemeLines(studio, points)
 
@@ -130,14 +140,15 @@ async function initApp () {
                     [leftLine.p1.x, H, leftLine.p1.z],
                     [leftLine.p0.x, H, leftLine.p0.z],
                 ))
-                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+                uv.push(...atlas[Math.floor(Math.random() * wallMaxAtlas)])
                 v.push(...M.createPolygon(
                     [rightLine.p1.x, 0, rightLine.p1.z],
                     [rightLine.p0.x, 0, rightLine.p0.z],
                     [rightLine.p0.x, H, rightLine.p0.z],
                     [rightLine.p1.x, H, rightLine.p1.z],
                 ))
-                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+                uv.push(...atlas[Math.floor(Math.random() * wallMaxAtlas)])
+                // road
                 v.push(
                     ...M.createPolygon(
                         [leftLine.p0.x, 0, leftLine.p0.z],
@@ -146,7 +157,7 @@ async function initApp () {
                         [leftLine.p1.x, 0, leftLine.p1.z],
                     )
                 )
-                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+                uv.push(...atlas[13])
             }
             if (result[i].type === 'cross') {
                 const { p0, p1, p2, p3 } = result[i]
@@ -156,7 +167,7 @@ async function initApp () {
                         p2.toArray(),
                         p3.toArray(),
                 ))
-                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
+                uv.push(...atlas[14])
             }
             if (result[i].type === 'corner') {
                 const { p0, p1, p2, dir } = result[i]
@@ -167,7 +178,7 @@ async function initApp () {
                         [p1.x, H, p1.z],
                         [p0.x, H, p0.z],
                     ))
-                    v.push(...p2.toArray(), ...p1.toArray(), ...p0.toArray())
+                    v.push(...p1.toArray(), ...p0.toArray(), ...p2.toArray(),)
                 } else {
                     v.push(...M.createPolygon(
                         p1.toArray(),
@@ -177,8 +188,8 @@ async function initApp () {
                     ))
                     v.push(...p0.toArray(), ...p1.toArray(), ...p2.toArray())
                 }
+                uv.push(...atlas[cornerMinAtlas + Math.floor((cornerMaxAtlas - cornerMinAtlas) * Math.random())])
                 uv.push(...atlas[atlas.length - 1])
-                uv.push(...atlas[Math.floor(atlas.length * Math.random())])
             }
         }
         const geometry = new THREE.BufferGeometry()
@@ -222,12 +233,6 @@ async function initApp () {
         path.push(p.toArray())
         console.log(path)
         createStructure(path)
-        // if (currentWall) {
-        //     studio.removeFromScene(currentWall)
-        //     currentWall.geometry.dispose()
-        //     currentWall.material.dispose()
-        // }
-        // path.length > 2 && createWalls(path)
     })
 }
 
