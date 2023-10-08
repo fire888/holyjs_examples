@@ -71,6 +71,15 @@ export const createStudio = (startCameraCoord = 3) => {
         setCamTargetPos (x, y, z) {
             controls.target.set(x, y, z)
             controls.update()
+        },
+        setBackColor(color) {
+            renderer.setClearColor(color)
+        },
+        setFog (n, f, c) {
+            console.log(scene.fog)
+            scene.fog.near = n
+            scene.fog.far = f
+            scene.fog.color.set(c)
         }
     }
 }

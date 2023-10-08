@@ -6,6 +6,16 @@ import { ClickerOnScene } from "../entities/clickerOnScene"
 import diff from '../assets/map_brick_diff_1.jpg'
 import { createSchemeLines } from './schemeLines'
 import { M } from './M'
+import { Player } from './player'
+
+
+const button = document.createElement('button')
+button.innerText = 'WALK'
+document.body.appendChild(button)
+button.style.position = 'absolute'
+button.style.zIndex = '100'
+button.style.top = '0'
+let f = null
 
 
 const atlas = (() => {
@@ -119,14 +129,14 @@ async function initApp () {
 
     /** CUSTOM 00 **************************/
     let mesh = null
-
     const wallMaxAtlas = 4
-
     const cornerMinAtlas = 8
     const cornerMaxAtlas = 8
+    let result = null
+    let isCanClick = true
 
     async function createStructure (points) {
-        const result = await createSchemeLines(studio, points)
+        result = await createSchemeLines(studio, points)
 
         const v = []
         const uv = []
@@ -206,6 +216,26 @@ async function initApp () {
         studio.addToScene(mesh)
     }
 
+    const f = () => {
+        button.removeEventListener('click', f)
+        isCanClick = false
+        let playerPos
+        for (let i = 0; i < result.length; ++i) {
+            if (result[i].type === 'corridor' && result[i].prevId === null) {
+                const {p0, p1} = result[i].axis
+                playerPos = new THREE.Vector3().copy(p1).sub(p0).add(p0)
+                playerPos.y = 1
+            }
+        }
+
+        studio.setBackColor(0x4f3210)
+        studio.setFog(0.5, 7, 0x56420d)
+        const player = new Player(...playerPos.toArray(), [mesh])
+        updateFunctions.push(player.update.bind(player))
+        studio.setCam(player)
+    }
+    button.addEventListener("click", f)
+
 
     // const path = [
     //     [0, 0, 0],
@@ -224,6 +254,9 @@ async function initApp () {
     clickerOnScene.camera = studio.camera
     studio.addToScene(clickerOnScene)
     clickerOnScene.setCB(p => {
+        if (!isCanClick) {
+            return;
+        }
         const ob = new THREE.Mesh(
             new THREE.BoxGeometry(.2,.2, .2),
             new THREE.MeshBasicMaterial({ color: 0xffff00 })
