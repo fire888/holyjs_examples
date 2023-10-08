@@ -14,16 +14,23 @@ const addBox = (v, color = 0xFF0000) => {
     mesh.position.copy(v)
     studio.addToScene(mesh)
 }
+const drawRoad = (r, color = 0x333333) => {
+    const n = 0
+    const l = createLineFromVectors(r.axis.p0, r.axis.p1, 0xFF0000)
+    l.position.y = n
+    const l1 = createLineFromVectors(r.leftLine.p0, r.leftLine.p1, 0xFFFF00)
+    l1.position.y = n
+    const l2 = createLineFromVectors(r.rightLine.p0, r.rightLine.p1, 0x00FFFF)
+    l2.position.y = n
+    studio.addToScene(l)
+    studio.addToScene(l1)
+    studio.addToScene(l2)
+}
 
 const getInterceptLines = (l1, l2) => {
-    const intercept = M.line_intersect(
-        l1.p0.x, l1.p0.z,
-        l1.p1.x, l1.p1.z,
-        l2.p0.x, l2.p0.z,
-        l2.p1.x, l2.p1.z,
-    )
-    if (!intercept || !intercept.seg1) {
-        return
+    const intercept = M.vecXZIntercept(l1.p0, l1.p1, l2.p0, l2.p1)
+    if (!intercept || !intercept.seg1 || !intercept.seg2) {
+        return null
     }
     return intercept
 }
@@ -47,7 +54,7 @@ const createLines = () => {
         const dir = new THREE.Vector3().copy(p1).sub(p0).normalize()
         const angle = M.angleFromCoords(dir.x, dir.z)
 
-        const w = .5
+        const w = .1
         const data = {
             id: getID(),
             type: 'corridor',
@@ -83,45 +90,29 @@ const createLines = () => {
         }
     }
 
-
     return lines
 }
 
 
 const getConnectionsWithNears = lines => {
     for (let i = 1; i < lines.length; ++i) {
-        const interceptL = M.line_intersect(
-            lines[i - 1].leftLine.p0.x,
-            lines[i - 1].leftLine.p0.z,
-            lines[i - 1].leftLine.p1.x,
-            lines[i - 1].leftLine.p1.z,
-            lines[i].leftLine.p0.x,
-            lines[i].leftLine.p0.z,
-            lines[i].leftLine.p1.x,
-            lines[i].leftLine.p1.z,
-        )
-        if (interceptL && interceptL.seg1) {
-            lines[i - 1].leftLine.p1.x = interceptL.x
-            lines[i - 1].leftLine.p1.z = interceptL.y
-            lines[i].leftLine.p0.x = interceptL.x
-            lines[i].leftLine.p0.z = interceptL.y
+        /** clip corners prev & next lines */
+
+        /** if intercept left line clip points by intercept */
+        const interceptL = getInterceptLines(lines[i - 1].leftLine, lines[i].leftLine)
+        if (interceptL && interceptL.seg1 && interceptL.seg2) {
+            lines[i - 1].leftLine.p1 = interceptL.v
+            lines[i].leftLine.p0 = interceptL.v
         }
-        const interceptR = M.line_intersect(
-            lines[i - 1].rightLine.p0.x,
-            lines[i - 1].rightLine.p0.z,
-            lines[i - 1].rightLine.p1.x,
-            lines[i - 1].rightLine.p1.z,
-            lines[i].rightLine.p0.x,
-            lines[i].rightLine.p0.z,
-            lines[i].rightLine.p1.x,
-            lines[i].rightLine.p1.z,
-        )
+        /** if intercept right line clip points by intercept */
+        const interceptR = getInterceptLines(lines[i - 1].rightLine, lines[i].rightLine)
         if (interceptR && interceptR.seg1) {
-            lines[i - 1].rightLine.p1.x = interceptR.x
-            lines[i - 1].rightLine.p1.z = interceptR.y
-            lines[i].rightLine.p0.x = interceptR.x
-            lines[i].rightLine.p0.z = interceptR.y
+            lines[i - 1].rightLine.p1 = interceptR.v
+            lines[i].rightLine.p0 = interceptR.v
         }
+    }
+    for (let i = 0; i < lines.length; ++i) {
+        drawRoad(lines[i])
     }
     return lines
 }
@@ -158,27 +149,21 @@ const addCorners = lines => {
         }
     }
     lines.push(...corners)
+
+    for (let i = 0; i < corners.length; ++i) {
+        const l = createLineFromVectors(corners[i].p0, corners[i].p1, 0xFF0000)
+        studio.addToScene(l)
+    }
+
     return lines
 }
 
 const addCrosses = items => {
-    let n = .1
-    const drawLines = d => {
-        n +=.1
-        const l = createLineFromVectors(d.axis.p0, d.axis.p1, 0xFF0000)
-        l.position.y = n
-        const l1 = createLineFromVectors(d.leftLine.p0, d.leftLine.p1, 0xFFFF00)
-        l1.position.y = n
-        const l2 = createLineFromVectors(d.rightLine.p0, d.rightLine.p1, 0x00FFFF)
-        l2.position.y = n
-        studio.addToScene(l)
-        studio.addToScene(l1)
-        studio.addToScene(l2)
-    }
+    const corners = items.filter(n => n.type === 'corner')
+
 
     return new Promise(res => {
         const oldCorridors = items.filter(n => n.type === 'corridor')
-        const corners = items.filter(n => n.type === 'corner')
         const crosses = []
         const newCorridors = []
 
@@ -357,10 +342,10 @@ const addCrosses = items => {
                     }
                     console.log(c1, c2, c3, c4)
 
-                    drawLines(c1)
-                    drawLines(c2)
-                    drawLines(c3)
-                    drawLines(c4)
+                    // drawLines(c1)
+                    // drawLines(c2)
+                    // drawLines(c3)
+                    // drawLines(c4)
 
                     newCorridors = []
                     for (let i = 0; i < oldCorridors.length; ++i) {
@@ -477,10 +462,10 @@ const addCrosses = items => {
                          nextElm.prevId = c4.id
                     }
 
-                    drawLines(c1)
-                    drawLines(c2)
-                    drawLines(c3)
-                    drawLines(c4)
+                    // drawLines(c1)
+                    // drawLines(c2)
+                    // drawLines(c3)
+                    // drawLines(c4)
 
                     newCorridors = []
                     for (let i = 0; i < oldCorridors.length; ++i) {
@@ -527,26 +512,9 @@ export const createSchemeLines = (st) => {
         const lines = createLines()
         const linesClipped = getConnectionsWithNears(lines)
         const addedCorners = addCorners(linesClipped)
-        addCrosses(addedCorners).then(result => {
-            res(result)
-        })
+        console.log(addedCorners)
+        //addCrosses(addedCorners).then(result => {
+        //    res(result)
+        //})
     })
-
-
-    // for (let i = 0; i < addedCorners.length; ++i) {
-    //     if (addedCorners[i].type === 'corridor') {
-    //         const l = createLineFromVectors(lines[i].axis.p0, lines[i].axis.p1, 0xFF0000)
-    //         const l1 = createLineFromVectors(linesClipped[i].leftLine.p0, linesClipped[i].leftLine.p1, 0xFFFF00)
-    //         const l2 = createLineFromVectors(lines[i].rightLine.p0, lines[i].rightLine.p1, 0x00FFFF)
-    //         studio.addToScene(l)
-    //         studio.addToScene(l1)
-    //         studio.addToScene(l2)
-    //     }
-    //     if (addedCorners[i].type === 'corner') {
-    //         const l = createLineFromVectors(addedCorners[i].p0, addedCorners[i].p1, 0xffffff)
-    //         studio.addToScene(l)
-    //     }
-    // }
-
-    //return lines
 }

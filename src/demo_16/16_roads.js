@@ -98,35 +98,35 @@ async function initApp () {
     /** CUSTOM 00 **************************/
 
     createSchemeLines(studio).then(result => {
-        const v = []
-        const uv = []
-        for(let i = 0; i < result.length; ++i) {
-            console.log(result[i])
-            if (result[i].type === 'corridor') {
-                const { leftLine, rightLine } = result[i]
-                v.push(...M.createPolygon(
-                    [leftLine.p0.x, 0, leftLine.p0.z],
-                    [leftLine.p1.x, 0, leftLine.p1.z],
-                    [leftLine.p1.x, 3, leftLine.p1.z],
-                    [leftLine.p0.x, 3, leftLine.p0.z],
-                ))
-                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
-                v.push(...M.createPolygon(
-                    [rightLine.p1.x, 0, rightLine.p1.z],
-                    [rightLine.p0.x, 0, rightLine.p0.z],
-                    [rightLine.p0.x, 3, rightLine.p0.z],
-                    [rightLine.p1.x, 3, rightLine.p1.z],
-                ))
-                uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
-            }
-        }
-        const geometry = new THREE.BufferGeometry()
-        const vF32 = new Float32Array(v)
-        geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
-        geometry.computeVertexNormals()
-        const uvF32 = new Float32Array(uv)
-        geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
-        studio.addToScene(new THREE.Mesh(geometry, materials.atlasBrick))
+        // const v = []
+        // const uv = []
+        // for(let i = 0; i < result.length; ++i) {
+        //     console.log(result[i])
+        //     if (result[i].type === 'corridor') {
+        //         const { leftLine, rightLine } = result[i]
+        //         v.push(...M.createPolygon(
+        //             [leftLine.p0.x, 0, leftLine.p0.z],
+        //             [leftLine.p1.x, 0, leftLine.p1.z],
+        //             [leftLine.p1.x, 3, leftLine.p1.z],
+        //             [leftLine.p0.x, 3, leftLine.p0.z],
+        //         ))
+        //         uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+        //         v.push(...M.createPolygon(
+        //             [rightLine.p1.x, 0, rightLine.p1.z],
+        //             [rightLine.p0.x, 0, rightLine.p0.z],
+        //             [rightLine.p0.x, 3, rightLine.p0.z],
+        //             [rightLine.p1.x, 3, rightLine.p1.z],
+        //         ))
+        //         uv.push(0,0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1)
+        //     }
+        // }
+        // const geometry = new THREE.BufferGeometry()
+        // const vF32 = new Float32Array(v)
+        // geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
+        // geometry.computeVertexNormals()
+        // const uvF32 = new Float32Array(uv)
+        // geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
+        // studio.addToScene(new THREE.Mesh(geometry, materials.atlasBrick))
     })
 
 

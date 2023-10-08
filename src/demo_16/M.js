@@ -155,16 +155,40 @@ export const M = {
         ]
         return { vArr, cArr, uArr }
     },
-    line_intersect: (x1, y1, x2, y2, x3, y3, x4, y4) => {
+    // line_intersect: (x1, y1, x2, y2, x3, y3, x4, y4) => {
+    //     let ua, ub, denom = (y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1);
+    //     if (denom === 0) {
+    //         return null;
+    //     }
+    //     ua = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3))/denom;
+    //     ub = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3))/denom;
+    //     return {
+    //         x: x1 + ua * (x2 - x1),
+    //         y: y1 + ua * (y2 - y1),
+    //         seg1: ua >= 0 && ua <= 1,
+    //         seg2: ub >= 0 && ub <= 1
+    //     }
+    // },
+    vecXZIntercept: (v00, v01, v10, v11) => {
+        const x1 = v00.x
+        const y1 = v00.z
+        const x2 = v01.x
+        const y2 = v01.z
+        const x3 = v10.x
+        const y3 = v10.z
+        const x4 = v11.x
+        const y4 = v11.z
         let ua, ub, denom = (y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1);
         if (denom === 0) {
             return null;
         }
         ua = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3))/denom;
         ub = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3))/denom;
+        const x = x1 + ua * (x2 - x1)
+        const y = y1 + ua * (y2 - y1)
+        const v = new THREE.Vector3(x, 0, y)
         return {
-            x: x1 + ua * (x2 - x1),
-            y: y1 + ua * (y2 - y1),
+            v,
             seg1: ua >= 0 && ua <= 1,
             seg2: ub >= 0 && ub <= 1
         }
