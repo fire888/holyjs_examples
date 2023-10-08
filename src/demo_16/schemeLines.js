@@ -50,7 +50,7 @@ const createLines = (points) => {
         const dir = new THREE.Vector3().copy(p1).sub(p0).normalize()
         const angle = M.angleFromCoords(dir.x, dir.z)
 
-        const w = .1
+        const w = .3
         const data = {
             id: getID(),
             type: 'corridor',
@@ -203,9 +203,7 @@ const checkFirstInterceptRoad = corridors => {
             if (intercept) {
                 return void res(intercept)
             }
-            setTimeout(() => {
-                iterate()
-            }, 1)
+            iterate()
         }
         iterate()
     })
@@ -419,7 +417,7 @@ const addCrosses = items => {
                 }
             }
             resultCorridorsArr = changedCorridors
-            await pause(0)
+            //await pause(0)
             await findAndInsertFirstCross(resultCorridorsArr)
         }
         findAndInsertFirstCross(resultCorridorsArr)

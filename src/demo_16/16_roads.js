@@ -148,7 +148,31 @@ async function initApp () {
         [15, 0, 3],
     ]
 
-    createStructure(points)
+
+
+
+    const path = []
+
+    const clickerOnScene = new ClickerOnScene()
+    clickerOnScene.camera = studio.camera
+    studio.addToScene(clickerOnScene)
+    clickerOnScene.setCB(p => {
+        const ob = new THREE.Mesh(
+            new THREE.BoxGeometry(.2,.2, .2),
+            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+        )
+        ob.position.copy(p)
+        studio.addToScene(ob)
+        path.push(p.toArray())
+        console.log(path)
+        createStructure(path)
+        // if (currentWall) {
+        //     studio.removeFromScene(currentWall)
+        //     currentWall.geometry.dispose()
+        //     currentWall.material.dispose()
+        // }
+        // path.length > 2 && createWalls(path)
+    })
 }
 
 
