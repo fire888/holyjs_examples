@@ -1,6 +1,7 @@
 import { createLineFromVectors } from "./lineHelper";
 import * as THREE from "three";
 import { M } from './M'
+import { createLabel } from './label'
 
 let id = 0
 const getID = () => ++id
@@ -14,14 +15,19 @@ const addBox = (v, color = 0xFF0000) => {
     mesh.position.copy(v)
     studio.addToScene(mesh)
 }
-const drawRoad = (r, color = 0x333333) => {
-    const n = 0
+const drawRoad = (r, y = 0) => {
+    const x = r.axis.p0.x + (r.axis.p1.x - r.axis.p0.x) / 3
+    const z = r.axis.p0.z + (r.axis.p1.z - r.axis.p0.z) / 3
+    const label = createLabel(r.id, "#ff0000", 1)
+    label.position.set(x, y, z)
+    studio.addToScene(label)
+
     const l = createLineFromVectors(r.axis.p0, r.axis.p1, 0xFF0000)
-    l.position.y = n
+    l.position.y = y
     const l1 = createLineFromVectors(r.leftLine.p0, r.leftLine.p1, 0xFFFF00)
-    l1.position.y = n
+    l1.position.y = y
     const l2 = createLineFromVectors(r.rightLine.p0, r.rightLine.p1, 0x00FFFF)
-    l2.position.y = n
+    l2.position.y = y
     studio.addToScene(l)
     studio.addToScene(l1)
     studio.addToScene(l2)
@@ -35,17 +41,7 @@ const getInterceptLines = (l1, l2) => {
     return intercept
 }
 
-const createLines = () => {
-    const points = [
-        [0, 0, 0],
-        [11, 0, -2],
-        [5, 0, 5],
-        [3, 0, 5],
-        [10, 0, -5],
-        [5, 0, -3],
-        [2, 0, 3],
-        [15, 0, 3],
-    ]
+const createLines = (points) => {
     const lines = []
     for (let i = 1; i < points.length; ++i) {
         const p0 = new THREE.Vector3().fromArray(points[i - 1])
@@ -158,363 +154,298 @@ const addCorners = lines => {
     return lines
 }
 
+/** ******************************************************************/
+const checkFirstInterceptRoad = corridors => {
+    return new Promise(res => {
+        const checkIntercept = (i, j) => {
+            if (
+                corridors[i].nextId === corridors[j].id ||
+                corridors[j].nextId === corridors[i].id ||
+                corridors[i].prevId === corridors[j].id ||
+                corridors[j].prevId === corridors[i].id
+            ) {
+                return false
+            }
+            if (
+                corridors[i].axis.p1.equals(corridors[j].axis.p0) ||
+                corridors[i].axis.p0.equals(corridors[j].axis.p1)
+            ) {
+                return false
+            }
+            if (
+                corridors[i].axis.p0.equals(corridors[j].axis.p1) ||
+                corridors[i].axis.p0.equals(corridors[j].axis.p1)
+            ) {
+                return false
+            }
+            const intercept = getInterceptLines(corridors[i].axis, corridors[j].axis)
+            if (!intercept || !intercept.seg1 || !intercept.seg2) {
+                return false
+            }
+            return {
+                v: intercept.v,
+                idCorridorCurrent: corridors[i].id,
+                idCorridorWith: corridors[j].id
+            }
+        }
+
+        let i = 0, j = 0
+        const iterate = () => {
+            ++j
+            if (!corridors[j]) {
+                ++i
+                j = i + 1
+                if (!corridors[i] || !corridors[j]) {
+                    return void res(null)
+                }
+            }
+            const intercept = checkIntercept(i, j)
+            if (intercept) {
+                return void res(intercept)
+            }
+            setTimeout(() => {
+                iterate()
+            }, 1)
+        }
+        iterate()
+    })
+}
+
+let levelDraw = .5
+const createCrossByIntercept = (crossData, oldCorridors) => {
+    levelDraw += .3
+    return new Promise(res => {
+        const corridorCurrent = oldCorridors.filter(n => n.id === crossData.idCorridorCurrent)[0]
+        const corridorWith = oldCorridors.filter(n => n.id === crossData.idCorridorWith)[0]
+
+        const interceptAxisWithLeft = getInterceptLines(corridorCurrent.axis, corridorWith.leftLine)
+        //addBox(interceptAxisWithLeft.v, 0x0000ff)
+        const d1 = interceptAxisWithLeft.v.distanceTo(corridorCurrent.axis.p0)
+
+        const interceptAxisWithRight = getInterceptLines(corridorCurrent.axis, corridorWith.rightLine)
+        //addBox(interceptAxisWithRight.v, 0xf000f0)
+        const d2 = interceptAxisWithRight.v.distanceTo(corridorCurrent.axis.p0)
+
+        if (d1 < d2) {
+            const p0 = getInterceptLines(corridorCurrent.leftLine, corridorWith.leftLine)
+            const p1 = getInterceptLines(corridorCurrent.rightLine, corridorWith.leftLine)
+            const p2 = getInterceptLines(corridorCurrent.rightLine, corridorWith.rightLine)
+            const p3 = getInterceptLines(corridorCurrent.leftLine, corridorWith.rightLine)
+
+            const r2Id = getID()
+            const r1 = {
+                oldRoadId: corridorCurrent.id,
+                id: getID(),
+                prevId: corridorCurrent.prevId,
+                nextId: r2Id,
+                type: 'corridor',
+                axis: { p0: corridorCurrent.axis.p0, p1: interceptAxisWithLeft.v },
+                leftLine: { p0: corridorCurrent.leftLine.p0, p1: p0.v },
+                rightLine: { p0: corridorCurrent.rightLine.p0, p1: p1.v },
+            }
+            const corridorPrev = oldCorridors.filter(c => c.id === corridorCurrent.prevId)
+            if (corridorPrev && corridorPrev.length === 1) {
+                corridorPrev.nextId = r1.id
+            }
+            //drawRoad(r1, levelDraw)
+            const r2 = {
+                 oldRoadId: corridorCurrent.id,
+                 id: r2Id,
+                 prevId: r1.id,
+                 nextId: corridorCurrent.nextId,
+                 type: 'corridor',
+                 axis: { p0: interceptAxisWithRight.v, p1: corridorCurrent.axis.p1 },
+                 leftLine: { p0: p3.v, p1: corridorCurrent.leftLine.p1 },
+                 rightLine: { p0: p2.v, p1: corridorCurrent.rightLine.p1 },
+            }
+            const corridorNext = oldCorridors.filter(c => c.id === corridorCurrent.nextId)
+            if (corridorNext && corridorNext.length === 1) {
+                 corridorNext.prevId = r2.id
+            }
+            //drawRoad(r2, levelDraw)
+
+            const interceptAxisWtoRight = getInterceptLines(corridorWith.axis, corridorCurrent.rightLine)
+            //addBox(interceptAxisWtoRight.v, 0x0000FF)
+            const interceptAxisWtoLeft = getInterceptLines(corridorWith.axis, corridorCurrent.leftLine)
+            //addBox(interceptAxisWtoLeft.v, 0xFF00ff)
+
+            const r4Id = getID()
+            const r3 = {
+                oldRoadId: corridorWith.id,
+                id: getID(),
+                nextId: r4Id,
+                prevId: corridorWith.prevId,
+                type: 'corridor',
+                axis: { p0: corridorWith.axis.p0, p1: interceptAxisWtoRight.v },
+                leftLine: { p0: corridorWith.leftLine.p0, p1: p1.v },
+                rightLine: { p0: corridorWith.rightLine.p0, p1: p2.v },
+            }
+            const prevElm = oldCorridors.filter(c => c.id === corridorWith.prevId)
+            if (prevElm && prevElm.length === 1) {
+                 prevElm.nextId = r3.id
+            }
+            //drawRoad(r3, levelDraw)
+
+            const r4 = {
+                oldRoadId: corridorWith.id,
+                id: r4Id,
+                prevId: r3.id,
+                nextId: corridorWith.nextId,
+                type: 'corridor',
+                axis: { p0: interceptAxisWtoLeft.v, p1: corridorWith.axis.p1 },
+                leftLine: { p0: p0.v, p1: corridorWith.leftLine.p1 },
+                rightLine: { p0: p3.v, p1: corridorWith.rightLine.p1 },
+            }
+            const nextElm = oldCorridors.filter(c => c.id === corridorWith.nextId)
+            if (nextElm && nextElm.length === 1) {
+                 nextElm.prevId = r4.id
+            }
+            //drawRoad(r4, levelDraw)
+
+            const newCorridors = [r1, r2, r3, r4]
+            return res({ newCorridors, crossData: { id: getID(), type: 'cross', p0, p1, p2, p3 } })
+        } else {
+            const p0 = getInterceptLines(corridorCurrent.leftLine, corridorWith.rightLine)
+            const p1 = getInterceptLines(corridorCurrent.rightLine, corridorWith.rightLine)
+            const p2 = getInterceptLines(corridorCurrent.rightLine, corridorWith.leftLine)
+            const p3 = getInterceptLines(corridorCurrent.leftLine, corridorWith.leftLine)
+
+            const r2Id = getID()
+            const r1 = {
+                oldRoadId: corridorCurrent.id,
+                id: getID(),
+                prevId: corridorCurrent.prevId,
+                nextId: r2Id,
+                type: 'corridor',
+                axis: { p0: corridorCurrent.axis.p0, p1: interceptAxisWithRight.v },
+                leftLine: { p0: corridorCurrent.leftLine.p0, p1: p0.v },
+                rightLine: { p0: corridorCurrent.rightLine.p0, p1: p1.v },
+            }
+            const corridorPrev = oldCorridors.filter(c => c.id === corridorCurrent.prevId)
+            if (corridorPrev && corridorPrev.length === 1) {
+                corridorPrev.nextId = r1.id
+            }
+            //drawRoad(r1, levelDraw)
+
+            const r2 = {
+                oldRoadId: corridorCurrent.id,
+                id: r2Id,
+                prevId: r1.id,
+                nextId: corridorCurrent.nextId,
+                type: 'corridor',
+                axis: { p0: interceptAxisWithLeft.v, p1: corridorCurrent.axis.p1 },
+                leftLine: { p0: p3.v, p1: corridorCurrent.leftLine.p1 },
+                rightLine: { p0: p2.v, p1: corridorCurrent.rightLine.p1 },
+            }
+            const corridorNext = oldCorridors.filter(c => c.id === corridorCurrent.nextId)
+            if (corridorNext && corridorNext.length === 1) {
+                corridorNext.prevId = r2.id
+            }
+            //drawRoad(r2, levelDraw)
+
+            const interceptAxisWtoLeft = getInterceptLines(corridorWith.axis, corridorCurrent.leftLine)
+            //addBox(interceptAxisWtoLeft.v, 0x0000FF)
+            const interceptAxisWtoRight = getInterceptLines(corridorWith.axis, corridorCurrent.rightLine)
+            //addBox(interceptAxisWtoRight.v, 0xFF00ff)
+
+            const r4Id = getID()
+            const r3 = {
+                oldRoadId: corridorWith.id,
+                id: getID(),
+                nextId: r4Id,
+                prevId: corridorWith.prevId,
+                type: 'corridor',
+                axis: { p0: corridorWith.axis.p0, p1: interceptAxisWtoLeft.v },
+                leftLine: { p0: corridorWith.leftLine.p0, p1: p3.v },
+                rightLine: { p0: corridorWith.rightLine.p0, p1: p0.v },
+            }
+            const prevElm = oldCorridors.filter(c => c.id === corridorWith.prevId)
+            if (prevElm && prevElm.length === 1) {
+                prevElm.nextId = r3.id
+            }
+            //drawRoad(r3, levelDraw)
+
+            const r4 = {
+                oldRoadId: corridorWith.id,
+                id: r4Id,
+                prevId: r3.id,
+                nextId: corridorWith.nextId,
+                type: 'corridor',
+                axis: { p0: interceptAxisWtoRight.v, p1: corridorWith.axis.p1 },
+                leftLine: { p0: p2.v, p1: corridorWith.leftLine.p1 },
+                rightLine: { p0: p1.v, p1: corridorWith.rightLine.p1 },
+            }
+            const nextElm = oldCorridors.filter(c => c.id === corridorWith.nextId)
+            if (nextElm && nextElm.length === 1) {
+                nextElm.prevId = r4.id
+            }
+            //drawRoad(r4, levelDraw)
+
+            const newCorridors = [r1, r2, r3, r4]
+            return res({ newCorridors, crossData: { id: getID(), type: 'cross', p0, p1, p2, p3 } })
+        }
+    })
+}
+
+const pause = t => new Promise(res => setTimeout(res, t))
+
 const addCrosses = items => {
     const corners = items.filter(n => n.type === 'corner')
-
+    const crosses = []
+    let resultCorridorsArr = items.filter(n => n.type === 'corridor')
 
     return new Promise(res => {
-        const oldCorridors = items.filter(n => n.type === 'corridor')
-        const crosses = []
-        const newCorridors = []
+        async function findAndInsertFirstCross (corridors) {
+            const crossIntercept = await checkFirstInterceptRoad(corridors)
+            if (!crossIntercept) {
+                return void res([...resultCorridorsArr, ...crosses, ...corners])
+            }
 
-        const checkIntercept = corridors => {
-            return new Promise(res => {
-                const checkIntercept = (i, j) => {
-                    if (
-                        corridors[i].nextId === corridors[j].id ||
-                        corridors[j].nextId === corridors[i].id ||
-                        corridors[i].prevId === corridors[j].id ||
-                        corridors[j].prevId === corridors[i].id
-                    ) {
-                        return false
-                    }
-                    const intercept = getInterceptLines(corridors[i].axis, corridors[j].axis)
-                    if (!intercept || !intercept.seg1 || !intercept.seg2) {
-                        return false
-                    }
-                    return {
-                        x: intercept.x,
-                        z: intercept.y,
-                        idCorridorCurrent: corridors[i].id,
-                        idCorridorWith: corridors[j].id
+            const dataNewRoads = await createCrossByIntercept(crossIntercept, corridors)
+            const { newCorridors, crossData } = dataNewRoads
+            crosses.push(crossData)
+
+            const changedCorridors = []
+            for (let i = 0; i < corridors.length; ++i) {
+                let isInsertedNew = false
+                for (let j = 0; j < newCorridors.length; ++j) {
+                    if (corridors[i].id === newCorridors[j].oldRoadId) {
+                        changedCorridors.push(newCorridors[j])
+                        isInsertedNew = true
                     }
                 }
-
-                let i = 0, j = 0
-                const iterate = () => {
-                    ++j
-                    if (!corridors[j]) {
-                        ++i
-                        j = i + 1
-                        if (!corridors[i] || !corridors[j]) {
-                            return void res(null)
-                        }
-                    }
-                    const intercept = checkIntercept(i, j)
-                    if (intercept) {
-                        return void res(intercept)
-                    }
-                    setTimeout(() => {
-                        iterate()
-                    }, 1)
+                if (!isInsertedNew) {
+                    changedCorridors.push(corridors[i])
                 }
-                iterate()
-            })
+            }
+            resultCorridorsArr = changedCorridors
+            await pause(0)
+            await findAndInsertFirstCross(resultCorridorsArr)
         }
-
-
-        const createCrossByIntercept = (crossData, oldCorridors) => {
-            return new Promise(res => {
-                const corridorCurrent = oldCorridors.filter(n => n.id === crossData.idCorridorCurrent)[0]
-                const corridorWith = oldCorridors.filter(n => n.id === crossData.idCorridorWith)[0]
-                //const newCorridors = oldCorridors.filter(n => n.id !== crossData.idCorridorCurrent && n.id !== crossData.idCorridorWith)
-                let newCorridors
-
-                //console.log('crossData', crossData, corridorCurrent, corridorWith)
-
-                const interceptAxis1 = M.line_intersect(
-                    corridorCurrent.axis.p0.x, corridorCurrent.axis.p0.z,
-                    corridorCurrent.axis.p1.x, corridorCurrent.axis.p1.z,
-                    corridorWith.leftLine.p0.x, corridorWith.leftLine.p0.z,
-                    corridorWith.leftLine.p1.x, corridorWith.leftLine.p1.z,
-                )
-                const d1 = new THREE.Vector3(interceptAxis1.x, 0, interceptAxis1.y).distanceTo(corridorCurrent.axis.p0)
-                addBox(new THREE.Vector3(interceptAxis1.x, 0, interceptAxis1.y), 0x0000ff)
-
-                const interceptAxis2 = M.line_intersect(
-                    corridorCurrent.axis.p0.x, corridorCurrent.axis.p0.z,
-                    corridorCurrent.axis.p1.x, corridorCurrent.axis.p1.z,
-                    corridorWith.rightLine.p0.x, corridorWith.rightLine.p0.z,
-                    corridorWith.rightLine.p1.x, corridorWith.rightLine.p1.z,
-                )
-                addBox(new THREE.Vector3(interceptAxis2.x, 0, interceptAxis2.y), 0x0000ff)
-                const d2 = new THREE.Vector3(interceptAxis2.x, 0, interceptAxis2.y).distanceTo(corridorCurrent.axis.p0)
-
-                if (d1 < d2) {
-                    const p0 = M.line_intersect(
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                        corridorWith.leftLine.p0.x, corridorWith.leftLine.p0.z,
-                        corridorWith.leftLine.p1.x, corridorWith.leftLine.p1.z,
-                    )
-                    const p1 = M.line_intersect(
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                        corridorWith.leftLine.p0.x, corridorWith.leftLine.p0.z,
-                        corridorWith.leftLine.p1.x, corridorWith.leftLine.p1.z,
-                    )
-                    const p2 = M.line_intersect(
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                        corridorWith.rightLine.p0.x, corridorWith.rightLine.p0.z,
-                        corridorWith.rightLine.p1.x, corridorWith.rightLine.p1.z,
-                    )
-                    const p3 = M.line_intersect(
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                        corridorWith.rightLine.p0.x, corridorWith.rightLine.p0.z,
-                        corridorWith.rightLine.p1.x, corridorWith.rightLine.p1.z,
-                    )
-
-                    const c2Id = getID()
-                    const c1 = {
-                        id: getID(),
-                        prevId: corridorCurrent.prevId,
-                        nextId: c2Id,
-                        type: 'corridor',
-                        axis: { p0: corridorCurrent.axis.p0, p1: new THREE.Vector3(interceptAxis1.x, 0, interceptAxis1.y) },
-                        leftLine: { p0: corridorCurrent.leftLine.p0, p1: new THREE.Vector3(p0.x, 0, p0.y) },
-                        rightLine: { p0: corridorCurrent.rightLine.p0, p1: new THREE.Vector3(p1.x, 0, p1.y) },
-                    }
-                    const corridorPrev = oldCorridors.filter(c => c.id === corridorCurrent.prevId)
-                    if (corridorPrev && corridorPrev.length === 1) {
-                        corridorPrev.nextId = c1.id
-                    }
-                    const c2 = {
-                        id: c2Id,
-                        prevId: c1.id,
-                        nextId: corridorCurrent.nextId,
-                        type: 'corridor',
-                        axis: { p0: new THREE.Vector3(interceptAxis2.x, 0, interceptAxis2.y), p1: corridorCurrent.axis.p1 },
-                        leftLine: { p0: new THREE.Vector3(p3.x, 0, p3.y), p1: corridorCurrent.leftLine.p1 },
-                        rightLine: { p0: new THREE.Vector3(p2.x, 0, p2.y), p1: corridorCurrent.rightLine.p1 },
-                    }
-                    const corridorNext = oldCorridors.filter(c => c.id === corridorCurrent.nextId)
-                    if (corridorNext && corridorNext.length === 1) {
-                        corridorNext.prevId = c2.id
-                    }
-
-                    const interceptAxis3 = M.line_intersect(
-                        corridorWith.axis.p0.x, corridorWith.axis.p0.z,
-                        corridorWith.axis.p1.x, corridorWith.axis.p1.z,
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                    )
-                    addBox(new THREE.Vector3(interceptAxis3.x, 0, interceptAxis3.y), 0xFFFFFF)
-
-                    const interceptAxis4 = M.line_intersect(
-                        corridorWith.axis.p0.x, corridorWith.axis.p0.z,
-                        corridorWith.axis.p1.x, corridorWith.axis.p1.z,
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                    )
-                    addBox(new THREE.Vector3(interceptAxis4.x, 0, interceptAxis4.y), 0xFF00ff)
-
-
-                    const c4Id = getID()
-                    const c3 = {
-                        id: getID(),
-                        nextId: c4Id,
-                        prevId: corridorWith.prevId,
-                        type: 'corridor',
-                        axis: { p0: corridorWith.axis.p0, p1: new THREE.Vector3(interceptAxis3.x, 0, interceptAxis3.y) },
-                        leftLine: { p0: corridorWith.leftLine.p0, p1: new THREE.Vector3(p1.x, 0, p1.y) },
-                        rightLine: { p0: corridorWith.rightLine.p0, p1: new THREE.Vector3(p2.x, 0, p2.y) },
-                    }
-                    const prevElm = oldCorridors.filter(c => c.id === corridorWith.prevId)
-                    if (prevElm && prevElm.length === 1) {
-                        prevElm.nextId = c3.id
-                    }
-
-                    const c4 = {
-                        id: c4Id,
-                        prevId: c3.id,
-                        nextId: corridorWith.nextId,
-                        type: 'corridor',
-                        axis: { p0: new THREE.Vector3(interceptAxis4.x, 0, interceptAxis4.y), p1: corridorWith.axis.p1 },
-                        leftLine: { p0: new THREE.Vector3(p0.x, 0, p0.y), p1: corridorWith.leftLine.p1 },
-                        rightLine: { p0: new THREE.Vector3(p3.x, 0, p3.y), p1: corridorWith.rightLine.p1 },
-                    }
-
-                    const nextElm = oldCorridors.filter(c => c.id === corridorWith.nextId)
-                    if (nextElm && nextElm.length === 1) {
-                        nextElm.prevId = c4.id
-                    }
-                    console.log(c1, c2, c3, c4)
-
-                    // drawLines(c1)
-                    // drawLines(c2)
-                    // drawLines(c3)
-                    // drawLines(c4)
-
-                    newCorridors = []
-                    for (let i = 0; i < oldCorridors.length; ++i) {
-                        if (oldCorridors[i].id === corridorCurrent.id) {
-                            newCorridors.push(c1, c2)
-                        } else if (oldCorridors[i].id === corridorWith.id) {
-                            newCorridors.push(c3, c4)
-                        } else {
-                            newCorridors.push(oldCorridors[i])
-                        }
-
-                    }
-                    crosses.push({ id: getID(), type: 'cross', p0, p1, p2, p3 })
-                    return res(newCorridors)
-                } else {
-
-                    const p0 = M.line_intersect(
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                        corridorWith.rightLine.p0.x, corridorWith.rightLine.p0.z,
-                        corridorWith.rightLine.p1.x, corridorWith.rightLine.p1.z,
-                    )
-                    const p1 = M.line_intersect(
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                        corridorWith.rightLine.p0.x, corridorWith.rightLine.p0.z,
-                        corridorWith.rightLine.p1.x, corridorWith.rightLine.p1.z,
-                    )
-                    const p2 = M.line_intersect(
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                        corridorWith.leftLine.p0.x, corridorWith.leftLine.p0.z,
-                        corridorWith.leftLine.p1.x, corridorWith.leftLine.p1.z,
-                    )
-                    const p3 = M.line_intersect(
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                        corridorWith.leftLine.p0.x, corridorWith.leftLine.p0.z,
-                        corridorWith.leftLine.p1.x, corridorWith.leftLine.p1.z,
-                    )
-
-                    const c2Id = getID()
-                    const c1 = {
-                        id: getID(),
-                        prevId: corridorCurrent.prevId,
-                        nextId: c2Id,
-                        type: 'corridor',
-                        axis: { p0: corridorCurrent.axis.p0, p1: new THREE.Vector3(interceptAxis2.x, 0, interceptAxis2.y) },
-                        leftLine: { p0: corridorCurrent.leftLine.p0, p1: new THREE.Vector3(p0.x, 0, p0.y) },
-                        rightLine: { p0: corridorCurrent.rightLine.p0, p1: new THREE.Vector3(p1.x, 0, p1.y) },
-                    }
-                    const corridorPrev = oldCorridors.filter(c => c.id === corridorCurrent.prevId)
-                    if (corridorPrev && corridorPrev.length === 1) {
-                        corridorPrev.nextId = c1.id
-                    }
-                    const c2 = {
-                         id: c2Id,
-                         prevId: c1.prevId,
-                         nextId: corridorCurrent.nextId,
-                         type: 'corridor',
-                         axis: { p0: new THREE.Vector3(interceptAxis1.x, 0, interceptAxis1.y), p1: corridorCurrent.axis.p1 },
-                         leftLine: { p0: new THREE.Vector3(p3.x, 0, p3.y), p1: corridorCurrent.leftLine.p1 },
-                         rightLine: { p0: new THREE.Vector3(p2.x, 0, p2.y), p1: corridorCurrent.rightLine.p1 },
-                    }
-                    const corridorNext = oldCorridors.filter(c => c.id === corridorCurrent.nextId)
-                    if (corridorNext && corridorNext.length === 1) {
-                         corridorNext.prevId = c2.id
-                    }
-
-                    const interceptAxis3 = M.line_intersect(
-                        corridorWith.axis.p0.x, corridorWith.axis.p0.z,
-                        corridorWith.axis.p1.x, corridorWith.axis.p1.z,
-                        corridorCurrent.leftLine.p0.x, corridorCurrent.leftLine.p0.z,
-                        corridorCurrent.leftLine.p1.x, corridorCurrent.leftLine.p1.z,
-                    )
-                    addBox(new THREE.Vector3(interceptAxis3.x, 0, interceptAxis3.y), 0xFFFFFF)
-
-                    const interceptAxis4 = M.line_intersect(
-                        corridorWith.axis.p0.x, corridorWith.axis.p0.z,
-                        corridorWith.axis.p1.x, corridorWith.axis.p1.z,
-                        corridorCurrent.rightLine.p0.x, corridorCurrent.rightLine.p0.z,
-                        corridorCurrent.rightLine.p1.x, corridorCurrent.rightLine.p1.z,
-                    )
-                    addBox(new THREE.Vector3(interceptAxis4.x, 0, interceptAxis4.y), 0xFF00ff)
-                    //
-                    //
-                    const c4Id = getID()
-                    const c3 = {
-                        id: getID(),
-                        nextId: c4Id,
-                        prevId: corridorWith.prevId,
-                        type: 'corridor',
-                        axis: { p0: corridorWith.axis.p0, p1: new THREE.Vector3(interceptAxis3.x, 0, interceptAxis3.y) },
-                        leftLine: { p0: corridorWith.leftLine.p0, p1: new THREE.Vector3(p3.x, 0, p3.y) },
-                        rightLine: { p0: corridorWith.rightLine.p0, p1: new THREE.Vector3(p0.x, 0, p0.y) },
-                    }
-                    const prevElm = oldCorridors.filter(c => c.id === corridorWith.prevId)
-                     if (prevElm && prevElm.length === 1) {
-                         prevElm.nextId = c3.id
-                    }
-                    //
-                    const c4 = {
-                         id: c4Id,
-                         nextId: corridorWith.nextId,
-                         prevId: c3.id,
-                         type: 'corridor',
-                         axis: { p0: new THREE.Vector3(interceptAxis4.x, 0, interceptAxis4.y), p1: corridorWith.axis.p1 },
-                         leftLine: { p0: new THREE.Vector3(p2.x, 0, p2.y), p1: corridorWith.leftLine.p1 },
-                         rightLine: { p0: new THREE.Vector3(p1.x, 0, p1.y), p1: corridorWith.rightLine.p1 },
-                    }
-                    //
-                    const nextElm = oldCorridors.filter(c => c.id === corridorWith.nextId)
-                     if (nextElm && nextElm.length === 1) {
-                         nextElm.prevId = c4.id
-                    }
-
-                    // drawLines(c1)
-                    // drawLines(c2)
-                    // drawLines(c3)
-                    // drawLines(c4)
-
-                    newCorridors = []
-                    for (let i = 0; i < oldCorridors.length; ++i) {
-                        if (oldCorridors[i].id === corridorCurrent.id) {
-                            newCorridors.push(c1, c2)
-                        } else if (oldCorridors[i].id === corridorWith.id) {
-                            //newCorridors.push(c3, c4)
-                        } else {
-                            newCorridors.push(oldCorridors[i])
-                        }
-
-                    }
-                    return void res(newCorridors)
-                }
-                //res(oldCorridors)
-            })
-        }
-
-        const iterate = (corridors) => {
-            checkIntercept(corridors).then(crossData => {
-                if (crossData) {
-                    createCrossByIntercept(crossData, corridors).then(newCorridors => {
-                        console.log(newCorridors)
-                        setTimeout(() => {
-                            iterate(newCorridors)
-                        }, 30)
-
-                    })
-                } else {
-                    corridors.push(...crosses)
-                    res(corridors)
-                }
-            })
-        }
-        iterate(oldCorridors)
+        findAndInsertFirstCross(resultCorridorsArr)
     })
 }
 
 
-export const createSchemeLines = (st) => {
-    return new Promise(res => {
-        studio = st
+export async function createSchemeLines (st, points) {
+    studio = st
 
-        const lines = createLines()
-        const linesClipped = getConnectionsWithNears(lines)
-        const addedCorners = addCorners(linesClipped)
-        console.log(addedCorners)
-        //addCrosses(addedCorners).then(result => {
-        //    res(result)
-        //})
-    })
+    const lines = createLines(points)
+    const linesClipped = getConnectionsWithNears(lines)
+    const addedCorners = addCorners(linesClipped)
+    const result = await addCrosses(addedCorners)
+    for (let i = 0; i < result.length; ++i) {
+        if (result[i].type === 'corridor') {
+            drawRoad(result[i])
+        }
+        if (result[i].type === 'corner') {
+            const l = createLineFromVectors(
+                result[i].p0,
+                result[i].p1,
+                0x333333,
+            )
+            studio.addToScene(l)
+        }
+    }
+    return result
 }
