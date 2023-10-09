@@ -264,7 +264,6 @@ async function initApp () {
         ob.position.set(p.x, -.5, p.z)
         studio.addToScene(ob)
         path.push(p.toArray())
-        console.log(path)
         createStructure(path)
     })
 }

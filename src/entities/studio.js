@@ -76,7 +76,6 @@ export const createStudio = (startCameraCoord = 3) => {
             renderer.setClearColor(color)
         },
         setFog (n, f, c) {
-            console.log(scene.fog)
             scene.fog.near = n
             scene.fog.far = f
             scene.fog.color.set(c)

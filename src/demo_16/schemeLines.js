@@ -213,10 +213,15 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
         const corridorWith = oldCorridors.filter(n => n.id === crossData.idCorridorWith)[0]
 
         const interceptAxisWithLeft = getInterceptLines(corridorCurrent.axis, corridorWith.leftLine)
+        if (!interceptAxisWithLeft) {
+            alert('NOT VALID INTERCEPT')
+        }
         //addBox(interceptAxisWithLeft.v, 0x0000ff)
         const d1 = interceptAxisWithLeft.v.distanceTo(corridorCurrent.axis.p0)
-
         const interceptAxisWithRight = getInterceptLines(corridorCurrent.axis, corridorWith.rightLine)
+        if (!interceptAxisWithRight) {
+            alert('NOT VALID INTERCEPT')
+        }
         //addBox(interceptAxisWithRight.v, 0xf000f0)
         const d2 = interceptAxisWithRight.v.distanceTo(corridorCurrent.axis.p0)
 
@@ -225,6 +230,10 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
             const p1 = getInterceptLines(corridorCurrent.rightLine, corridorWith.leftLine)
             const p2 = getInterceptLines(corridorCurrent.rightLine, corridorWith.rightLine)
             const p3 = getInterceptLines(corridorCurrent.leftLine, corridorWith.rightLine)
+
+            if (!p0 || !p1 || !p2 || !p3) {
+                alert('NOT VALID INTERCEPT')
+            }
 
             const r2Id = getID()
             const r1 = {
@@ -303,6 +312,10 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
             const p1 = getInterceptLines(corridorCurrent.rightLine, corridorWith.rightLine)
             const p2 = getInterceptLines(corridorCurrent.rightLine, corridorWith.leftLine)
             const p3 = getInterceptLines(corridorCurrent.leftLine, corridorWith.leftLine)
+
+            if (!p0 || !p1 || !p2 || !p3) {
+                alert('NOT VALID INTERCEPT')
+            }
 
             const r2Id = getID()
             const r1 = {
