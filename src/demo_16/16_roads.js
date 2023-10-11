@@ -216,7 +216,9 @@ async function initApp () {
         studio.addToScene(mesh)
     }
 
-    const f = () => {
+    const f = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
         button.removeEventListener('click', f)
         isCanClick = false
         let playerPos
