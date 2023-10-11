@@ -10,7 +10,7 @@ let studio
 let meshes = []
 const addBox = (v, color = 0xFF0000) => {
     const mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(.05, .05, .05),
+        new THREE.BoxGeometry(.1, .1, .1),
         new THREE.MeshBasicMaterial({ color })
     )
     mesh.position.copy(v)
@@ -41,7 +41,8 @@ const drawRoad = (r, y = 0) => {
 
 const getInterceptLines = (l1, l2) => {
     const intercept = M.vecXZIntercept(l1.p0, l1.p1, l2.p0, l2.p1)
-    if (!intercept || !intercept.seg1 || !intercept.seg2) {
+    //if (!intercept || !intercept.seg1 || !intercept.seg2) {
+    if (!intercept) {
         return null
     }
     return intercept
@@ -102,13 +103,15 @@ const getConnectionsWithNears = lines => {
 
         /** if intercept left line clip points by intercept */
         const interceptL = getInterceptLines(lines[i - 1].leftLine, lines[i].leftLine)
-        if (interceptL && interceptL.seg1 && interceptL.seg2) {
+        //if (interceptL && interceptL.seg1 && interceptL.seg2) {
+        if (interceptL) {
             lines[i - 1].leftLine.p1 = interceptL.v
             lines[i].leftLine.p0 = interceptL.v
         }
         /** if intercept right line clip points by intercept */
         const interceptR = getInterceptLines(lines[i - 1].rightLine, lines[i].rightLine)
-        if (interceptR && interceptR.seg1) {
+        //if (interceptR && interceptR.seg1) {
+        if (interceptR) {
             lines[i - 1].rightLine.p1 = interceptR.v
             lines[i].rightLine.p0 = interceptR.v
         }
@@ -176,18 +179,25 @@ const checkFirstInterceptRoad = corridors => {
                 return false
             }
             const intercept = getInterceptLines(corridors[i].axis, corridors[j].axis)
-            if (!intercept || !intercept.seg1 || !intercept.seg2) {
+            //if (!intercept || !intercept.seg1 || !intercept.seg2) {
+            if (!intercept) {
                 return false
             }
             return {
+                intercept,
                 v: intercept.v,
                 idCorridorCurrent: corridors[i].id,
                 idCorridorWith: corridors[j].id
             }
         }
 
-        let i = 0, j = 0
+        let i = 0, j = 0, count = 0
         const iterate = () => {
+            ++count
+            if (count > 10000) {
+                alert('more 10000')
+                return void res(null)
+            }
             ++j
             if (!corridors[j]) {
                 ++i
@@ -196,10 +206,16 @@ const checkFirstInterceptRoad = corridors => {
                     return void res(null)
                 }
             }
-            const intercept = checkIntercept(i, j)
-            if (intercept) {
-                return void res(intercept)
+            try {
+                const intercept = checkIntercept(i, j)
+                if (intercept) {
+                    return void res(intercept)
+                }
+            } catch (e) {
+                alert(`!! max call stack ${ i } ${ j }`)
+                void res(null)
             }
+
             iterate()
         }
         iterate()
@@ -214,13 +230,17 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
 
         const interceptAxisWithLeft = getInterceptLines(corridorCurrent.axis, corridorWith.leftLine)
         if (!interceptAxisWithLeft) {
-            alert('NOT VALID INTERCEPT')
+            alert('NOT VALID INTERCEPT: axis-left')
+            console.log('axis-left error ---', crossData, corridorCurrent, corridorWith, oldCorridors)
+            //addBox(crossData.v)
+            return res(null)
         }
         //addBox(interceptAxisWithLeft.v, 0x0000ff)
         const d1 = interceptAxisWithLeft.v.distanceTo(corridorCurrent.axis.p0)
+
         const interceptAxisWithRight = getInterceptLines(corridorCurrent.axis, corridorWith.rightLine)
         if (!interceptAxisWithRight) {
-            alert('NOT VALID INTERCEPT')
+            alert('NOT VALID INTERCEPT: axis-right')
         }
         //addBox(interceptAxisWithRight.v, 0xf000f0)
         const d2 = interceptAxisWithRight.v.distanceTo(corridorCurrent.axis.p0)
@@ -314,7 +334,7 @@ const createCrossByIntercept = (crossData, oldCorridors) => {
             const p3 = getInterceptLines(corridorCurrent.leftLine, corridorWith.leftLine)
 
             if (!p0 || !p1 || !p2 || !p3) {
-                alert('NOT VALID INTERCEPT')
+                alert('NOT VALID INTERCEPT: left or right current-with')
             }
 
             const r2Id = getID()
@@ -409,6 +429,9 @@ const addCrosses = items => {
             }
 
             const dataNewRoads = await createCrossByIntercept(crossIntercept, corridors)
+            if (!dataNewRoads) {
+                return void res([...resultCorridorsArr, ...crosses, ...corners])
+            }
             const { newCorridors, crossData } = dataNewRoads
             crosses.push(crossData)
 
@@ -426,7 +449,6 @@ const addCrosses = items => {
                 }
             }
             resultCorridorsArr = changedCorridors
-            //await pause(0)
             await findAndInsertFirstCross(resultCorridorsArr)
         }
         findAndInsertFirstCross(resultCorridorsArr)
@@ -449,7 +471,7 @@ export async function createSchemeLines (st, points) {
     const result = await addCrosses(addedCorners)
     for (let i = 0; i < result.length; ++i) {
         if (result[i].type === 'corridor') {
-            drawRoad(result[i], -.5)
+            drawRoad(result[i], -.3)
         }
         if (result[i].type === 'corner') {
             const l = createLineFromVectors(
