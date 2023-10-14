@@ -59,24 +59,24 @@ async function initApp () {
 
     /** CUSTOM 04_01 ***********************************/
 
-    // const rotateAndTranslate = (arr, angle, x, y, z) => {
-    //     const v3 = new THREE.Vector3()
-    //     const applyMatrixToArray = (m, arr) => {
-    //         for (let i = 0; i < arr.length; i += 3) {
-    //             v3.fromArray(v, i)
-    //             v3.applyMatrix4(m)
-    //             arr[i] = v3.x
-    //             arr[i + 1] = v3.y
-    //             arr[i + 2] = v3.z
-    //         }
-    //     }
-    //
-    //     const m4rot = new THREE.Matrix4().makeRotationY(angle)
-    //     const m4translate = new THREE.Matrix4().makeTranslation(x, y, z)
-    //
-    //     applyMatrixToArray(m4rot, v)
-    //     applyMatrixToArray(m4translate, v)
-    // }
+    const rotateAndTranslate = (arr, angle, x, y, z) => {
+        const v3 = new THREE.Vector3()
+        const applyMatrixToArray = (m, arr) => {
+            for (let i = 0; i < arr.length; i += 3) {
+                v3.fromArray(v, i)
+                v3.applyMatrix4(m)
+                arr[i] = v3.x
+                arr[i + 1] = v3.y
+                arr[i + 2] = v3.z
+            }
+        }
+
+        const m4rot = new THREE.Matrix4().makeRotationY(angle)
+        const m4translate = new THREE.Matrix4().makeTranslation(x, y, z)
+
+        applyMatrixToArray(m4rot, v)
+        applyMatrixToArray(m4translate, v)
+    }
 
     /** ************************************************/
 
@@ -101,9 +101,9 @@ async function initApp () {
     studio.addToScene(mesh)
 
     updateFunctions.push(() => {
-        //rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
-        //v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
-        //geometry.attributes.position.needsUpdate = true
+        rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
+        v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
+        geometry.attributes.position.needsUpdate = true
     })
 
     /** *******************************************/
