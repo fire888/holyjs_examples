@@ -132,15 +132,15 @@ async function initApp () {
     const mesh = createMesh(v, uv, materials.atlasBrick)
     studio.addToScene(mesh)
 
-    updateFunctions.push(n => {
-            const { v } = createArrays(n)
-            v.forEach((elem, i) => {
-                if (i % 2 > 0) {
-                    mesh.geometry.attributes.uv.array[i] -= .001
-                }
-            })
-            mesh.geometry.attributes.uv.needsUpdate = true
-    })
+    // updateFunctions.push(n => {
+    //         const { v } = createArrays(n)
+    //         v.forEach((elem, i) => {
+    //             if (i % 2 > 0) {
+    //                 mesh.geometry.attributes.uv.array[i] -= .001
+    //             }
+    //         })
+    //         mesh.geometry.attributes.uv.needsUpdate = true
+    // })
 
     /** *******************************************/
 

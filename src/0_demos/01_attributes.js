@@ -26,84 +26,84 @@ async function initApp () {
     /** CUSTOM 00_00 ***********************************/
     {
 
+        // const v = [
+        //     0, 0, 0,
+        //     1, 0, 0,
+        //     1, 2, 0,
+        //
+        //     -.1, 0, 0,
+        //     1, 2.1, 0,
+        //     0, 2, 0,
+        // ]
+        //
+        // const geometry = new THREE.BufferGeometry()
+        // const vF32 = new Float32Array(v)
+        // geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
+        //
+        // const mesh = new THREE.Mesh(geometry, materials.simple)
+        // studio.addToScene(mesh)
+        //
+        // updateFunctions.push(n => {
+        //     geometry.attributes.position.array[0] = sin(n * 5)
+        //     geometry.attributes.position.array[9] = sin(n * 5) // - .1
+        //     geometry.attributes.position.needsUpdate = true
+        // })
+    }
+
+    /** CUSTOM 00_01 ***********************************/
+    {
         const v = [
             0, 0, 0,
             1, 0, 0,
             1, 2, 0,
 
-            -.1, 0, 0,
-            1, 2.1, 0,
+            0, 0, 0,
+            1, 2, 0,
             0, 2, 0,
+        ]
+
+        const uv = [
+            0, 0,
+            1, 0,
+            1, 1,
+
+            0, 0,
+            1, 1,
+            0, 1,
         ]
 
         const geometry = new THREE.BufferGeometry()
         const vF32 = new Float32Array(v)
         geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
+        const uvF32 = new Float32Array(uv)
+        geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
 
-        const mesh = new THREE.Mesh(geometry, materials.simple)
+        const mesh = new THREE.Mesh(geometry, materials.brick)
+        mesh.position.x = 1.2
         studio.addToScene(mesh)
 
         updateFunctions.push(n => {
-            // geometry.attributes.position.array[0] = sin(n * 5)
-            // geometry.attributes.position.array[9] = sin(n * 5) // - .1
-            geometry.attributes.position.needsUpdate = true
+            // const v = .01
+            // geometry.attributes.uv.array[0] += v
+            // geometry.attributes.uv.array[2] += v
+            // geometry.attributes.uv.array[demo_14] += v
+            // geometry.attributes.uv.array[6] += v
+            // geometry.attributes.uv.array[8] += v
+            // geometry.attributes.uv.array[10] += v
+            // geometry.attributes.uv.array[12] += v
+
+            // const v = sin(n * 5) * .01
+            // geometry.attributes.uv.array[0] += v
+            // geometry.attributes.uv.array[2] += v
+            // geometry.attributes.uv.array[demo_14] += v
+            // geometry.attributes.uv.array[6] += v
+            // geometry.attributes.uv.array[8] += v
+            // geometry.attributes.uv.array[10] += v
+            // geometry.attributes.uv.array[12] += v
+
+            geometry.attributes.uv.needsUpdate = true
         })
     }
-
-    /** CUSTOM 00_01 ***********************************/
-    // {
-    //     const v = [
-    //         0, 0, 0,
-    //         1, 0, 0,
-    //         1, 2, 0,
-    //
-    //         0, 0, 0,
-    //         1, 2, 0,
-    //         0, 2, 0,
-    //     ]
-    //
-    //     const uv = [
-    //         0, 0,
-    //         1, 0,
-    //         1, 1,
-    //
-    //         0, 0,
-    //         1, 1,
-    //         0, 1,
-    //     ]
-    //
-    //     const geometry = new THREE.BufferGeometry()
-    //     const vF32 = new Float32Array(v)
-    //     geometry.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
-    //     const uvF32 = new Float32Array(uv)
-    //     geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
-    //
-    //     const mesh = new THREE.Mesh(geometry, materials.brick)
-    //     mesh.position.x = 1.2
-    //     studio.addToScene(mesh)
-    //
-    //     updateFunctions.push(n => {
-    //         // const v = .01
-    //         // geometry.attributes.uv.array[0] += v
-    //         // geometry.attributes.uv.array[2] += v
-    //         // geometry.attributes.uv.array[demo_14] += v
-    //         // geometry.attributes.uv.array[6] += v
-    //         // geometry.attributes.uv.array[8] += v
-    //         // geometry.attributes.uv.array[10] += v
-    //         // geometry.attributes.uv.array[12] += v
-    //
-    //         // const v = sin(n * 5) * .01
-    //         // geometry.attributes.uv.array[0] += v
-    //         // geometry.attributes.uv.array[2] += v
-    //         // geometry.attributes.uv.array[demo_14] += v
-    //         // geometry.attributes.uv.array[6] += v
-    //         // geometry.attributes.uv.array[8] += v
-    //         // geometry.attributes.uv.array[10] += v
-    //         // geometry.attributes.uv.array[12] += v
-    //
-    //         geometry.attributes.uv.needsUpdate = true
-    //     })
-    // }
 
     /** *******************************************/
 }

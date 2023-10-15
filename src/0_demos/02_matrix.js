@@ -101,9 +101,9 @@ async function initApp () {
     studio.addToScene(mesh)
 
     updateFunctions.push(() => {
-        rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
-        v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
-        geometry.attributes.position.needsUpdate = true
+        // rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
+        // v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
+        // geometry.attributes.position.needsUpdate = true
     })
 
     /** *******************************************/

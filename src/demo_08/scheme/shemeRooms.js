@@ -287,9 +287,9 @@ export const createTown2Scheme = (root) => {
         }
     }
 
-    const l = createHelpLines(arrWalls)
-    l.position.y = 200
-    root.studio.addToScene(l)
+    //const l = createHelpLines(arrWalls)
+    //l.position.y = 200
+    //root.studio.addToScene(l)
 
     /** divide walls by doors */
     for (let i = 0; i < arrWalls.length; ++i) {

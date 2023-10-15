@@ -168,6 +168,7 @@ async function initApp () {
             new THREE.MeshBasicMaterial({ color: 0xffff00 })
         )
         ob.position.copy(p)
+        ob.position.y -=.5
         studio.addToScene(ob)
         path.push(p.toArray())
         if (currentWall) {
