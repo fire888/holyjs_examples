@@ -77,9 +77,11 @@ async function initApp () {
 
     const arrTiles = createDataTiles()
     const dataForMap = {
-        numW: 7,
-        numH: 10,
-        numD: 7,
+        //numW: 14,
+        // numH: 10,
+        numW: 10,
+        numD: 5,
+        numH: 5,
         tileW: W,
         tileH: H,
         tileD: W,
@@ -120,9 +122,9 @@ async function initApp () {
         meshCollision.visible = false
         studio.addToScene(meshCollision)
 
-        const player = new Player(6, 5,6, [meshCollision])
-        studio.setCam(player)
-        updateFunctions.push(() => { player.update() })
+        // const player = new Player(6, 5,6, [meshCollision])
+        // studio.setCam(player)
+        // updateFunctions.push(() => { player.update() })
     })
 }
 
