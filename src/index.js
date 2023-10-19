@@ -16,8 +16,8 @@
 //import './0_demos/08_structureRooms'
 //import './0_demos/08_z1_structureRoomsAnimate'
 //import './0_demos/10_tiles'
-//import './0_demos/12_tilesConnect'
-import './0_demos/13_waveFuncAll'
+import './0_demos/12_tilesConnect'
+//import './0_demos/13_waveFuncAll'
 //import './0_demos/11_collisions'
 //import './0_demos/14_structureBricks'
 

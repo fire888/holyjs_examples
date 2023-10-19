@@ -79,9 +79,10 @@ async function initApp () {
     const dataForMap = {
         //numW: 14,
         // numH: 10,
-        numW: 10,
-        numD: 5,
-        numH: 5,
+        //numD: 5,
+        numW: 7,
+        numH: 7,
+        numD: 4,
         tileW: W,
         tileH: H,
         tileD: W,

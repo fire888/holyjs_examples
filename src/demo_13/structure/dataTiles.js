@@ -104,16 +104,16 @@ const prepareConnectionTiles = arrTiles => {
 
 export const createDataTiles = () => {
     const arrTiles = []
-    // arrTiles.push({
-    //     keyModel: 'tile_EMPTY',
-    //     rotationY: 0,
-    //     sideNX: '_|_|_',
-    //     sidePX: '_|_|_',
-    //     sideNY: '_|_|_',
-    //     sidePY: '_|_|_',
-    //     sideNZ: '_|_|_',
-    //     sidePZ: '_|_|_',
-    // })
+    arrTiles.push({
+        keyModel: 'tile_EMPTY',
+        rotationY: 0,
+        sideNX: '_|_|_',
+        sidePX: '_|_|_',
+        sideNY: '_|_|_',
+        sidePY: '_|_|_',
+        sideNZ: '_|_|_',
+        sidePZ: '_|_|_',
+    })
 
     //////////////////////////// gor
     arrTiles.push({
@@ -186,6 +186,7 @@ export const createDataTiles = () => {
         sideNZ: '_|1|_',
         sidePZ: '_|_|_',
     })
+
     arrTiles.push({
         keyModel: 'tile_T',
         rotationY: 0,
@@ -250,6 +251,8 @@ export const createDataTiles = () => {
     //     sideNZ: '_|1|_',
     //     sidePZ: '_|1|_',
     // })
+
+
     // arrTiles.push({
     //     keyModel: 'tile_H',
     //     rotationY: 0,
@@ -334,46 +337,46 @@ export const createDataTiles = () => {
     })
 
 
-    // arrTiles.push({
-    //     keyModel: 'tile_B',
-    //     rotationY: 0,
-    //     sideNX: '_|_|_',
-    //     sidePX: '_|_|_',
-    //     sideNY: '_|closed.NZ|_',
-    //     sidePY: '_|_|_',
-    //     sideNZ: '_|1|_',
-    //     sidePZ: '_|_|_',
-    // })
-    // arrTiles.push({
-    //     keyModel: 'tile_B',
-    //     rotationY: Math.PI / 2,
-    //     sideNX: '_|1|_',
-    //     sidePX: '_|_|_',
-    //     sideNY: '_|closed.NX|_',
-    //     sidePY: '_|_|_',
-    //     sideNZ: '_|_|_',
-    //     sidePZ: '_|_|_',
-    // })
-    // arrTiles.push({
-    //     keyModel: 'tile_B',
-    //     rotationY: Math.PI,
-    //     sideNX: '_|_|_',
-    //     sidePX: '_|_|_',
-    //     sideNY: '_|closed.PZ|_',
-    //     sidePY: '_|_|_',
-    //     sideNZ: '_|_|_',
-    //     sidePZ: '_|1|_',
-    // })
-    // arrTiles.push({
-    //     keyModel: 'tile_B',
-    //     rotationY: Math.PI + Math.PI / 2,
-    //     sideNX: '_|_|_',
-    //     sidePX: '_|1|_',
-    //     sideNY: '_|closed.PX|_',
-    //     sidePY: '_|_|_',
-    //     sideNZ: '_|_|_',
-    //     sidePZ: '_|_|_',
-    // })
+    arrTiles.push({
+        keyModel: 'tile_B',
+        rotationY: 0,
+        sideNX: '_|_|_',
+        sidePX: '_|_|_',
+        sideNY: '_|closed.NZ|_',
+        sidePY: '_|_|_',
+        sideNZ: '_|1|_',
+        sidePZ: '_|_|_',
+    })
+    arrTiles.push({
+        keyModel: 'tile_B',
+        rotationY: Math.PI / 2,
+        sideNX: '_|1|_',
+        sidePX: '_|_|_',
+        sideNY: '_|closed.NX|_',
+        sidePY: '_|_|_',
+        sideNZ: '_|_|_',
+        sidePZ: '_|_|_',
+    })
+    arrTiles.push({
+        keyModel: 'tile_B',
+        rotationY: Math.PI,
+        sideNX: '_|_|_',
+        sidePX: '_|_|_',
+        sideNY: '_|closed.PZ|_',
+        sidePY: '_|_|_',
+        sideNZ: '_|_|_',
+        sidePZ: '_|1|_',
+    })
+    arrTiles.push({
+        keyModel: 'tile_B',
+        rotationY: Math.PI + Math.PI / 2,
+        sideNX: '_|_|_',
+        sidePX: '_|1|_',
+        sideNY: '_|closed.PX|_',
+        sidePY: '_|_|_',
+        sideNZ: '_|_|_',
+        sidePZ: '_|_|_',
+    })
     prepareConnectionTiles(arrTiles)
     return arrTiles
 }

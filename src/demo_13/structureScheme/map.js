@@ -171,12 +171,17 @@ export const createMap = (tiles, studio, materials) => {
                     console.log('!!! map', map)
 
                     /** set existing tiles */
-                    // const { mapFill } = dataStructure
-                    // for (let i = 0; i < mapFill.length; ++i) {
-                    //     const { place } = mapFill[i]
-                    //     map.items[place[0]][place[1]][place[2]].resultTileIndex = 0
-                    //     map.items[place[0]][place[1]][place[2]].maybeTilesInds = [0]
-                    // }
+                    const { mapFill } = dataStructure
+                    for (let i = 0; i < mapFill.length; ++i) {
+                        const { place, resultTileIndex } = mapFill[i]
+                        if (!map.items[place[0]] || !map.items[place[0]][place[1]] || !map.items[place[0]][place[1]][place[2]]) {
+                            console.log(`no map ${place[0]} ${place[1]} ${place[2]} to insert tile`)
+                            continue;
+                        }
+
+                        map.items[place[0]][place[1]][place[2]].resultTileIndex = resultTileIndex
+                        map.items[place[0]][place[1]][place[2]].maybeTilesInds = [resultTileIndex]
+                    }
 
 
                     /** pipeline actions with tile */
