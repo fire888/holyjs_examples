@@ -23,6 +23,25 @@ async function initApp () {
     animate()
 
 
+    const rotateAndTranslate = (arr, angle, x, y, z) => {
+        const v3 = new THREE.Vector3()
+        const applyMatrixToArray = (m, arr) => {
+            for (let i = 0; i < arr.length; i += 3) {
+                v3.fromArray(v, i)
+                v3.applyMatrix4(m)
+                arr[i] = v3.x
+                arr[i + 1] = v3.y
+                arr[i + 2] = v3.z
+            }
+        }
+
+        const m4rot = new THREE.Matrix4().makeRotationY(angle)
+        const m4translate = new THREE.Matrix4().makeTranslation(x, y, z)
+
+        applyMatrixToArray(m4rot, v)
+        applyMatrixToArray(m4translate, v)
+    }
+
     const v = [
         0, 0, 0,
         1, 0, 0,
@@ -33,26 +52,8 @@ async function initApp () {
         0, 2, 0,
     ]
 
-    /** CUSTOM 04_01 ***********************************/
+    rotateAndTranslate(v, .15, .5, 0, 0)
 
-    const m4rot = new THREE.Matrix4().makeRotationY(1.3)
-    const m4x = new THREE.Matrix4().makeTranslation(0, 0, 0)
-    const m4z = new THREE.Matrix4().makeTranslation(0, 0, -.5)
-
-    const v3 = new THREE.Vector3()
-    const applyMatrixToArray = (m, arr) => {
-        for (let i = 0; i < arr.length; i += 3) {
-            v3.fromArray(v, i)
-            v3.applyMatrix4(m)
-            arr[i] = v3.x
-            arr[i + 1] = v3.y
-            arr[i + 2] = v3.z
-        }
-    }
-
-    applyMatrixToArray(m4rot, v)
-    applyMatrixToArray(m4x, v)
-    applyMatrixToArray(m4z, v)
 
     const uv = [
         0, 0,
@@ -74,9 +75,9 @@ async function initApp () {
     studio.addToScene(mesh)
 
     //updateFunctions.push(() => {
-        // rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
-        // v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
-        // geometry.attributes.position.needsUpdate = true
+    // rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
+    // v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
+    // geometry.attributes.position.needsUpdate = true
     //})
 
     /** *******************************************/
