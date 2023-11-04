@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { createStudio } from './studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { M } from '../demo_13/structure/M'
+import { M } from './structureBricks/M'
 import { W, H } from './structureBricks/constants'
 import { tile_I } from './structureBricks/tile_I'
 import { tile_X } from './structureBricks/tile_X'
@@ -16,7 +16,7 @@ import { tile_B } from './structureBricks/tile_B'
 import { tile_EMPTY } from './structureBricks/tile_EMPTY'
 import { createDataTiles } from './structureBricks/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
-import { Player } from "../entities/player";
+import { Player } from "../helpers/player";
 import { createBoxesLines } from './structureBricks/gabarites'
 import { tile_ElemsTop } from './structureBricks/tile_ElemsTop'
 

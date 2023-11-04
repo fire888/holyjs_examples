@@ -18,11 +18,11 @@
 //import './10_00_parametricBox/index'
 //import './11_00_rooms/11_structureRooms'
 //import './11_01_roomsAnimate/11_01_roomsAnim'
-import './12_00_tiles/12_tiles'
-//import './0_demos/12_tilesConnect'
-//import './0_demos/13_waveFuncAll'
-//import './0_demos/11_collisions'
-//import './0_demos/14_structureBricks'
+//import './12_00_tiles/12_tiles'
+//import './12_01_tilesConnect/12_tilesConnect'
+//import './14_wave/14_wave'
+//import './15_collisions/15_collisions'
+import './16_00_hard/structureBricks'
 
 
 
