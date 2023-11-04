@@ -5,8 +5,13 @@
 ![Stability status](https://img.shields.io/badge/stability-stable-green.svg) 
 ![License status](https://img.shields.io/badge/license-Beerware-green.svg) 
 
+------------
+Использовалась нода v14.21.3
+------------
+```bash
+npm i && npm run start
+```
 
-[View]()
------------- 
+
 
 
