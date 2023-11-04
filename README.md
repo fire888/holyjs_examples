@@ -12,7 +12,7 @@
 npm i && npm run start
 ```
 
-Чтобы сменить демку в файле [index.js](https://github.com/fire888/holyjs_examples/blob/master/src/index.js) надо закомментировать текущюю и расскоментировать новую.
+Чтобы сменить демку в файле [src/index.js](https://github.com/fire888/holyjs_examples/blob/master/src/index.js) надо закомментировать текущюю и расскоментировать новую.
 
 
 
