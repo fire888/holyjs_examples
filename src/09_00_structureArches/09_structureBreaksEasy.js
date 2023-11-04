@@ -1,7 +1,7 @@
 import * as THREE from 'three'
-import { GLTFExporter } from '../entities/GLTFExporter'
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { GLTFExporter } from '../helpers/GLTFExporter'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
 

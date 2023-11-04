@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { ClickerOnScene } from "../entities/clickerOnScene"
+import { ClickerOnScene } from "../helpers/clickerOnScene"
 import diff from '../assets/map_brick_diff_1.jpg'
 import { createSchemeLines } from './schemeLines'
 import { M } from './M'
