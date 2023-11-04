@@ -1,11 +1,14 @@
 import * as THREE from "three";
 import { createStudio } from './studio'
 import { createRooms } from './createRooms'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 import consA0Src from '../assets/broken_down_concrete2_ao.jpg'
 import consNormSrc from '../assets/broken_down_concrete2_Normal-dx.jpg'
+//import { Player } from '../helpers/player'
 
 async function initApp () {
     const studio = createStudio(3)
+    updateEveryFrame(studio.render)
     studio.setCamPos(0, 1000, -1000)
     const root = { studio }
     root.materials = {
@@ -22,18 +25,8 @@ async function initApp () {
         }),
     }
 
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
     const town = createRooms(root)
-
+    //
     // const meshCollision = createMesh(vCollision, uv, c, materials.simple)
     // meshCollision.visible = false
     // studio.addToScene(meshCollision)
