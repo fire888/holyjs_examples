@@ -1,4 +1,4 @@
-//import './01_00_attr/01_00_attributes'
+import './01_00_attr/01_00_attributes'
 //import './01_01_attrUV/01_01_attributes_uv'
 
 //import './02_00_matrix/02_matrix'
@@ -6,7 +6,6 @@
 
 //import './03_00_manyPolygons/03_00_manyPolygons'
 //import './03_01_manyPolygonsAnim/03_01_manyPolygonsAnim'
-
 //import './04_00_atlas/04_atlas'
 //import './05_00_manyFigures/05_manyFigures'
 //import './06_00_simpleProfile/06_simpleProfile'
@@ -22,7 +21,7 @@
 //import './12_01_tilesConnect/12_tilesConnect'
 //import './14_wave/14_wave'
 //import './15_collisions/15_collisions'
-import './16_00_hard/structureBricks'
+//import './16_00_hard/structureBricks'
 
 
 
