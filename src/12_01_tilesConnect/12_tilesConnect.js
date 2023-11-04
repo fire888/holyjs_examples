@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { M } from './structure/M'
 import { W, H } from './structure/constants'
 import { tile_I } from './structure/tile_I'
