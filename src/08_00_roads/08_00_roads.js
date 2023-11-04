@@ -162,7 +162,7 @@ async function initApp () {
         studio.setBackColor(0x4f3210)
         studio.setFog(0.5, 7, 0x56420d)
         const player = new Player(...playerPos.toArray(), [mesh])
-        updateFunctions.push(player.update.bind(player))
+        updateEveryFrame(player.update.bind(player))
         studio.setCam(player)
     }
     button.addEventListener("click", f)
