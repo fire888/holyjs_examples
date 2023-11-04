@@ -106,9 +106,4 @@ export const createRooms = (root) => {
         return {mesh, mCollision}
 
     })
-
-//    const l = createHelpLines(walls)
-//    root.studio.addToScene(l)
-
-
 }

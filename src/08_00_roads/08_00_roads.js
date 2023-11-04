@@ -117,7 +117,11 @@ async function initApp () {
                         [p1.x, H, p1.z],
                         [p0.x, H, p0.z],
                     ))
-                    v.push(...p1.toArray(), ...p0.toArray(), ...p2.toArray(),)
+                    v.push(
+                        ...p1.toArray(),
+                        ...p0.toArray(),
+                        ...p2.toArray(),
+                    )
                 } else {
                     v.push(...M.createPolygon(
                         p1.toArray(),
@@ -125,7 +129,11 @@ async function initApp () {
                         [p0.x, H, p0.z],
                         [p1.x, H, p1.z],
                     ))
-                    v.push(...p0.toArray(), ...p1.toArray(), ...p2.toArray())
+                    v.push(
+                        ...p0.toArray(),
+                        ...p1.toArray(),
+                        ...p2.toArray()
+                    )
                 }
                 uv.push(...atlas[cornerMinAtlas + Math.floor((cornerMaxAtlas - cornerMinAtlas) * Math.random())])
                 uv.push(...atlas[atlas.length - 1])
