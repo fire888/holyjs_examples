@@ -90,8 +90,8 @@ async function initApp () {
 
     /** CUSTOM 00 **************************/
     const R = .7
-    const H = .7
-    const N = 7
+    const H = 1
+    const N = 5
 
     const points = []
     for (let i = 0; i < N; ++i) {
@@ -117,18 +117,18 @@ async function initApp () {
     }
 
     const copyV = [...v1]
-    m.translateVertices(copyV, 0, 0.7, 0)
+    m.translateVertices(copyV, 0, H, 0)
     const uv2 = []
         points.forEach(() => {
         uv2.push(...atlas[3])
     })
 
     const copyV2 = [...v1]
+    m.translateVertices(copyV2, 0, H * 2, 0)
     const uv3 = []
     points.forEach(() => {
         uv3.push(...atlas[4])
     })
-    m.translateVertices(copyV2, 0, 1.4, 0)
 
 
     const v4 = []
@@ -146,7 +146,7 @@ async function initApp () {
         v4.push(...p)
         uv4.push(...atlas[16])
     }
-    m.translateVertices(v4, 0, 2.1, 0)
+    m.translateVertices(v4, 0, H * 3, 0)
 
 
     const v = [...v1, ...copyV, ...copyV2, ...v4]

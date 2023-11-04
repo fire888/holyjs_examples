@@ -52,14 +52,12 @@ async function initApp () {
         'phongWhite': new THREE.MeshPhongMaterial({
             color: 0x999999,
             flatShading: false,
+            //side: THREE.DoubleSide,
         }),
     }
 
 
     /** CUSTOM 00 **************************/
-    const l00 = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
-    const l01 = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array
-
     const createWall = (W, H, profileB) => {
         const v = []
         const uv = []
@@ -101,12 +99,9 @@ async function initApp () {
         c4T: null,
     }
 
-    // const copyT = [...l00]
-    // m.translateVertices(copyT, 0, 2, 0, 0)
-    // const fullP = [...l01, ...copyT]
     const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
-    const w1 = createWall(3, 2, fullP)
+    const w1 = createWall(3, 1, fullP)
     v.push(...w1.v)
     uv.push(...w1.uv)
     corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]

@@ -48,6 +48,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio()
+    studio.showGrid()
     studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
@@ -61,23 +62,22 @@ async function initApp () {
     
     /** CUSTOM 00 **************************/
 
-    const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, 0], [0, 2, 0])
+    const poly4 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, 0], [0, 2, 0])
 
     const v = []
     const uv = []
 
     const N = 10
-    for (let i = 0; i < 10; ++i) {
-        const copyV = [...p1.v]
-        translateVertices(copyV, 0, 0, 1)
+    for (let i = 0; i < N; ++i) {
+        const copyV = [...poly4.v]
+        translateVertices(copyV, -.5, 0, 1.5)
         rotateVerticesY(copyV, i / N * Math.PI * 2)
         v.push(...copyV)
-        uv.push(...p1.uv)
+        uv.push(...poly4.uv)
     }
 
     const mesh = createMesh(v, uv, materials.brick)
     studio.addToScene(mesh)
-
 }
 
 

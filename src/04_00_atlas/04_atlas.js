@@ -78,7 +78,6 @@ async function initApp () {
     }
 
 
-
     const createArrays = (phase) => {
         const v = []
         const uv = []
@@ -105,13 +104,13 @@ async function initApp () {
     studio.addToScene(mesh)
 
     updateEveryFrame(n => {
-        const { v } = createArrays(n)
-        v.forEach((elem, i) => {
-            if (i % 2 > 0) {
-                mesh.geometry.attributes.uv.array[i] -= .001
-            }
-        })
-        mesh.geometry.attributes.uv.needsUpdate = true
+        // const { v } = createArrays(n)
+        // v.forEach((elem, i) => {
+        //     if (i % 2 > 0) {
+        //         mesh.geometry.attributes.uv.array[i] -= .001
+        //     }
+        // })
+        // mesh.geometry.attributes.uv.needsUpdate = true
     })
 
     /** *******************************************/

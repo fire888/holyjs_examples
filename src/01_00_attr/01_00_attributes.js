@@ -6,6 +6,7 @@ const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    studio.showGrid()
     studio.setBackColor(0x333333)
     studio.setCamTargetPos(.5, .5, 0)
     updateEveryFrame(studio.render)
@@ -15,13 +16,13 @@ async function initApp () {
     {
 
         const v = [
-            0, 0, 0,
-            1, 0, 0,
-            1, 2, 0,
+            .2, 0, -.2,
+            1, 0, -.2,
+            1, 2, -.2,
 
-            0, 0, 0,
-            1, 2.1, 0,
-            0, 2, 0,
+            .2, 0, -.2,
+            1, 2.1, -.2,
+            0, 2, -.2,
         ]
 
         const geometry = new THREE.BufferGeometry()
@@ -32,9 +33,9 @@ async function initApp () {
         studio.addToScene(mesh)
 
         updateEveryFrame(n => {
-            // geometry.attributes.position.array[0] = sin(n * 5)
-            // geometry.attributes.position.array[9] = sin(n * 5)
-            // geometry.attributes.position.needsUpdate = true
+            geometry.attributes.position.array[0] = sin(n * 5)
+            geometry.attributes.position.array[9] = sin(n * 5)
+            geometry.attributes.position.needsUpdate = true
         })
     }
 }

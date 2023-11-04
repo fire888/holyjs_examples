@@ -7,6 +7,7 @@ const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    studio.showGrid()
     studio.setBackColor(0x333333)
     studio.setCamTargetPos(1.7, .5, 0)
     updateEveryFrame(studio.render)
@@ -24,13 +25,13 @@ async function initApp () {
 
 
         const v = [
-            0, 0, 0,
-            1, 0, 0,
-            1, 2, 0,
+            0, 0, -0.2,
+            1, 0, -0.2,
+            1, 2, -0.2,
 
-            0, 0, 0,
-            1, 2, 0,
-            0, 2, 0,
+            0, 0, -0.2,
+            1, 2, -0.2,
+            0, 2, -0.2,
         ]
 
         const vF32 = new Float32Array(v)
@@ -57,12 +58,10 @@ async function initApp () {
             geometry.attributes.position.array[0] = sin(n * 5)
             geometry.attributes.position.array[9] = sin(n * 5)
             geometry.attributes.position.needsUpdate = true
-
             const v = sin(n * 5) * .02
             geometry.attributes.uv.array[0] += v
             geometry.attributes.uv.array[2] += v
             geometry.attributes.uv.array[6] += v
-
             geometry.attributes.uv.needsUpdate = true
         })
     }

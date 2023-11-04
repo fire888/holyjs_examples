@@ -7,6 +7,7 @@ const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    studio.showGrid()
     studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
@@ -30,9 +31,6 @@ async function initApp () {
 
     /** CUSTOM 04_01 ***********************************/
 
-    const m4rot = new THREE.Matrix4().makeRotationY(1.3)
-    const m4x = new THREE.Matrix4().makeTranslation(0, 0, 0)
-    const m4z = new THREE.Matrix4().makeTranslation(0, 0, -.5)
 
     const v3 = new THREE.Vector3()
     const applyMatrixToArray = (m, arr) => {
@@ -44,6 +42,10 @@ async function initApp () {
             arr[i + 2] = v3.z
         }
     }
+
+    const m4rot = new THREE.Matrix4().makeRotationY(-1.3)
+    const m4x = new THREE.Matrix4().makeTranslation(-.5, 1, 0)
+    const m4z = new THREE.Matrix4().makeTranslation(0, 0, -.5)
 
     applyMatrixToArray(m4rot, v)
     applyMatrixToArray(m4x, v)

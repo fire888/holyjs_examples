@@ -54,7 +54,7 @@ async function initApp () {
         'brick': new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
             map: new THREE.TextureLoader().load(map),
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
         }),
     }
 

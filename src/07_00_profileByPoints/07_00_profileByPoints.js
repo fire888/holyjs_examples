@@ -64,7 +64,6 @@ async function initApp () {
     let currentWall
 
     const createWalls = (path) => {
-
         const createDataWalls = path => {
             const pathV = path.map(item => new THREE.Vector3().fromArray(item))
             const dataWalls = pathV.map((item, i, arr) => {

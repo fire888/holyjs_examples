@@ -86,7 +86,7 @@ async function initApp () {
         }),
     }
 
-    /** CUSTOM 01 ***********************************************/
+    /** ************************************************/
     const createTower = (h, r, rN, hRoof) => {
         const points = []
         for (let i = 0; i < rN; ++i) {

@@ -1,12 +1,13 @@
 import * as THREE from "three";
-import { createStudio } from '../helpers/studio'
-import { updateEveryFrame } from "../helpers/frameUpdater";
-import map from "../assets/map_brick_diff.jpg";
+import { createStudio } from '../../helpers/studio'
+import { updateEveryFrame } from "../../helpers/frameUpdater";
+import map from "../../assets/map_brick_diff.jpg";
 
 const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    studio.showGrid()
     studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
@@ -46,7 +47,7 @@ async function initApp () {
         0, 2, 0,
     ]
 
-    rotateAndTranslate(v, .15, .5, 0, 0)
+    rotateAndTranslate(v, .15, .5, -2, 0)
 
     const uv = [
         0, 0,
