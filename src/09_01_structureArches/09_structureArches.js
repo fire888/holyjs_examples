@@ -4,7 +4,6 @@ import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from './ASSETS'
 
-
 const { sin, cos, PI, random, floor } = Math
 const PI2 = PI * 2
 const hPI = PI / 2

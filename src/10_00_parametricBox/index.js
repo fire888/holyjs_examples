@@ -1,12 +1,13 @@
+import * as THREE from "three";
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import { createStudio } from './entities/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { startFrameUpdater  } from './utils/createFrameUpater'
-import { ASSETS_TO_LOAD } from './constants/constants_assetsToLoad'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { createDoor } from './entities/door'
 import { createBox } from './entities/box'
-import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
-import * as THREE from "three";
-import { ARR_STATES } from './constants/animations'
+
+import { ARR_STATES } from './ANIMATIONS'
 
 const PARAMS = {
     door: {
