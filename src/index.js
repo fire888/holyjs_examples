@@ -1,4 +1,4 @@
-import './01_00_attr/01_00_attributes'
+//import './01_00_attr/01_00_attributes'
 //import './01_01_attrUV/01_01_attributes_uv'
 
 //import './02_00_matrix/02_matrix'
@@ -10,7 +10,7 @@ import './01_00_attr/01_00_attributes'
 //import './05_00_manyFigures/05_manyFigures'
 //import './06_00_simpleProfile/06_simpleProfile'
 //import './07_00_profileByPoints/07_00_profileByPoints'
-//import './07_01_doubleProfile/07_01_doubleProfile'
+import './07_01_doubleProfile/07_01_doubleProfile'
 //import './08_00_roads/08_00_roads'
 //import './09_00_structureArches/09_structureArches'
 //import './09_01_structureArchesAnim/09_z1_structureBreaksAnimated'
@@ -22,6 +22,3 @@ import './01_00_attr/01_00_attributes'
 //import './14_wave/14_wave'
 //import './15_collisions/15_collisions'
 //import './16_00_hard/structureBricks'
-
-
-

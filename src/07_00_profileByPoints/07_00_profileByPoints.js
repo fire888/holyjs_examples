@@ -55,15 +55,6 @@ async function initApp () {
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
-        'atlasBrick': new THREE.MeshPhongMaterial({
-            color: 0xFFFFFF,
-            map: assets.atlasBrickDiff,
-            bumpMap: assets.atlasBrickDiff,
-            bumpScale: .02,
-            //wireframe: true
-        }),
         'phongWhite': new THREE.MeshPhongMaterial({color: 0x999999, flatShading: false,}),
     }
 

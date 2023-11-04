@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { updateEveryFrame } from "../helpers/frameUpdater";
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -45,31 +45,12 @@ async function initApp () {
     const studio = createStudio(2)
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
-    console.log(assets)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
-        'atlasBrick': new THREE.MeshPhongMaterial({
-            color: 0xFFFFFF,
-            map: assets.atlasBrickDiff,
-            bumpMap: assets.atlasBrickDiff,
-            bumpScale: .02,
-            //wireframe: true
-        }),
         'phongWhite': new THREE.MeshPhongMaterial({
             color: 0x999999,
             flatShading: false,
         }),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
 
     // /** CUSTOM 00 **************************/
     // const prBottom = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array

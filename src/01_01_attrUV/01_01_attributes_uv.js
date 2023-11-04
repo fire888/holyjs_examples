@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
-import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { updateEveryFrame } from '../helpers/frameUpdater'
+import map from "../assets/map_brick_diff.jpg";
 
 const { sin, cos } = Math
 
@@ -10,10 +9,11 @@ async function initApp () {
     const studio = createStudio()
     studio.setCamTargetPos(1.7, .5, 0)
     updateEveryFrame(studio.render)
-    const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff}),
+        'brick': new THREE.MeshBasicMaterial({
+            color: 0xFFFFFF,
+            map: new THREE.TextureLoader().load(map),
+        }),
     }
 
     /** CUSTOM 00_00 ***********************************/

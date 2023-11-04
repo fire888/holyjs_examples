@@ -2,8 +2,14 @@ import * as THREE from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { KEYS_LOADERS } from "../constants/ASSETS";
 
+export const KEYS_LOADERS = {
+    IMG: 'IMG',
+    OBJ: 'OBJ',
+    GLB: 'GLB',
+    FBX: 'FBX',
+    CUBE_IMG: 'CUBE_IMG',
+}
 
 export const createLoadManager = dataAssets => {
     return new Promise(res => {

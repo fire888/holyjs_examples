@@ -1,10 +1,9 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { ClickerOnScene } from "../helpers/clickerOnScene"
-import diff from '../assets/map_brick_diff_1.jpg'
-import consA0Src from "../assets/broken_down_concrete2_ao.jpg";
+import { updateEveryFrame } from "../helpers/frameUpdater";
 
 const m = {
     createPolygon(v0, v1, v2, v3) {
@@ -65,33 +64,18 @@ const uvHalf = [0, 0, 1, 0, 1, .2, 0, 0, 1, .2, 0, .2]
 
 async function initApp () {
     const studio = createStudio(10)
+    updateEveryFrame(studio.render)
+
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
-        'atlasBrick': new THREE.MeshPhongMaterial({
-            color: 0xFFFFFF,
-            map: assets.atlasBrickDiff,
-            bumpMap: assets.atlasBrickDiff,
-            bumpScale: .02,
-            //wireframe: true
-        }),
         'phongWhite': new THREE.MeshPhongMaterial({
             color: 0xffffff,
             flatShading: false,
             vertexColors: true,
-            map: new THREE.TextureLoader().load(diff),
+            map: assets.mapBrickDiff,
         }),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
+    console.log(assets)
 
     /** CUSTOM 00 **************************/
 

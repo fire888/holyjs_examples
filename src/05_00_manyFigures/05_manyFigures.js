@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
-import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { updateEveryFrame } from "../helpers/frameUpdater";
+import { updateEveryFrame } from "../helpers/frameUpdater"
+import diff from '../assets/atlas.jpg'
 
 
 const atlas = (() => {
@@ -76,14 +75,11 @@ const createMesh = (v, uv, material) => {
 async function initApp () {
     const studio = createStudio(25)
     updateEveryFrame(studio.render)
-    const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
         'atlasBrick': new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
-            map: assets.atlasBrickDiff,
-            bumpMap: assets.atlasBrickDiff,
+            map: new THREE.TextureLoader().load(diff),
+            bumpMap: new THREE.TextureLoader().load(diff),
             bumpScale: .02,
             //wireframe: true
         }),

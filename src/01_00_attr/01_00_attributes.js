@@ -10,7 +10,7 @@ async function initApp () {
     updateEveryFrame(studio.render)
     const materials = { 'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}) }
 
-    /** CUSTOM 00_00 ***********************************/
+    /** **************************************************/
     {
 
         const v = [
