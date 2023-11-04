@@ -48,9 +48,9 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio()
+    studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
         'brick': new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
             map: new THREE.TextureLoader().load(map),

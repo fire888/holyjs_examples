@@ -64,6 +64,7 @@ const uvHalf = [0, 0, 1, 0, 1, .2, 0, 0, 1, .2, 0, .2]
 
 async function initApp () {
     const studio = createStudio(10)
+    studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
 
     const assets = await createLoadManager(ASSETS_TO_LOAD)

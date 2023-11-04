@@ -7,6 +7,7 @@ const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
         'brick': new THREE.MeshBasicMaterial({

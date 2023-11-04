@@ -69,6 +69,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio()
+    studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     assets.atlasBrickDiff.wrapS = assets.atlasBrickDiff.wrapT = THREE.RepeatWrapping

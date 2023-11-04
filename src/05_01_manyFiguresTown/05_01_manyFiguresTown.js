@@ -74,8 +74,6 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio(25)
-    studio.setCamPos(0, 4, 4)
-    studio.setCamTargetPos(0, 1, 0)
     studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const materials = {
@@ -88,73 +86,73 @@ async function initApp () {
         }),
     }
 
-    /** CUSTOM 00 **************************/
-    const R = .7
-    const H = .7
-    const N = 7
+    /** CUSTOM 01 ***********************************************/
+    const createTower = (h, r, rN, hRoof) => {
+        const points = []
+        for (let i = 0; i < rN; ++i) {
+            points.push([sin(i / rN * PI2) * r, cos(i / rN * PI2) * r])
+        }
 
-    const points = []
-    for (let i = 0; i < N; ++i) {
-        points.push([sin(i / N * PI2) * R, cos(i / N * PI2) * R])
+        const nFloors = Math.floor(h / 0.7) + 1
+        const hFloor = h / nFloors
+
+        const v = []
+        const uv = []
+        for (let nFloor = 0; nFloor < nFloors; ++nFloor) {
+            for (let i = 0; i < points.length; ++i) {
+                const prev = points[i - 1] ? points[i - 1] : points[points.length - 1]
+                const curr = points[i]
+
+                const p = m.createPolygon(
+                    [prev[0], nFloor * hFloor, prev[1]],
+                    [curr[0], nFloor * hFloor, curr[1]],
+                    [curr[0], (nFloor + 1) * hFloor, curr[1]],
+                    [prev[0], (nFloor + 1) * hFloor, prev[1]],
+                )
+
+                v.push(...p.v)
+                if (nFloor === 0) {
+                    uv.push(...atlas[14])
+                }
+                else if (nFloor === nFloors - 1) {
+                    uv.push(...atlas[4])
+                }
+                else {
+                    const r = Math.random()
+                    uv.push(...atlas[r > .3 ? 0 : Math.floor(Math.random() * 14)])
+                }
+            }
+        }
+        for (let i = 0; i < points.length; ++i) {
+            const prev = points[i - 1] ? points[i - 1] : points[points.length - 1]
+            const curr = points[i]
+
+            const p = [
+                prev[0], h, prev[1],
+                curr[0], h, curr[1],
+                0, h + hRoof, 0,
+            ]
+
+            v.push(...p)
+            uv.push(...atlas[16])
+        }
+
+        return { v, uv }
     }
 
+    const v = []
+    const uv = []
 
-    const v1 = []
-    const uv1 = []
-    for (let i = 0; i < points.length; ++i) {
-        const prev = points[i - 1] ? points[i - 1] : points[points.length - 1]
-        const curr = points[i]
-
-        const p = m.createPolygon(
-            [prev[0], 0, prev[1]],
-            [curr[0], 0, curr[1]],
-            [curr[0], H, curr[1]],
-            [prev[0], H, prev[1]],
-        )
-
-        v1.push(...p.v)
-        uv1.push(...atlas[14])
+    for (let i = 0; i < 150; ++i) {
+        const H = Math.random() * 10
+        const house1 = createTower(H, Math.random() * 1 + .3, Math.random() * 5 + 4, Math.random() * 3 + .5)
+        m.translateVertices(house1.v, Math.random() * 20 - 10, 0, Math.random() * 20 - 10)
+        v.push(...house1.v)
+        uv.push(...house1.uv)
     }
-
-    const copyV = [...v1]
-    m.translateVertices(copyV, 0, 0.7, 0)
-    const uv2 = []
-        points.forEach(() => {
-        uv2.push(...atlas[3])
-    })
-
-    const copyV2 = [...v1]
-    const uv3 = []
-    points.forEach(() => {
-        uv3.push(...atlas[4])
-    })
-    m.translateVertices(copyV2, 0, 1.4, 0)
-
-
-    const v4 = []
-    const uv4 = []
-    for (let i = 0; i < points.length; ++i) {
-        const prev = points[i - 1] ? points[i - 1] : points[points.length - 1]
-        const curr = points[i]
-
-        const p = [
-            prev[0], 0, prev[1],
-            curr[0], 0, curr[1],
-            0, H, 0,
-        ]
-
-        v4.push(...p)
-        uv4.push(...atlas[16])
-    }
-    m.translateVertices(v4, 0, 2.1, 0)
-
-
-    const v = [...v1, ...copyV, ...copyV2, ...v4]
-    const uv = [...uv1, ...uv2, ...uv3, ...uv4]
 
     const mesh = createMesh(v, uv, materials.atlasBrick)
     studio.addToScene(mesh)
-
 }
 
 

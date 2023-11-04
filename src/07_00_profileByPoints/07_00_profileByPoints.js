@@ -52,6 +52,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio(10)
+    studio.setBackColor(0x333333)
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
