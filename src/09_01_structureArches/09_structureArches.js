@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFExporter } from '../helpers/GLTFExporter'
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 
 
 const { sin, cos, PI, random, floor } = Math
@@ -624,6 +624,8 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(20)
+    studio.setCamTargetPos(0, 15, 0)
+    studio.setBackColor(0x333333)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({

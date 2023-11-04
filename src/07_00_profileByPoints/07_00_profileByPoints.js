@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { ClickerOnScene } from "../helpers/clickerOnScene"
 import { updateEveryFrame } from "../helpers/frameUpdater";
 

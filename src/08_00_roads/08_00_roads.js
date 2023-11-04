@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { ClickerOnScene } from "../helpers/clickerOnScene"
 import diff from '../assets/map_brick_diff_1.jpg'
 import { createSchemeLines } from './schemeLines'
@@ -99,22 +99,15 @@ const uvHalf = [0, 0, 1, 0, 1, .2, 0, 0, 1, .2, 0, .2]
 
 async function initApp () {
     const studio = createStudio(7)
+    studio.setBackColor(0x333333)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
-        'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
-        'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
         'atlasBrick': new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
             map: assets.atlasBrickDiff2,
             bumpMap: assets.atlasBrickDiff2,
             bumpScale: .02,
             //wireframe: true
-        }),
-        'phongWhite': new THREE.MeshPhongMaterial({
-            color: 0xffffff,
-            flatShading: false,
-            vertexColors: true,
-            map: new THREE.TextureLoader().load(diff),
         }),
     }
     const updateFunctions = []
