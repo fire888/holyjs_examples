@@ -1,5 +1,5 @@
 import { createStudio } from './entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createLoadManager } from '../helpers/loadManager'
 import { startFrameUpdater  } from './utils/createFrameUpater'
 import { ASSETS_TO_LOAD } from './constants/constants_assetsToLoad'
 import { createDoor } from './entities/door'

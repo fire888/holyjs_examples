@@ -1,19 +1,19 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
-import { createColumnData } from '../demo_13/structure/elemColumn'
-import { createPlatformData } from "../demo_13/structure/elemPlatform";
-import { createElemArcData } from "../demo_13/structure/elemArc";
-import { tile_I } from '../demo_13/structure/tile_I'
-import { tile_X } from '../demo_13/structure/tile_X'
-import { tile_L } from '../demo_13/structure/tile_L'
-import { tile_X_BT } from '../demo_13/structure/tile_X_BT'
-import { tile_H } from '../demo_13/structure/tile_H'
-import { tile_H_toH } from '../demo_13/structure/tile_H_toH'
-import { tile_T } from '../demo_13/structure/tile_T'
-import { tile_STAIRS } from '../demo_13/structure/tile_STAIRS'
-import { tile_B } from '../demo_13/structure/tile_B'
+import { createColumnData } from './structure/elemColumn'
+import { createPlatformData } from "./structure/elemPlatform";
+import { createElemArcData } from "./structure/elemArc";
+import { tile_I } from './structure/tile_I'
+import { tile_X } from './structure/tile_X'
+import { tile_L } from './structure/tile_L'
+import { tile_X_BT } from './structure/tile_X_BT'
+import { tile_H } from './structure/tile_H'
+import { tile_H_toH } from './structure/tile_H_toH'
+import { tile_T } from './structure/tile_T'
+import { tile_STAIRS } from './structure/tile_STAIRS'
+import { tile_B } from './structure/tile_B'
 
 const createMesh = (v, uv, c, material) => {
     const geometry = new THREE.BufferGeometry()

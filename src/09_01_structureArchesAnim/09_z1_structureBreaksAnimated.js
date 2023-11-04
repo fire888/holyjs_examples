@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createLoadManager } from '../entities/loadManager'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
