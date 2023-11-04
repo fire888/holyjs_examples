@@ -1,26 +1,19 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
+import { updateEveryFrame } from "../helpers/frameUpdater"
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
 const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
 
 
     const v = [
@@ -72,12 +65,6 @@ async function initApp () {
 
     const mesh = new THREE.Mesh(geometry, materials.brick)
     studio.addToScene(mesh)
-
-    //updateFunctions.push(() => {
-        // rotateAndTranslate(v, 0.01, 0.01, 0, 0.01)
-        // v.forEach((elem, i) => geometry.attributes.position.array[i] = elem)
-        // geometry.attributes.position.needsUpdate = true
-    //})
 
     /** *******************************************/
 }

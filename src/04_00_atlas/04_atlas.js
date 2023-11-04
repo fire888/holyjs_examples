@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
 const { sin, cos } = Math
@@ -67,6 +68,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio()
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     assets.atlasBrickDiff.wrapS = assets.atlasBrickDiff.wrapT = THREE.RepeatWrapping
     const materials = {
@@ -74,17 +76,6 @@ async function initApp () {
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
         'atlasBrick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.atlasBrickDiff, side: THREE.DoubleSide}),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
-
 
     /** CUSTOM 00 **************************/
 

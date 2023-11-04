@@ -1,7 +1,8 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 
 const { sin, cos } = Math
 
@@ -48,23 +49,13 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio()
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff, side: THREE.DoubleSide}),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
-
-
+    
     /** CUSTOM 00 **************************/
 
     const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, 0], [0, 2, 0])

@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
 
 const m = {
@@ -42,6 +43,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio(2)
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     console.log(assets)
     const materials = {

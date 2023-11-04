@@ -1,28 +1,20 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { updateEveryFrame } from '../helpers/frameUpdater'
 
 const { sin, cos } = Math
 
 async function initApp () {
     const studio = createStudio()
     studio.setCamTargetPos(1.7, .5, 0)
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
         'brick': new THREE.MeshBasicMaterial({color: 0xFFFFFF, map: assets.mapBrickDiff}),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
 
     /** CUSTOM 00_00 ***********************************/
 
@@ -60,7 +52,7 @@ async function initApp () {
         mesh.position.x = 1.2
         studio.addToScene(mesh)
 
-        updateFunctions.push(n => {
+        updateEveryFrame(n => {
             geometry.attributes.position.array[0] = sin(n * 5)
             geometry.attributes.position.array[9] = sin(n * 5)
             geometry.attributes.position.needsUpdate = true

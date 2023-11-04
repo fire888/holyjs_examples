@@ -1,7 +1,8 @@
 import * as THREE from "three";
-import { createStudio } from '../entities/studio'
-import { createLoadManager } from '../entities/loadManager'
+import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from '../constants/ASSETS'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 
 
 const atlas = (() => {
@@ -74,6 +75,7 @@ const createMesh = (v, uv, material) => {
 
 async function initApp () {
     const studio = createStudio(25)
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'simple': new THREE.MeshBasicMaterial({color: 0xFF0000}),
@@ -86,16 +88,6 @@ async function initApp () {
             //wireframe: true
         }),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
 
     /** CUSTOM 00 **************************/
     // const R = .7
