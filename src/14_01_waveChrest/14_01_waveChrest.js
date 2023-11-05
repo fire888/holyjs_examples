@@ -19,6 +19,7 @@ import { createDataTiles } from './structure/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
 import { createBoxesLines } from './structure/gabarites'
 import { updateEveryFrame } from "../helpers/frameUpdater";
+import {createLabel} from "./structure/label";
 
 const button = document.createElement('button')
 button.innerText = 'WALK'
@@ -78,15 +79,27 @@ async function initApp () {
     }
 
     const arrTiles = createDataTiles()
+    //const indexesUse  = [0, 1]
+    //const indexesUse  = [0, 3, 4, 5, 6]
+    const indexesUse  = [8, 9, 10]
+    const useTiles = arrTiles.filter((elemTile, ind) => {
+        let isUse = false
+        indexesUse.forEach(elemIndex => {
+            if (ind === elemIndex) {
+                isUse = true
+            }
+        })
+        return isUse
+    })
 
     const dataForMap = {
         numW: 9,
-        numH: 1,
+        numH: 2,
         numD: 6,
         tileW: W,
         tileH: H,
         tileD: W,
-        tiles: arrTiles,
+        tiles: useTiles,
     }
 
     const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
@@ -120,6 +133,7 @@ async function initApp () {
         meshCollision.visible = false
         studio.addToScene(meshCollision)
 
+        /** player *****************/
         let isPlayer = false
         let player = null
         const f = (e) => {
@@ -149,7 +163,7 @@ async function initApp () {
         }
         button.addEventListener("click", f)
 
-        /** view tiles */
+        /** view tiles ********************/
         for (let i = 0; i < arrTiles.length; ++i) {
             const v = []
             const uv = []
@@ -162,6 +176,9 @@ async function initApp () {
                 v.push(...elem.v)
                 uv.push(...elem.uv)
                 c.push(...elem.c)
+                const label = createLabel(i, '#ff0000', 3)
+                label.position.set((W + .1) * i, 1, -5)
+                studio.addToScene(label)
             }
 
             const mesh = createMesh(v, uv, c, materials.brickColor)
