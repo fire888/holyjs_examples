@@ -89,13 +89,14 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([ 0, 4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([8, 9, 10, 11, 3])
-    const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    //const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22])
+    const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 11, 12, 13, 14, 19, 20, 21, 22])
 
 
 
     const dataForMap = {
         numW: 9,
-        numH: 1,
+        numH: 2,
         numD: 6,
         tileW: W,
         tileH: H,
@@ -173,13 +174,31 @@ async function initApp () {
             if (arrTiles[i].keyModel) {
                 const elem = TILES[arrTiles[i].keyModel]({})
                 M.rotateVerticesY(elem.v, arrTiles[i].rotationY)
-                M.translateVertices(elem.v, (W + .1) * i, 0, -5)
+                M.translateVertices(elem.v, (W + .1) * i, 0, -9)
                 v.push(...elem.v)
                 uv.push(...elem.uv)
                 c.push(...elem.c)
                 const label = createLabel(i, '#ff0000', 3)
-                label.position.set((W + .1) * i, 1, -5)
+                label.position.set((W + .1) * i, 2.5, -9)
                 studio.addToScene(label)
+            }
+
+            const mesh = createMesh(v, uv, c, materials.brickColor)
+            studio.addToScene(mesh)
+        }
+
+        for (let i = 0; i < resultTiles.length; ++i) {
+            const v = []
+            const uv = []
+            const c = []
+
+            if (resultTiles[i].keyModel) {
+                const elem = TILES[resultTiles[i].keyModel]({})
+                M.rotateVerticesY(elem.v, resultTiles[i].rotationY)
+                M.translateVertices(elem.v, (W + .1) * i, 0, -5)
+                v.push(...elem.v)
+                uv.push(...elem.uv)
+                c.push(...elem.c)
             }
 
             const mesh = createMesh(v, uv, c, materials.brickColor)
