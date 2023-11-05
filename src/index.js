@@ -23,8 +23,8 @@
 //import './12_00_tiles/12_tiles'
 //import './12_01_tilesConnect/12_tilesConnect'
 
-import './14_00_wave/14_00_wave'
-//import './14_08_waveInsert/14_08_waveInsert'
+//import './14_00_wave/14_00_wave'
+import './14_08_waveInsert/14_08_waveInsert'
 
 //import './15_collisions/15_collisions'
 //import './16_00_hard/structureBricks'

@@ -18,6 +18,15 @@ import { tile_EMPTY } from './structure/tile_EMPTY'
 import { createDataTiles } from './structure/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
 import { createBoxesLines } from './structure/gabarites'
+import {updateEveryFrame} from "../helpers/frameUpdater";
+
+const button = document.createElement('button')
+button.innerText = 'WALK'
+document.body.appendChild(button)
+button.style.position = 'absolute'
+button.style.zIndex = '100'
+button.style.top = '0'
+let f = null
 
 const TILES = {
     tile_I,
@@ -116,16 +125,39 @@ async function initApp () {
             }
         })
 
-        // const mesh = createMesh(v, uv, c, materials.brickColor)
-        // studio.addToScene(mesh)
 
         const meshCollision = createMesh(vCollision, uv, c, materials.simple)
         meshCollision.visible = false
         studio.addToScene(meshCollision)
 
-        // const player = new Player(6, 5,6, [meshCollision])
-        // studio.setCam(player)
-        // updateFunctions.push(() => { player.update() })
+        let isPlayer = false
+        let player = null
+        const f = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+
+            if (!isPlayer) {
+                if (!player) {
+                    player = new Player(
+                        dataForMap.numW * W / 2,
+                        dataForMap.numH * H / 2,
+                        dataForMap.numD * W / 2,
+                        [meshCollision]
+                    )
+                    updateEveryFrame(player.update.bind(player))
+                }
+                isPlayer = true
+                player.enable()
+                studio.setCam(player)
+            } else {
+                isPlayer = false
+                player.disable()
+                studio.enableControls()
+            }
+
+
+        }
+        button.addEventListener("click", f)
     })
 }
 
