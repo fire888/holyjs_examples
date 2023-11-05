@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
-import { Player } from "../helpers/player";
 import { createLoadManager } from '../helpers/loadManager'
+import { Player } from "../helpers/player";
 import { ASSETS_TO_LOAD } from './ASSETS'
 import { M } from './structure/M'
 import { W, H } from './structure/constants'
@@ -16,7 +16,18 @@ import { tile_STAIRS } from './structure/tile_STAIRS'
 import { tile_B } from './structure/tile_B'
 import { tile_EMPTY } from './structure/tile_EMPTY'
 import { createDataTiles } from './structure/dataTiles'
-import { generateStructureScheme } from './structureSheme/structureScheme'
+import { generateStructureScheme } from './structureScheme/structureScheme'
+import { createBoxesLines } from './structure/gabarites'
+import {updateEveryFrame} from "../helpers/frameUpdater";
+
+const button = document.createElement('button')
+button.innerText = 'WALK'
+document.body.appendChild(button)
+button.style.position = 'absolute'
+button.style.zIndex = '100'
+button.style.top = '0'
+let f = null
+
 
 const TILES = {
     tile_I,
@@ -48,6 +59,8 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
+    studio.setCamPos(10, 10, 10)
+    updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
         'brickColor': new THREE.MeshPhongMaterial({
@@ -63,29 +76,26 @@ async function initApp () {
             opacity: .8,
         })
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
-    const offset = W * 1.5
 
     const arrTiles = createDataTiles()
     const dataForMap = {
+        //numW: 14,
+        // numH: 10,
+        //numD: 5,
         numW: 7,
-        numH: 10,
-        numD: 7,
+        numH: 7,
+        numD: 4,
         tileW: W,
         tileH: H,
         tileD: W,
         tiles: arrTiles,
     }
-    generateStructureScheme(dataForMap).then(result => {
+
+    const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
+    l.position.set(-W / 2, 0, -W / 2)
+    studio.addToScene(l)
+
+    generateStructureScheme(dataForMap, studio, materials).then(result => {
         const v = []
         const uv = []
         const c = []
@@ -108,15 +118,38 @@ async function initApp () {
             }
         })
 
-        const mesh = createMesh(v, uv, c, materials.brickColor)
-        studio.addToScene(mesh)
-
         const meshCollision = createMesh(vCollision, uv, c, materials.simple)
+        meshCollision.visible = false
         studio.addToScene(meshCollision)
 
-        const player = new Player(6, 5,6, [meshCollision])
-        studio.setCam(player)
-        updateFunctions.push(() => { player.update() })
+        let isPlayer = false
+        let player = null
+        const f = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+
+            if (!isPlayer) {
+                if (!player) {
+                    player = new Player(
+                        dataForMap.numW * W / 2,
+                        dataForMap.numH * H / 2,
+                        dataForMap.numD * W / 2,
+                        [meshCollision]
+                    )
+                    updateEveryFrame(player.update.bind(player))
+                }
+                isPlayer = true
+                player.enable()
+                studio.setCam(player)
+            } else {
+                isPlayer = false
+                player.disable()
+                studio.enableControls()
+            }
+
+
+        }
+        button.addEventListener("click", f)
     })
 }
 

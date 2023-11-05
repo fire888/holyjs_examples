@@ -19,10 +19,14 @@
 //import './10_00_parametricBox/index'
 //import './11_00_rooms/11_structureRooms'
 //import './11_01_roomsAnimate/11_01_roomsAnim'
+
 //import './12_00_tiles/12_tiles'
 //import './12_01_tilesConnect/12_tilesConnect'
-//import './14_wave/14_wave'
-import './15_collisions/15_collisions'
+
+import './14_00_wave/14_00_wave'
+//import './14_08_waveInsert/14_08_waveInsert'
+
+//import './15_collisions/15_collisions'
 //import './16_00_hard/structureBricks'
 
 

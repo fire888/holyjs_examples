@@ -16,7 +16,12 @@ export class Player extends THREE.PerspectiveCamera {
         this.bottomObj.position.set(0, -1, 0)
         this.add(this.bottomObj)
 
+        this._isDisabled = false
+
         document.body.addEventListener('click', () => {
+            if (this._isDisabled) {
+                return;
+            }
             this.controls.lock()
         })
 
@@ -51,6 +56,16 @@ export class Player extends THREE.PerspectiveCamera {
         if (this._forward) {
             this.translateZ(-.04)
         }
+    }
+
+    disable () {
+        this._isDisabled = true
+        this.controls.unlock()
+    }
+
+    enable () {
+        this._isDisabled = false
+        this.controls.lock()
     }
 
     _checkCollisions () {

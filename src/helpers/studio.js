@@ -31,11 +31,13 @@ export const createStudio = (startCameraCoord = 3) => {
     dir2.position.set(0, -5, -3)
     scene.add(dir2)
 
-    let camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2000)
-    camera.position.set(0, startCameraCoord, startCameraCoord)
-    const controls = new OrbitControls(camera, renderer.domElement)
+    const controlsCam = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2000)
+    controlsCam.position.set(0, startCameraCoord, startCameraCoord)
+    const controls = new OrbitControls(controlsCam, renderer.domElement)
     controls.target.set(0, 0, 0)
     controls.update()
+
+    let camera = controlsCam
 
     const resize = () => {
         renderer.setSize(window.innerWidth, window.innerHeight)
@@ -83,6 +85,9 @@ export const createStudio = (startCameraCoord = 3) => {
         showGrid() {
             scene.add(axesHelper)
             scene.add(gridHelper)
+        },
+        enableControls () {
+            camera = controlsCam
         }
     }
 }
