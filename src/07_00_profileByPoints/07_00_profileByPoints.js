@@ -93,11 +93,11 @@ async function initApp () {
         }
 
 
-        const createWall = (W, H, profileB, angle1, angle2) => {
+        const createWall = (W, profile, angle1, angle2) => {
             const v = []
             const uv = []
 
-            const l = [...profileB]
+            const l = [...profile]
             const lx = [...l]
 
             m.rotateVerticesY(l, angle1)
@@ -128,7 +128,7 @@ async function initApp () {
         const uv = []
         for (let i = 0; i < dataWalls.length; ++i) {
             const { w, angle, p1, angle1, angle2 } = dataWalls[i]
-            const wall = createWall(w, 3, fullP, angle1, angle2)
+            const wall = createWall(w, fullP, angle1, angle2)
             m.rotateVerticesY(wall.v, angle)
             m.translateVertices(wall.v, p1.x, 0, p1.z)
             v.push(...wall.v)

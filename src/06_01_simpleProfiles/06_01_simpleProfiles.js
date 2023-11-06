@@ -52,7 +52,7 @@ async function initApp () {
         'phongWhite': new THREE.MeshPhongMaterial({
             color: 0x999999,
             flatShading: false,
-            //side: THREE.DoubleSide,
+            side: THREE.DoubleSide,
         }),
     }
 
@@ -101,7 +101,10 @@ async function initApp () {
 
     const profile = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
-    const w1 = createWall(3, profile)
+    const W1 = 5
+    const W2 = 5
+
+    const w1 = createWall(W1, profile)
     v.push(...w1.v)
     uv.push(...w1.uv)
     corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]
@@ -110,15 +113,15 @@ async function initApp () {
     corners.c1t = [w1.v[l - 3], w1.v[l - 2], w1.v[l - 1]]
     corners.c2t = [w1.v[l - 6], w1.v[l - 5], w1.v[l - 4]]
 
-    const w2 = createWall(5, profile)
+    const w2 = createWall(W2, profile)
     m.rotateVerticesY(w2.v, -Math.PI / 2)
-    m.translateVertices(w2.v, 3, 0, 0)
+    m.translateVertices(w2.v, W1, 0, 0)
     v.push(...w2.v)
     uv.push(...w2.uv)
 
-    const w3 = createWall(3, profile)
+    const w3 = createWall(W1, profile)
     m.rotateVerticesY(w3.v, -Math.PI)
-    m.translateVertices(w3.v, 3, 0, 5)
+    m.translateVertices(w3.v, W1, 0, W2)
     v.push(...w3.v)
     uv.push(...w3.uv)
     corners.c3b = [w3.v[0], w3.v[1], w3.v[2]]
@@ -127,9 +130,9 @@ async function initApp () {
     corners.c3t = [w3.v[l2 - 3], w3.v[l2 - 2], w3.v[l2 - 1]]
     corners.c4t = [w3.v[l2 - 6], w3.v[l2 - 5], w3.v[l2 - 4]]
 
-    const w4 = createWall(5, profile)
+    const w4 = createWall(W2, profile)
     m.rotateVerticesY(w4.v, Math.PI / 2)
-    m.translateVertices(w4.v, 0, 0, 5)
+    m.translateVertices(w4.v, 0, 0, W2)
     v.push(...w4.v)
     uv.push(...w4.uv)
 

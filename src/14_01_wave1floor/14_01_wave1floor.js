@@ -57,7 +57,7 @@ async function initApp () {
     }
 
     // прямая
-    //const { arrTiles, resultTiles } = createDataTiles([0, 1])
+    const { arrTiles, resultTiles } = createDataTiles([0, 1])
 
     // x
     //const { arrTiles, resultTiles } = createDataTiles([3])
@@ -93,7 +93,7 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([1, 2, 4, 5, 6, 7, 8])
 
     // all
-    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
     const
         SIZE_X = 9,

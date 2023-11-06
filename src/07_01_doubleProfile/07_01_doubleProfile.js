@@ -111,14 +111,14 @@ async function initApp () {
             return dataWalls
         }
 
-        const D = .2
-        const createWall = (W, H, profileB, angle1, angle2) => {
+        const D = .01
+        const createWall = (W, profile, angle1, angle2) => {
             const v = []
             const uv = []
             const c = []
 
-            const l = [...profileB]
-            const lx = [...profileB]
+            const l = [...profile]
+            const lx = [...profile]
             m.translateVertices(l, 0, 0, D)
             m.rotateVerticesY(l, angle1)
             m.translateVertices(lx, 0, 0, D)
@@ -150,8 +150,8 @@ async function initApp () {
 
 
             const vB = []
-            const r = [...profileB]
-            const rx = [...profileB]
+            const r = [...profile]
+            const rx = [...profile]
             m.rotateVerticesY(rx, angle2 + Math.PI)
             m.translateVertices(rx, W, 0, 0)
             m.rotateVerticesY(r, angle1 + Math.PI)
@@ -209,7 +209,7 @@ async function initApp () {
             return { v, uv, c }
         }
 
-        const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
+        const profile = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
         const dataWalls = createDataWalls(path)
 
@@ -218,7 +218,7 @@ async function initApp () {
         const c = []
         for (let i = 0; i < dataWalls.length; ++i) {
             const { w, angle, p1, angle1, angle2 } = dataWalls[i]
-            const wall = createWall(w, 3, fullP, angle1, angle2)
+            const wall = createWall(w, profile, angle1, angle2)
             m.rotateVerticesY(wall.v, angle)
             m.translateVertices(wall.v, p1.x, 0, p1.z)
             v.push(...wall.v)
@@ -232,6 +232,7 @@ async function initApp () {
         currentWall = mesh
     }
 
+    /** click points on scene ********/
     const path = []
 
     const clickerOnScene = new ClickerOnScene()

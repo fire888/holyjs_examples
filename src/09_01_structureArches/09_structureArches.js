@@ -646,32 +646,7 @@ async function initApp () {
     animate()
 
 
-    /** CUSTOM 00 **************************/
-    // const color1 =  [.3, .3, .5]
-    // const color2 =  [1, 1, .5]
-    //
-    // const elemT = ARCH.topElem({ h: .5, r: .05, color1, color2 })
-    // const mesh = createMesh(elemT.v, elemT.uv, elemT.c,  materials.brickColor)
-    // mesh.position.set(0, 0, 0)
-    // studio.addToScene(mesh)
-    //
-    // const columnVery = ARCH.column({ h: 1, r: .05,  color1, color2  })
-    // const mesh1 = createMesh(columnVery.v, columnVery.uv, columnVery.c,  materials.brickColor)
-    // mesh1.position.set(.5, 0, 0)
-    // studio.addToScene(mesh1)
-    //
-    // const arcD = ARCH.arc({ h: .5, w: .3, color1, color2 })
-    // const mesh2 = createMesh(arcD.v, arcD.uv, arcD.c, materials.brickColor)
-    // mesh2.position.set(1, 0, 0)
-    // studio.addToScene(mesh2)
-    //
-    // const c2 = ARCH.columnSimple({ h: .5, r: .05, color1, color2 })
-    // const mesh3 = createMesh(c2.v, c2.uv, c2.c, materials.brickColor)
-    // mesh3.position.set(1.5, 0, 0)
-    // studio.setCamPos(.5, 1, 2)
-    // studio.addToScene(mesh3)
-
-    /** CUSTOM 02 ************************************/
+    /** ************************************/
     const v = []
     const uv = []
     const c = []
@@ -691,7 +666,6 @@ async function initApp () {
 
     const exporter = new GLTFExporter()
     button.addEventListener('click', () => {
-        console.log(studio.scene)
         exporter.parse(
             studio.scene, gltf => {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gltf))
