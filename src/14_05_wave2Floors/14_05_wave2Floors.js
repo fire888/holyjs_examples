@@ -63,8 +63,8 @@ async function initApp () {
     const tCrosses = [8, 9, 10, 11]
     const xBT = [12, 13]
     const topPlatform = [15, 16, 17, 18]
-    const toBottom = [22, 23, 24, 25]
-    const stairs = [19, 20, 21]
+    const toBottom = [23, 24, 25, 26]
+    const stairs = [19, 20, 21, 22]
 
 
     // перекрестки непересекающиеся
@@ -74,17 +74,17 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
 
     // круговые лестницы
-    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
 
     // bottom top
     //const { arrTiles, resultTiles } = createDataTiles([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
 
     //all
-    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
+    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
 
     const
         SIZE_X = 9,
-        SIZE_Y = 2,
+        SIZE_Y = 5,
         SIZE_Z = 6,
         mapFill = [],
         dataForMap = { tiles: resultTiles, mapFill, SIZE_X, SIZE_Y, SIZE_Z }

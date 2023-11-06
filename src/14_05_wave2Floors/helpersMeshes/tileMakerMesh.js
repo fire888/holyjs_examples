@@ -26,9 +26,9 @@ export const createMakerMesh = (materials) => {
     return data => {
         /** blackBox if resultTile = -1 **********/
         if (data.resultTileIndex === -1) {
-            const mesh = new THREE.Mesh(boxGeom, blackMat)
-            mesh.position.set(W * data.k, H * data.i, W * data.j)
-            return mesh
+            // const mesh = new THREE.Mesh(boxGeom, blackMat)
+            // mesh.position.set(W * data.k, H * data.i, W * data.j)
+            // return mesh
         }
 
         if (!data.tileData || !data.tileData.keyModel) {

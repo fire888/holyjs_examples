@@ -320,7 +320,7 @@ export const createDataTiles = (arrIndexes) => {
         rotationY: Math.PI / 2,
         sideNX: '_|_|_',
         sidePX: '_|_|_',
-        sideNY: '_|closed.NX|_',
+        sideNY: '_|closed.PX|_',
         sidePY: '_|PX|_',
         sideNZ: '_|_|_',
         sidePZ: '_|1|_',
@@ -333,6 +333,17 @@ export const createDataTiles = (arrIndexes) => {
         sideNY: '_|closed.PZ|_',
         sidePY: '_|NZ|_',
         sideNZ: '_|_|_',
+        sidePZ: '_|_|_',
+    })
+
+    arrTiles.push({
+        keyModel: 'tile_STAIRS',
+        rotationY: Math.PI * 1.5,
+        sideNX: '_|_|_',
+        sidePX: '_|_|_',
+        sideNY: '_|closed.NX|_',
+        sidePY: '_|NZ|_',
+        sideNZ: '_|1|_',
         sidePZ: '_|_|_',
     })
 
