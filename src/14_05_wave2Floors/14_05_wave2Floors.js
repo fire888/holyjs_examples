@@ -70,8 +70,11 @@ async function initApp () {
     // перекрестки непересекающиеся
     //const { arrTiles, resultTiles } = createDataTiles([...xBT])
 
-    // без лестниц круговых блоки
-    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
+    // без лестниц круговых
+    ///const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
+
+    // без лестниц круговых
+    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25, ...xBT])
 
     // круговые лестницы
     //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
@@ -80,7 +83,7 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
 
     //all
-    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
 
     const
         SIZE_X = 9,
