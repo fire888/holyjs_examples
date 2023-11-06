@@ -3,13 +3,13 @@ import { createMakerMesh } from './makerMesh'
 import { CompressedTextureLoader } from 'three'
 //import { map3SArtifactsFilter } from './map3SArtefactsFilter'
 
-const button = document.createElement('button')
-button.innerText = 'NEXT'
-document.body.appendChild(button)
-button.style.position = 'absolute'
-button.style.zIndex = '1000'
-button.style.top = '80px'
-let f = null
+// const button = document.createElement('button')
+// button.innerText = 'NEXT'
+// document.body.appendChild(button)
+// button.style.position = 'absolute'
+// button.style.zIndex = '1000'
+// button.style.top = '80px'
+// let f = null
 
 
 const choiceFinalTileFromExists = (dataAction, map) => {

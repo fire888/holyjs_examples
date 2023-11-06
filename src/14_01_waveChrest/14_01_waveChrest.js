@@ -60,7 +60,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
-    studio.setCamPos(10, 20, 30)
+    studio.setCamPos(10, 15, 23)
     studio.setCamTargetPos(10, 0, 5)
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
@@ -79,7 +79,7 @@ async function initApp () {
         })
     }
 
-    //const { arrTiles, resultTiles } = createDataTiles([1])
+    const { arrTiles, resultTiles } = createDataTiles([3, 7, 5, 9, 4, 6, 1])
     //const { arrTiles, resultTiles } = createDataTiles([0, 1])
     //const { arrTiles, resultTiles } = createDataTiles([3])
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7])
@@ -89,7 +89,7 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([ 0, 4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([8, 9, 10, 11, 3])
-    const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    //const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
 
 
@@ -145,7 +145,7 @@ async function initApp () {
                 if (!player) {
                     player = new Player(
                         dataForMap.numW * W / 2,
-                        dataForMap.numH * H / 2,
+                        dataForMap.numH * H / 2 + 1,
                         dataForMap.numD * W / 2,
                         [meshCollision]
                     )
@@ -173,13 +173,31 @@ async function initApp () {
             if (arrTiles[i].keyModel) {
                 const elem = TILES[arrTiles[i].keyModel]({})
                 M.rotateVerticesY(elem.v, arrTiles[i].rotationY)
-                M.translateVertices(elem.v, (W + .1) * i, 0, -5)
+                M.translateVertices(elem.v, (W + .1) * i, 0, -9)
                 v.push(...elem.v)
                 uv.push(...elem.uv)
                 c.push(...elem.c)
                 const label = createLabel(i, '#ff0000', 3)
-                label.position.set((W + .1) * i, 1, -5)
+                label.position.set((W + .1) * i, 2.5, -9)
                 studio.addToScene(label)
+            }
+
+            const mesh = createMesh(v, uv, c, materials.brickColor)
+            studio.addToScene(mesh)
+        }
+
+        for (let i = 0; i < resultTiles.length; ++i) {
+            const v = []
+            const uv = []
+            const c = []
+
+            if (resultTiles[i].keyModel) {
+                const elem = TILES[resultTiles[i].keyModel]({})
+                M.rotateVerticesY(elem.v, resultTiles[i].rotationY)
+                M.translateVertices(elem.v, (W + .1) * i, 0, -5)
+                v.push(...elem.v)
+                uv.push(...elem.uv)
+                c.push(...elem.c)
             }
 
             const mesh = createMesh(v, uv, c, materials.brickColor)

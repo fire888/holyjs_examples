@@ -146,7 +146,7 @@ async function initApp () {
                 if (!player) {
                     player = new Player(
                         dataForMap.numW * W / 2,
-                        dataForMap.numH * H / 2,
+                        dataForMap.numH * H / 2 + 1,
                         dataForMap.numD * W / 2,
                         [meshCollision]
                     )
