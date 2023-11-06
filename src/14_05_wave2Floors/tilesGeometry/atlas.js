@@ -1,4 +1,4 @@
-import { M } from './M'
+import { M } from '../helpersMeshes/M'
 
 const v033 = 1 / 3
 const v066 = v033 * 2

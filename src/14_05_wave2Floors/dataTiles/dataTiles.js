@@ -231,38 +231,38 @@ export const createDataTiles = (arrIndexes) => {
 
 
     //////////////////////////////////// top
-    // arrTiles.push({
-    //     keyModel: 'tile_X_BT',
-    //     rotationY: 0,
-    //     sideNX: '_|1|_',
-    //     sidePX: '_|1|_',
-    //     sideNY: '_|closed.NZ.PZ|_',
-    //     sidePY: '_|NX.PX|_',
-    //     sideNZ: '_|1|_',
-    //     sidePZ: '_|1|_',
-    // })
-    // arrTiles.push({
-    //     keyModel: 'tile_X_BT',
-    //     rotationY: Math.PI / 2,
-    //     sideNX: '_|1|_',
-    //     sidePX: '_|1|_',
-    //     sideNY: '_|closed.NX.PX|_',
-    //     sidePY: '_|NZ.PZ|_',
-    //     sideNZ: '_|1|_',
-    //     sidePZ: '_|1|_',
-    // })
+    arrTiles.push({
+        keyModel: 'tile_X_BT',
+        rotationY: 0,
+        sideNX: '_|1|_',
+        sidePX: '_|1|_',
+        sideNY: '_|closed.NZ.PZ|_',
+        sidePY: '_|NX.PX|_',
+        sideNZ: '_|1|_',
+        sidePZ: '_|1|_',
+    })
+    arrTiles.push({
+        keyModel: 'tile_X_BT',
+        rotationY: Math.PI / 2,
+        sideNX: '_|1|_',
+        sidePX: '_|1|_',
+        sideNY: '_|closed.NX.PX|_',
+        sidePY: '_|NZ.PZ|_',
+        sideNZ: '_|1|_',
+        sidePZ: '_|1|_',
+    })
 
 
-    // arrTiles.push({
-    //     keyModel: 'tile_H',
-    //     rotationY: 0,
-    //     sideNX: '_|_|_',
-    //     sidePX: '_|_|_',
-    //     sideNY: '_|_|_',
-    //     sidePY: '_|1|_',
-    //     sideNZ: '_|_|_',
-    //     sidePZ: '_|_|_',
-    // })
+    arrTiles.push({
+        keyModel: 'tile_H',
+        rotationY: 0,
+        sideNX: '_|_|_',
+        sidePX: '_|_|_',
+        sideNY: '_|_|_',
+        sidePY: '_|1|_',
+        sideNZ: '_|_|_',
+        sidePZ: '_|_|_',
+    })
 
     arrTiles.push({
         keyModel: 'tile_H_toH',

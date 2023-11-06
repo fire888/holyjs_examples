@@ -1,25 +1,16 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
-import { Player } from "../helpers/player";
+import { Player } from "../helpers/player"
 import { ASSETS_TO_LOAD } from './ASSETS'
-import { M } from './structure/M'
-import { W, H } from './structure/constants'
-import { tile_I } from './structure/tile_I'
-import { tile_X } from './structure/tile_X'
-import { tile_L } from './structure/tile_L'
-import { tile_X_BT } from './structure/tile_X_BT'
-import { tile_H } from './structure/tile_H'
-import { tile_H_toH } from './structure/tile_H_toH'
-import { tile_T } from './structure/tile_T'
-import { tile_STAIRS } from './structure/tile_STAIRS'
-import { tile_B } from './structure/tile_B'
-import { tile_EMPTY } from './structure/tile_EMPTY'
-import { createDataTiles } from './structure/dataTiles'
-import { generateStructureScheme } from './structureScheme/structureScheme'
-import { createBoxesLines } from './structure/gabarites'
-import { updateEveryFrame } from "../helpers/frameUpdater";
-import {createLabel} from "./structure/label";
+import { M } from './helpersMeshes/M'
+import { W, H } from './CONSTANTS'
+import { TILES } from "./tilesGeometry/TILES";
+import { createDataTiles } from './dataTiles/dataTiles'
+import { createBoxesLines } from './helpersMeshes/gabaritesLines'
+import { updateEveryFrame } from "../helpers/frameUpdater"
+import { createLabel } from "./helpersMeshes/label"
+import { createMap } from './structureScheme/map'
 
 const button = document.createElement('button')
 button.innerText = 'WALK'
@@ -28,20 +19,6 @@ button.style.position = 'absolute'
 button.style.zIndex = '100'
 button.style.top = '0'
 let f = null
-
-
-const TILES = {
-    tile_I,
-    tile_X,
-    tile_L,
-    tile_X_BT,
-    tile_H,
-    tile_H_toH,
-    tile_T,
-    tile_STAIRS,
-    tile_B,
-    tile_EMPTY,
-}
 
 
 
@@ -60,7 +37,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
-    studio.setCamPos(10, 20, 30)
+    studio.setCamPos(10, 15, 23)
     studio.setCamTargetPos(10, 0, 5)
     updateEveryFrame(studio.render)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
@@ -89,122 +66,124 @@ async function initApp () {
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([ 0, 4, 5, 6, 7, 8, 1, 2])
     //const { arrTiles, resultTiles } = createDataTiles([8, 9, 10, 11, 3])
-    //const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22])
-    const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 11, 12, 13, 14, 19, 20, 21, 22])
 
+    // без лестниц круговых
+    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
 
+    // bottom top
+    //const { arrTiles, resultTiles } = createDataTiles([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
 
-    const dataForMap = {
-        numW: 9,
-        numH: 2,
-        numD: 6,
-        tileW: W,
-        tileH: H,
-        tileD: W,
-        tiles: resultTiles,
-    }
+    //all
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
 
-    const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
+    const
+        SIZE_X = 9,
+        SIZE_Y = 2,
+        SIZE_Z = 6,
+        mapFill = [],
+        dataForMap = { tiles: resultTiles, mapFill, SIZE_X, SIZE_Y, SIZE_Z }
+
+    const l = createBoxesLines(W, H, W, SIZE_X, SIZE_Y, SIZE_Z)
     l.position.set(-W / 2, 0, -W / 2)
     studio.addToScene(l)
 
-    generateStructureScheme(dataForMap, studio, materials).then(result => {
+    /** create level ***********************/
+    const map = createMap(dataForMap.tiles, studio, materials)
+    const preparedLevelData = await map.generateMap(dataForMap)
+
+    /** create hidden collisions for player ********/
+    const v = []
+    const uv = []
+    const c = []
+    const vCollision = []
+
+    preparedLevelData.iterateAll(item => {
+        const { numX, numY, numZ, tileData } = item
+        if (tileData) {
+            const elem = TILES[tileData.keyModel]({})
+            M.rotateVerticesY(elem.v, tileData.rotationY)
+            M.translateVertices(elem.v, numX * W, numY * H, numZ * W)
+            v.push(...elem.v)
+            uv.push(...elem.uv)
+            c.push(...elem.c)
+
+            M.rotateVerticesY(elem.col, tileData.rotationY)
+            M.translateVertices(elem.col, numX * W, numY * H, numZ * W)
+            vCollision.push(...elem.col)
+        }
+    })
+
+    const meshCollision = createMesh(vCollision, uv, c, materials.simple)
+    meshCollision.visible = false
+    studio.addToScene(meshCollision)
+
+    /** player *****************/
+    let isPlayer = false
+    let player = null
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (!isPlayer) {
+            if (!player) {
+                player = new Player(
+                    SIZE_X * W / 2,
+                    SIZE_Y * H / 2 + 1,
+                    SIZE_Z * W / 2,
+                    [meshCollision]
+                )
+                updateEveryFrame(player.update.bind(player))
+            }
+            isPlayer = true
+            player.enable()
+            studio.setCam(player)
+        } else {
+            isPlayer = false
+            player.disable()
+            studio.enableControls()
+        }
+    })
+
+    /** show all tiles ********************/
+    for (let i = 0; i < arrTiles.length; ++i) {
         const v = []
         const uv = []
         const c = []
 
-        const vCollision = []
-
-        result.iterateAll(item => {
-            const { numX, numY, numZ, tileData } = item
-            if (tileData) {
-                const elem = TILES[tileData.keyModel]({})
-                M.rotateVerticesY(elem.v, tileData.rotationY)
-                M.translateVertices(elem.v, numX * W, numY * H, numZ * W)
-                v.push(...elem.v)
-                uv.push(...elem.uv)
-                c.push(...elem.c)
-
-                M.rotateVerticesY(elem.col, tileData.rotationY)
-                M.translateVertices(elem.col, numX * W, numY * H + .1, numZ * W)
-                vCollision.push(...elem.col)
-            }
-        })
-
-        const meshCollision = createMesh(vCollision, uv, c, materials.simple)
-        meshCollision.visible = false
-        studio.addToScene(meshCollision)
-
-        /** player *****************/
-        let isPlayer = false
-        let player = null
-        const f = (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-
-            if (!isPlayer) {
-                if (!player) {
-                    player = new Player(
-                        dataForMap.numW * W / 2,
-                        dataForMap.numH * H / 2 + 1,
-                        dataForMap.numD * W / 2,
-                        [meshCollision]
-                    )
-                    updateEveryFrame(player.update.bind(player))
-                }
-                isPlayer = true
-                player.enable()
-                studio.setCam(player)
-            } else {
-                isPlayer = false
-                player.disable()
-                studio.enableControls()
-            }
-
-
-        }
-        button.addEventListener("click", f)
-
-        /** view tiles ********************/
-        for (let i = 0; i < arrTiles.length; ++i) {
-            const v = []
-            const uv = []
-            const c = []
-
-            if (arrTiles[i].keyModel) {
-                const elem = TILES[arrTiles[i].keyModel]({})
-                M.rotateVerticesY(elem.v, arrTiles[i].rotationY)
-                M.translateVertices(elem.v, (W + .1) * i, 0, -9)
-                v.push(...elem.v)
-                uv.push(...elem.uv)
-                c.push(...elem.c)
-                const label = createLabel(i, '#ff0000', 3)
-                label.position.set((W + .1) * i, 2.5, -9)
-                studio.addToScene(label)
-            }
-
-            const mesh = createMesh(v, uv, c, materials.brickColor)
-            studio.addToScene(mesh)
+        if (arrTiles[i].keyModel) {
+            const elem = TILES[arrTiles[i].keyModel]({})
+            M.rotateVerticesY(elem.v, arrTiles[i].rotationY)
+            M.translateVertices(elem.v, (W + .1) * i, 0, -9)
+            v.push(...elem.v)
+            uv.push(...elem.uv)
+            c.push(...elem.c)
+            const label = createLabel(i, '#ff0000', 3)
+            label.position.set((W + .1) * i, 2.5, -9)
+            studio.addToScene(label)
         }
 
-        for (let i = 0; i < resultTiles.length; ++i) {
-            const v = []
-            const uv = []
-            const c = []
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        studio.addToScene(mesh)
+    }
 
-            if (resultTiles[i].keyModel) {
-                const elem = TILES[resultTiles[i].keyModel]({})
-                M.rotateVerticesY(elem.v, resultTiles[i].rotationY)
-                M.translateVertices(elem.v, (W + .1) * i, 0, -5)
-                v.push(...elem.v)
-                uv.push(...elem.uv)
-                c.push(...elem.c)
-            }
+    /** show exists tiles ********************/
+    for (let i = 0; i < resultTiles.length; ++i) {
+        const v = []
+        const uv = []
+        const c = []
 
-            const mesh = createMesh(v, uv, c, materials.brickColor)
-            studio.addToScene(mesh)
+        if (resultTiles[i].keyModel) {
+            const elem = TILES[resultTiles[i].keyModel]({})
+            M.rotateVerticesY(elem.v, resultTiles[i].rotationY)
+            M.translateVertices(elem.v, (W + .1) * i, 0, -5)
+            v.push(...elem.v)
+            uv.push(...elem.uv)
+            c.push(...elem.c)
         }
-    })
+
+        const mesh = createMesh(v, uv, c, materials.brickColor)
+        studio.addToScene(mesh)
+    }
 }
 
 

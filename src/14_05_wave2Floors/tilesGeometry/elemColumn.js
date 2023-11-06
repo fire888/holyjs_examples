@@ -1,5 +1,5 @@
-import {H, COLOR_00} from "./constants";
-import { M } from "./M";
+import {H, COLOR_00} from "../CONSTANTS";
+import { M } from "../helpersMeshes/M";
 import {tileUv, randomTile} from "./atlas";
 
 

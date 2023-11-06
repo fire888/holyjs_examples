@@ -1,5 +1,5 @@
-import { W, H, THICKNESS_PLATFORM } from './constants'
-import { M } from './M'
+import { W, H, THICKNESS_PLATFORM } from '../CONSTANTS'
+import { M } from '../helpersMeshes/M'
 import { createPlatformData } from './elemPlatform'
 import { tile_H } from './tile_H'
 

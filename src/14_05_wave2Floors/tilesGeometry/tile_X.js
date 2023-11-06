@@ -1,5 +1,5 @@
-import { W, H } from './constants'
-import { M } from './M'
+import { W, H } from '../CONSTANTS'
+import { M } from '../helpersMeshes/M'
 import { createPlatformData } from './elemPlatform'
 import { tile_I } from './tile_I'
 

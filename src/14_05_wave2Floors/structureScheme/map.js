@@ -1,7 +1,5 @@
 import { createMap3X } from './map3SHelper'
-import { createMakerMesh } from './makerMesh'
-import { CompressedTextureLoader } from 'three'
-//import { map3SArtifactsFilter } from './map3SArtefactsFilter'
+import { createMakerMesh } from '../helpersMeshes/tileMakerMesh'
 
 // const button = document.createElement('button')
 // button.innerText = 'NEXT'
@@ -156,7 +154,7 @@ const createPipelineActionsWithMapItem = (y, z, x) => {
 
 
 export const createMap = (tiles, studio, materials) => {
-    const make = createMakerMesh(materials)
+    const makeTileMesh = createMakerMesh(materials)
     let map
 
     return {
@@ -229,7 +227,7 @@ export const createMap = (tiles, studio, materials) => {
                                     if (mapR.labels[`${ y }_${ z }_${ x }`].mesh) {
                                         studio.removeFromScene(mapR.labels[`${ y }_${ z }_${ x }`].mesh)
                                     }
-                                    const m = make(map.items[y][z][x])
+                                    const m = makeTileMesh(map.items[y][z][x])
                                     m && studio.addToScene(m)
                                 }
                                 setTimeout(res, 15)
@@ -251,8 +249,6 @@ export const createMap = (tiles, studio, materials) => {
                     }
 
                     nextItem()
-
-                    console.log('--',map)
                 })
             })
         },
