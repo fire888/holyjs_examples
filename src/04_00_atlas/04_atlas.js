@@ -85,7 +85,7 @@ async function initApp () {
         const ph = phase % (Math.PI * 2)
         const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, sin(ph)], [0, 2, sin(ph)])
 
-        const N = 10
+        const N = 6
         for (let i = 0; i < N; ++i) {
             const copyV = [...p1.v]
             translateVertices(copyV, -.5, 0, 0)

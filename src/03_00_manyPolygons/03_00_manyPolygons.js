@@ -67,7 +67,7 @@ async function initApp () {
     const v = []
     const uv = []
 
-    const N = 10
+    const N = 5
     for (let i = 0; i < N; ++i) {
         const copyV = [...poly4.v]
         translateVertices(copyV, -.5, 0, 1.5)

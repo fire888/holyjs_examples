@@ -43,8 +43,8 @@ async function initApp () {
         }
     }
 
-    const m4rot = new THREE.Matrix4().makeRotationY(-1.3)
-    const m4x = new THREE.Matrix4().makeTranslation(-.5, 1, 0)
+    const m4rot = new THREE.Matrix4().makeRotationY(1.3)
+    const m4x = new THREE.Matrix4().makeTranslation(.5, 0, 0)
     const m4z = new THREE.Matrix4().makeTranslation(0, 0, -.5)
 
     applyMatrixToArray(m4rot, v)

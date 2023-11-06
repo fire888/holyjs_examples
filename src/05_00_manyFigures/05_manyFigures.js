@@ -91,7 +91,7 @@ async function initApp () {
     /** CUSTOM 00 **************************/
     const R = .7
     const H = 1
-    const N = 5
+    const N = 3
 
     const points = []
     for (let i = 0; i < N; ++i) {

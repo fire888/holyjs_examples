@@ -58,11 +58,11 @@ async function initApp () {
 
 
     /** CUSTOM 00 **************************/
-    const createWall = (W, H, profileB) => {
+    const createWall = (W, profile) => {
         const v = []
         const uv = []
 
-        const l = [...profileB]
+        const l = [...profile]
         const lx = [...l]
 
         m.rotateVerticesY(l, Math.PI / 4)
@@ -99,9 +99,9 @@ async function initApp () {
         c4T: null,
     }
 
-    const fullP = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
+    const profile = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
-    const w1 = createWall(3, 1, fullP)
+    const w1 = createWall(3, profile)
     v.push(...w1.v)
     uv.push(...w1.uv)
     corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]
@@ -110,13 +110,13 @@ async function initApp () {
     corners.c1t = [w1.v[l - 3], w1.v[l - 2], w1.v[l - 1]]
     corners.c2t = [w1.v[l - 6], w1.v[l - 5], w1.v[l - 4]]
 
-    const w2 = createWall(5, 2, fullP)
+    const w2 = createWall(5, profile)
     m.rotateVerticesY(w2.v, -Math.PI / 2)
     m.translateVertices(w2.v, 3, 0, 0)
     v.push(...w2.v)
     uv.push(...w2.uv)
 
-    const w3 = createWall(3, 2, fullP)
+    const w3 = createWall(3, profile)
     m.rotateVerticesY(w3.v, -Math.PI)
     m.translateVertices(w3.v, 3, 0, 5)
     v.push(...w3.v)
@@ -127,7 +127,7 @@ async function initApp () {
     corners.c3t = [w3.v[l2 - 3], w3.v[l2 - 2], w3.v[l2 - 1]]
     corners.c4t = [w3.v[l2 - 6], w3.v[l2 - 5], w3.v[l2 - 4]]
 
-    const w4 = createWall(5, 2, fullP)
+    const w4 = createWall(5, profile)
     m.rotateVerticesY(w4.v, Math.PI / 2)
     m.translateVertices(w4.v, 0, 0, 5)
     v.push(...w4.v)

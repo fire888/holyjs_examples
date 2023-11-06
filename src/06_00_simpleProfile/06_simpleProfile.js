@@ -58,17 +58,16 @@ async function initApp () {
     const prBottom = assets.profiles.children.filter(item => item.name === 'profilebottom')[0].geometry.attributes.position.array
     const prTop = assets.profiles.children.filter(item => item.name === 'profiletop')[0].geometry.attributes.position.array
 
-    const W = 2
-    const H = 1
+    const W = 1
+    const H = 2
     m.translateVertices(prTop, 0, H, 0)
-
     const pr = [...prBottom, ...prTop]
-
-    const v = []
-    const uv = []
 
     const prX = [...pr]
     m.translateVertices(prX, W, 0, 0)
+
+    const v = []
+    const uv = []
 
     for (let i = 3; i < pr.length; i += 3) {
         const prevI = i - 3

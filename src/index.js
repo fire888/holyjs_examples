@@ -10,7 +10,7 @@
 //import './05_01_manyFiguresTown/05_01_manyFiguresTown'
 
 //import './06_00_simpleProfile/06_simpleProfile'
-//import './06_01_simpleProfiles/06_01_simpleProfiles'
+import './06_01_simpleProfiles/06_01_simpleProfiles'
 //import './07_00_profileByPoints/07_00_profileByPoints'
 //import './07_01_doubleProfile/07_01_doubleProfile'
 //import './08_00_roads/08_00_roads'
@@ -27,7 +27,7 @@
 //import './14_00_wave/14_00_wave'
 //import './14_01_wave1floor/14_01_wave1floor'
 //import './14_05_wave2Floors/14_05_wave2floors'
-import './14_08_waveInsert/14_08_waveInsert'
+//import './14_08_waveInsert/14_08_waveInsert'
 
 
 //import './15_collisions/15_collisions'
