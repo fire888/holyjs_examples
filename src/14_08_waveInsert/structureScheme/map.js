@@ -221,7 +221,6 @@ export const createMap = (tiles, studio, materials) => {
                             /** choice tile and filter neighbours */
                             pipelineActions(y, z, x, map).then(() => {
                                 /** add mesh to scene */
-                                console.log(map.items[y][z][x].resultTileIndex)
                                 if (map.items[y][z][x].hasOwnProperty('resultTileIndex') && Number.isInteger(map.items[y][z][x].resultTileIndex)) {
                                     map.items[y][z][x].tileData = tiles[map.items[y][z][x].resultTileIndex]
 

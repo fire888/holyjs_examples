@@ -44,7 +44,6 @@ export const createMakerMesh = (materials) => {
         if (!data.tileData || !data.tileData.keyModel) {
             return null
         }
-        console.log(data.tileData.keyModel)
         const t = TILES[data.tileData.keyModel]()
 
         M.rotateVerticesY(t.v, data.tileData.rotationY)

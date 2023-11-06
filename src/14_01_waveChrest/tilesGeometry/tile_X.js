@@ -1,5 +1,5 @@
-import { W, H } from './constants'
-import { M } from './M'
+import { W, H } from '../structure/constants'
+import { M } from '../structure/M'
 import { createPlatformData } from './elemPlatform'
 import { tile_I } from './tile_I'
 

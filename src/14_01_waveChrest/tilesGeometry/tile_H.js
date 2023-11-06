@@ -1,11 +1,12 @@
-import { W, H, THICKNESS_PLATFORM } from './constants'
-import { M } from './M'
+import { W, H, THICKNESS_PLATFORM } from '../structure/constants'
+import { M } from '../structure/M'
 import { createColumnData } from './elemColumn'
 import { createPlatformData } from './elemPlatform'
 import {createElemArcData} from "./elemArc"
 
+const hpW = W / 6
 
-export const tile_I = () => {
+export const tile_H = () => {
     const v = []
     const c = []
     const uv = []
@@ -26,43 +27,24 @@ export const tile_I = () => {
     fill(W / 3 / 2, -W / 3 / 2)
     fill(-W / 3 / 2, W / 3 / 2)
     fill(W / 3 / 2, W / 3 / 2)
-
-    /** center */
+    /** center  top */
     {
         const platform = createPlatformData({})
-        M.translateVertices(platform.v, 0, H / 2, 0)
+        M.translateVertices(platform.v, 0, H, 0)
         v.push(...platform.v)
         c.push(...platform.c)
         uv.push(...platform.uv)
-        M.translateVertices(platform.col, 0, H / 2, 0)
-        col.push(...platform.col)
-    }
-    /** bottom */
-    {
-        const platform = createPlatformData({})
-        M.translateVertices(platform.v, 0, H / 2, W / 3)
-        v.push(...platform.v)
-        c.push(...platform.c)
-        uv.push(...platform.uv)
-        M.translateVertices(platform.col, 0, H / 2, W / 3)
-        col.push(...platform.col)
-    }
-    {
-        const platform = createPlatformData({})
-        M.translateVertices(platform.v, 0, H / 2, -W / 3)
-        v.push(...platform.v)
-        c.push(...platform.c)
-        uv.push(...platform.uv)
-        M.translateVertices(platform.col, 0, H / 2, -W / 3)
+        M.translateVertices(platform.col, 0, H, 0)
         col.push(...platform.col)
     }
     /** arc */
     {
         const arc = createElemArcData({})
-        M.translateVertices(arc.v, 0,  H / 2 - THICKNESS_PLATFORM, 0)
+        M.translateVertices(arc.v, 0, H - THICKNESS_PLATFORM, 0)
         v.push(...arc.v)
         c.push(...arc.c)
         uv.push(...arc.uv)
     }
+
     return { v, c, uv, col }
 }

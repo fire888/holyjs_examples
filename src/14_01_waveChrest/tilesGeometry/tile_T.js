@@ -1,5 +1,5 @@
-import { W, H, THICKNESS_PLATFORM } from './constants'
-import { M } from './M'
+import { W, H, THICKNESS_PLATFORM } from '../structure/constants'
+import { M } from '../structure/M'
 import { createColumnData } from './elemColumn'
 import { createPlatformData } from './elemPlatform'
 import {createElemArcData} from "./elemArc"

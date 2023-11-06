@@ -5,21 +5,12 @@ import { Player } from "../helpers/player";
 import { ASSETS_TO_LOAD } from './ASSETS'
 import { M } from './structure/M'
 import { W, H } from './structure/constants'
-import { tile_I } from './structure/tile_I'
-import { tile_X } from './structure/tile_X'
-import { tile_L } from './structure/tile_L'
-import { tile_X_BT } from './structure/tile_X_BT'
-import { tile_H } from './structure/tile_H'
-import { tile_H_toH } from './structure/tile_H_toH'
-import { tile_T } from './structure/tile_T'
-import { tile_STAIRS } from './structure/tile_STAIRS'
-import { tile_B } from './structure/tile_B'
-import { tile_EMPTY } from './structure/tile_EMPTY'
+import { TILES } from "./tilesGeometry/TILES";
 import { createDataTiles } from './structure/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
-import { createBoxesLines } from './structure/gabarites'
+import { createBoxesLines } from './helpersMeshes/gabaritesLines'
 import { updateEveryFrame } from "../helpers/frameUpdater";
-import {createLabel} from "./structure/label";
+import {createLabel} from "./helpersMeshes/label";
 
 const button = document.createElement('button')
 button.innerText = 'WALK'
@@ -28,20 +19,6 @@ button.style.position = 'absolute'
 button.style.zIndex = '100'
 button.style.top = '0'
 let f = null
-
-
-const TILES = {
-    tile_I,
-    tile_X,
-    tile_L,
-    tile_X_BT,
-    tile_H,
-    tile_H_toH,
-    tile_T,
-    tile_STAIRS,
-    tile_B,
-    tile_EMPTY,
-}
 
 
 
@@ -79,7 +56,8 @@ async function initApp () {
         })
     }
 
-    const { arrTiles, resultTiles } = createDataTiles([3, 7, 5, 9, 4, 6, 1])
+    //const { arrTiles, resultTiles } = createDataTiles([3, 7, 5, 9, 4, 6, 1])
+    const { arrTiles, resultTiles } = createDataTiles([4,5,6])
     //const { arrTiles, resultTiles } = createDataTiles([0, 1])
     //const { arrTiles, resultTiles } = createDataTiles([3])
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7])

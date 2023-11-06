@@ -1,6 +1,6 @@
-import { M } from "./M";
+import { M } from "../structure/M";
 import {tileUv} from "./atlas";
-import { COLOR_00, H, W, THICKNESS_PLATFORM } from './constants'
+import { COLOR_00, H, W, THICKNESS_PLATFORM } from '../structure/constants'
 
 const r = W / 6
 

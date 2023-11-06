@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { W, H } from '../structure/constants'
-import { createLabel } from '../structure/label'
+import { createLabel } from '../helpersMeshes/label'
 
 const button = document.createElement('button')
 button.innerText = 'NEXT'

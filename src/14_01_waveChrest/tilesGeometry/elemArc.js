@@ -1,5 +1,5 @@
-import {H, W, COLOR_00} from "./constants";
-import { M } from "./M";
+import {H, W, COLOR_00} from "../structure/constants";
+import { M } from "../structure/M";
 import {tileUv} from "./atlas";
 
 const { sin, cos } = Math

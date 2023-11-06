@@ -1,5 +1,5 @@
-import {H, COLOR_00} from "./constants";
-import { M } from "./M";
+import {H, COLOR_00} from "../structure/constants";
+import { M } from "../structure/M";
 import {tileUv, randomTile} from "./atlas";
 
 

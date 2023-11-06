@@ -1,7 +1,5 @@
 import { createMap3X } from './map3SHelper'
-import { createMakerMesh } from './makerMesh'
-import { CompressedTextureLoader } from 'three'
-//import { map3SArtifactsFilter } from './map3SArtefactsFilter'
+import { createMakerMesh } from '../helpersMeshes/tileMakerMesh'
 
 // const button = document.createElement('button')
 // button.innerText = 'NEXT'
@@ -156,6 +154,13 @@ const createPipelineActionsWithMapItem = (y, z, x) => {
 
 
 export const createMap = (tiles, studio, materials) => {
+
+
+
+
+
+
+
     const make = createMakerMesh(materials)
     let map
 

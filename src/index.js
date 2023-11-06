@@ -8,6 +8,7 @@
 //import './04_00_atlas/04_atlas'
 //import './05_00_manyFigures/05_manyFigures'
 //import './05_01_manyFiguresTown/05_01_manyFiguresTown'
+
 //import './06_00_simpleProfile/06_simpleProfile'
 //import './06_01_simpleProfiles/06_01_simpleProfiles'
 //import './07_00_profileByPoints/07_00_profileByPoints'
@@ -24,14 +25,11 @@
 //import './12_01_tilesConnect/12_tilesConnect'
 
 //import './14_00_wave/14_00_wave'
-import './14_01_waveChrest/14_01_waveChrest'
+//import './14_01_waveChrest/14_01_waveChrest'
 //import './14_05_wave2Floors/14_05_wave2Floors'
 //import './14_08_waveInsert/14_08_waveInsert'
 
 
 //import './15_collisions/15_collisions'
-//import './16_00_hard/structureBricks'
+import './16_00_hard/structureBricks'
 
-
-
-//import './02_01_matrixMove/02_matrix_01'
