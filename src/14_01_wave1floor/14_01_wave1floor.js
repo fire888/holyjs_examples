@@ -56,25 +56,51 @@ async function initApp () {
         })
     }
 
-    //const { arrTiles, resultTiles } = createDataTiles([3, 7, 5, 9, 4, 6, 1])
-    const { arrTiles, resultTiles } = createDataTiles([4,5,6])
+    // прямая
     //const { arrTiles, resultTiles } = createDataTiles([0, 1])
+
+    // x
     //const { arrTiles, resultTiles } = createDataTiles([3])
+
+    // г
     //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7])
-    //const { arrTiles, resultTiles } = createDataTiles([5, 6, 7])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 9])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 1, 2])
-    //const { arrTiles, resultTiles } = createDataTiles([ 0, 4, 5, 6, 7, 8, 1, 2])
+
+    // г и прямые без перекрестков
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 4, 5, 6, 7])
+
+    // т и прямые
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 8, 9, 10, 11])
+
+    // х, прямые
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3])
+
+    // т, г
+    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 9, 10, 11])
+
+    // т, х
     //const { arrTiles, resultTiles } = createDataTiles([8, 9, 10, 11, 3])
-    //const { arrTiles, resultTiles } = createDataTiles([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+
+    // x, т, г
+    //const { arrTiles, resultTiles } = createDataTiles([3, 4, 5, 6, 7, 8, 9, 10, 11])
+
+    // прямые x, т, г
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+
+    // г блок
+    //const { arrTiles, resultTiles } = createDataTiles([4,5,6])
+
+    // т 8
+    //const { arrTiles, resultTiles } = createDataTiles([1, 2, 4, 5, 6, 7, 8])
+
+    // all
+    const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
     const
         SIZE_X = 9,
         SIZE_Y = 1,
         SIZE_Z = 6,
-        mapFill = []
-    const dataForMap = { tiles: resultTiles, mapFill, SIZE_X, SIZE_Y, SIZE_Z }
+        mapFill = [],
+        dataForMap = { tiles: resultTiles, mapFill, SIZE_X, SIZE_Y, SIZE_Z }
 
     const l = createBoxesLines(W, H, W, SIZE_X, SIZE_Y, SIZE_Z)
     l.position.set(-W / 2, 0, -W / 2)
