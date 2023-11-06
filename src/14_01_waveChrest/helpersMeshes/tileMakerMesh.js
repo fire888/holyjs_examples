@@ -1,7 +1,10 @@
 import * as THREE from "three";
-import { W, H } from '../structure/constants'
-import { M } from '../structure/M'
+import { W, H } from '../CONSTANTS'
+import { M } from './M'
 import { TILES } from '../tilesGeometry/TILES'
+
+const boxGeom = new THREE.BoxGeometry(.2, .2,.2)
+const blackMat = new THREE.MeshPhongMaterial({ color: 0x111111 })
 
 
 
@@ -21,6 +24,13 @@ const createMesh = (v, uv, c, material) => {
 
 export const createMakerMesh = (materials) => {
     return data => {
+        /** blackBox if resultTile = -1 **********/
+        if (data.resultTileIndex === -1) {
+            const mesh = new THREE.Mesh(boxGeom, blackMat)
+            mesh.position.set(W * data.k, H * data.i, W * data.j)
+            return mesh
+        }
+
         if (!data.tileData || !data.tileData.keyModel) {
             return null
         }

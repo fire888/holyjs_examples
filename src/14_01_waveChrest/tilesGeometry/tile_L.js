@@ -1,5 +1,5 @@
-import { W, H } from '../structure/constants'
-import { M } from '../structure/M'
+import { W, H } from '../CONSTANTS'
+import { M } from '../helpersMeshes/M'
 import { createColumnData } from './elemColumn'
 import { createPlatformData } from './elemPlatform'
 

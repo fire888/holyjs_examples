@@ -34,7 +34,5 @@ export const createBoxesLines = (w, h, d, countW = 3, countH = 3, countD = 3) =>
     }
 
     const geom = new THREE.BufferGeometry().setFromPoints(v)
-    //console.log(geom)
-    //geom.setAttribute('position', new THREE.BufferAttribute(vF32, 3))
     return new THREE.LineSegments(geom, mat)
 }

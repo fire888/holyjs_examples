@@ -1,5 +1,5 @@
-import { W, H, THICKNESS_PLATFORM } from '../structure/constants'
-import { M } from '../structure/M'
+import { W, H, THICKNESS_PLATFORM } from '../CONSTANTS'
+import { M } from '../helpersMeshes/M'
 import { createPlatformData } from './elemPlatform'
 
 const hpW = W / 6
