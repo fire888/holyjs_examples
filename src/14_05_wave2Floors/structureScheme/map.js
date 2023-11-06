@@ -122,30 +122,30 @@ const createPipelineActionsWithMapItem = (y, z, x) => {
         /** ++Y with Y */
         { action: 'filterMaybeArrByCompare', src: [y + 1, z, x], with: [y, z, x], withProp: 'connectPY' },
         
-        // /** Z + 1, Z - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y, z - 1, x], withProp: 'connectPY' },
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z + 1, x], withProp: 'connectPY' },
-        // /** X + 1, X - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y, z, x - 1], withProp: 'connectPY' },
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z, x + 1], withProp: 'connectPY' },
-        // /** X - 1, Z - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x - 1], with: [y, z - 1, x - 1], withProp: 'connectPY' },
-        // /** X - 1, Z + 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x - 1], with: [y, z + 1, x - 1], withProp: 'connectPY' },
-        // /** X + 1, Z - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x + 1], with: [y, z - 1, x + 1], withProp: 'connectPY' },
-        // /** X + 1, Z + 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x + 1], with: [y, z + 1, x + 1], withProp: 'connectPY' },
-        //
-        // /** ++Y with ++Y */
-        // /** X - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y + 1, z, x], withProp: 'connectNX' },
-        // /** X + 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z - 1, x], withProp: 'connectPX' },
-        // /** Z - 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y + 1, z, x], withProp: 'connectNZ' },
-        // /** Z + 1 */
-        // { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z - 1, x], withProp: 'connectPZ' },
+        /** Z + 1, Z - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y, z - 1, x], withProp: 'connectPY' },
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z + 1, x], withProp: 'connectPY' },
+        /** X + 1, X - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y, z, x - 1], withProp: 'connectPY' },
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z, x + 1], withProp: 'connectPY' },
+        /** X - 1, Z - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x - 1], with: [y, z - 1, x - 1], withProp: 'connectPY' },
+        /** X - 1, Z + 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x - 1], with: [y, z + 1, x - 1], withProp: 'connectPY' },
+        /** X + 1, Z - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x + 1], with: [y, z - 1, x + 1], withProp: 'connectPY' },
+        /** X + 1, Z + 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x + 1], with: [y, z + 1, x + 1], withProp: 'connectPY' },
+
+        /** ++Y with ++Y */
+        /** X - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x - 1], with: [y + 1, z, x], withProp: 'connectNX' },
+        /** X + 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z, x + 1], with: [y, z - 1, x], withProp: 'connectPX' },
+        /** Z - 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z - 1, x], with: [y + 1, z, x], withProp: 'connectNZ' },
+        /** Z + 1 */
+        { action: 'filterMaybeArrByCompare', src: [y + 1, z + 1, x], with: [y, z - 1, x], withProp: 'connectPZ' },
     ]
 
     return actions

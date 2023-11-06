@@ -56,19 +56,25 @@ async function initApp () {
         })
     }
 
-    //const { arrTiles, resultTiles } = createDataTiles([1])
-    //const { arrTiles, resultTiles } = createDataTiles([0, 1])
-    //const { arrTiles, resultTiles } = createDataTiles([3])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7])
-    //const { arrTiles, resultTiles } = createDataTiles([5, 6, 7])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 9])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8])
-    //const { arrTiles, resultTiles } = createDataTiles([4, 5, 6, 7, 8, 1, 2])
-    //const { arrTiles, resultTiles } = createDataTiles([ 0, 4, 5, 6, 7, 8, 1, 2])
-    //const { arrTiles, resultTiles } = createDataTiles([8, 9, 10, 11, 3])
+    const fullfloor = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    const lines = [1, 2]
+    const x = [4]
+    const corners = [4, 5, 6, 7]
+    const tCrosses = [8, 9, 10, 11]
+    const xBT = [12, 13]
+    const topPlatform = [15, 16, 17, 18]
+    const toBottom = [22, 23, 24, 25]
+    const stairs = [19, 20, 21]
 
-    // без лестниц круговых
+
+    // перекрестки непересекающиеся
+    //const { arrTiles, resultTiles } = createDataTiles([...xBT])
+
+    // без лестниц круговых блоки
     const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
+
+    // круговые лестницы
+    //const { arrTiles, resultTiles } = createDataTiles([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 22, 23, 24, 25])
 
     // bottom top
     //const { arrTiles, resultTiles } = createDataTiles([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
