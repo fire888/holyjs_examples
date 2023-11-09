@@ -17,8 +17,8 @@ import { tile_EMPTY } from './structureBricks/tile_EMPTY'
 import { createDataTiles } from './structureBricks/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
 import { Player } from "../helpers/player";
-import { createBoxesLines } from './structureBricks/gabarites'
 import { tile_ElemsTop } from './structureBricks/tile_ElemsTop'
+import { updateEveryFrame } from "../helpers/frameUpdater";
 
 const TILES = {
     tile_I,
@@ -50,6 +50,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(3)
+    studio.render()
     studio.setCamPos(10, 10, 10)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
     const materials = {
@@ -64,17 +65,16 @@ async function initApp () {
             color: 0xFF3333,
             transparent: true,
             opacity: .8,
+        }),
+        'panorama': new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            map: assets.pan,
+            side: THREE.DoubleSide,
+            fog: false,
         })
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
+
+
 
     const arrTiles = createDataTiles()
     const dataForMap = {
@@ -86,6 +86,13 @@ async function initApp () {
         tileD: W,
         tiles: arrTiles,
     }
+
+    const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(50),
+        materials.panorama
+    )
+    studio.addToScene(sphere)
+    sphere.position.set(dataForMap.numW * W / 2,dataForMap.numH * H / 2, dataForMap.numD * W / 2)
 
     // const l = createBoxesLines(W, H, W, dataForMap.numW, dataForMap.numH, dataForMap.numD)
     // l.position.set(-W / 2, 0, -W / 2)
@@ -163,7 +170,8 @@ async function initApp () {
 
         const player = new Player(6, 5,6, [meshCollision])
         studio.setCam(player)
-        updateFunctions.push(() => { player.update() })
+        updateEveryFrame(studio.render)
+        updateEveryFrame(() => { player.update() })
     })
 }
 

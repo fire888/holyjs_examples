@@ -1,4 +1,4 @@
-import './01_00_attr/01_00_attributes'
+//import './01_00_attr/01_00_attributes'
 //import './01_01_attrUV/01_01_attributes_uv'
 
 //import './02_00_matrix/02_matrix'
@@ -31,5 +31,5 @@ import './01_00_attr/01_00_attributes'
 //import './14_08_waveInsert/14_08_waveInsert'
 
 //import './15_collisions/15_collisions'
-//import './16_00_hard/structureBricks'
+import './16_00_hard/structureBricks'
 
