@@ -11,7 +11,7 @@ export const createStudio = (startCameraCoord = 3) => {
     renderer.setSize(window.innerWidth, window.innerHeight)
 
     const scene = new THREE.Scene()
-    scene.fog = new THREE.Fog(0x1a323b, 5, 15)
+    scene.fog = new THREE.Fog(0x000011, 5, 12)
 
     // const axesHelper = new THREE.AxesHelper(1)
     // scene.add(axesHelper)
