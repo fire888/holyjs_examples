@@ -16,7 +16,7 @@ async function initApp () {
     {
 
         const v = [
-            .5, 0, -.2,
+            .2, 0, -.2,
             1, 0, -.2,
             1, 2, -.2,
 
@@ -36,6 +36,7 @@ async function initApp () {
             geometry.attributes.position.array[0] = sin(n * 5)
             geometry.attributes.position.array[9] = sin(n * 5)
             geometry.attributes.position.needsUpdate = true
+        
         })
     }
 }

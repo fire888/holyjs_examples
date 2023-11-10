@@ -227,9 +227,7 @@ async function initApp () {
         }
 
         const mesh = createMesh(v, uv, c, materials.phongWhite)
-        studio.addToScene(mesh)
-
-        currentWall = mesh
+        return mesh
     }
 
     /** click points on scene ********/
@@ -251,7 +249,10 @@ async function initApp () {
             currentWall.geometry.dispose()
             currentWall.material.dispose()
         }
-        path.length > 2 && createWalls(path)
+        if (path.length > 2) { 
+            currentWall = createWalls(path)
+            studio.addToScene(currentWall)
+        }
     })
 }
 

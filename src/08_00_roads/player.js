@@ -22,12 +22,13 @@ export class Player extends THREE.PerspectiveCamera {
 
         this._forward = false
         document.addEventListener('keydown', e => {
-            if (e.code === 'ArrowUp') {
+            console.log(e.code)
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') {
                 this._forward = true
             }
         })
         document.addEventListener('keyup', e => {
-            if (e.code === 'ArrowUp') {
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') {
                 this._forward = false
             }
         })

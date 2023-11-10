@@ -102,7 +102,7 @@ async function initApp () {
     const profile = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
     const W1 = 5
-    const W2 = 2
+    const W2 = 7
 
     const w1 = createWall(W1, profile)
     v.push(...w1.v)

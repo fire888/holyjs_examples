@@ -85,12 +85,12 @@ async function initApp () {
         const ph = phase % (Math.PI * 2)
         const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, sin(ph)], [0, 2, sin(ph)])
 
-        const N = 16
+        const N = 7
         for (let i = 0; i < N; ++i) {
             const copyV = [...p1.v]
             translateVertices(copyV, -.5, 0, 0)
             rotateVerticesY(copyV, ph)
-            translateVertices(copyV, 0, 0, 2)
+            translateVertices(copyV, 0, 0, 1)
             rotateVerticesY(copyV, i / N * (Math.PI * 2))
             v.push(...copyV)
             uv.push(...atlas[Math.floor(Math.random() * atlas.length)])

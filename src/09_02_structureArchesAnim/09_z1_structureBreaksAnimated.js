@@ -182,49 +182,35 @@ const M = {
         const v3_i = [x2, y2, v1[2]]
         const v4_i = [x1, y2, v1[2]]
 
-        const vArr = []
-        vArr.push(
-            ...this.createPolygon(v1_i, v2_i, v3_i, v4_i),
+        // outer 
+        const vArr = [
             ...this.createPolygon(v1, v2, v2_i, v1_i),
             ...this.createPolygon(v2_i, v2, v3, v3_i),
             ...this.createPolygon(v4_i, v3_i, v3, v4),
             ...this.createPolygon(v1, v1_i, v4_i, v4),
-        )
-
-        const cArr = this.fillColorFaceWithSquare(color1, color2)
-
-        const uArr = [
-            ...this.createUv(
-                [.5, .5],
-                [1, .5],
-                [1, 1],
-                [.5, 1],
-            ),
-            ...this.createUv(
-                [0, .5],
-                [.5, .5],
-                [.4, .6],
-                [.1, .6],
-            ),
-            ...this.createUv(
-                [.4, .6],
-                [.5, .5],
-                [.5, 1],
-                [.4, .9],
-            ),
-            ...this.createUv(
-                [.1, .9],
-                [.4, .9],
-                [.5, 1],
-                [0, 1],
-            ),
-            ...this.createUv(
-                [0, .5],
-                [.1, .6],
-                [.1, .9],
-                [0, 1],
-            )
         ]
+
+        const uArr = this.getUvByLen(vArr)
+        
+        // inner square
+        vArr.push(
+            ...this.createPolygon(v1_i, v2_i, v3_i, v4_i),
+        )
+        uArr.push(...this.createUv(
+            [.5, .5],
+            [1, .5],
+            [1, 1],
+            [.5, 1],
+        ))  
+        
+        const cArr = [
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color1),
+        ]
+
         return { vArr, cArr, uArr }
     },
 }

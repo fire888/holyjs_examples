@@ -17,7 +17,7 @@
 
 //import './09_02_structureArchesAnim/09_z1_structureBreaksAnimated'
 //import './09_00_archesElems/09_00_archesElems'
-//import './09_01_structureArches/09_structureArches'
+import './09_01_structureArches/09_structureArches'
 
 
 //import './10_00_parametricBox/index'
@@ -26,7 +26,7 @@
 
 
 //import './12_00_tiles/12_tiles'
-import './12_01_tilesConnect/12_tilesConnect'
+//import './12_01_tilesConnect/12_tilesConnect'
 
 //import './14_00_wave/14_00_wave'
 //import './14_01_wave1floor/14_01_wave1floor'

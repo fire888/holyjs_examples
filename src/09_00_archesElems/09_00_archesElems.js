@@ -39,23 +39,6 @@ const M = {
         rad = rad % (Math.PI * 2)
         return -rad
     },
-    mirrorZ: (arr) => {
-        const arr2 = []
-        for (let i = 0; i < arr.length; i += 18) {
-            if (!arr[i + 1]) {
-                continue;
-            }
-            arr2.push(
-                arr[i + 3], arr[i + 4], -arr[i + 5],
-                arr[i], arr[i + 1], -arr[i + 2],
-                arr[i + 15], arr[i + 16], -arr[i + 17],
-                arr[i + 3], arr[i + 4], -arr[i + 5],
-                arr[i + 15], arr[i + 16], -arr[i + 17],
-                arr[i + 12], arr[i + 13], -arr[i + 14],
-            )
-        }
-        arr.push(...arr2)
-    },
     getUvByLen: arr => {
         const uv = []
         let minX = 1000
@@ -88,13 +71,6 @@ const M = {
         return uv
     },
     ran: function (start, end) { return start + Math.random() * (end - start) },
-    fillColorFaceWithSquare: function(c1, c2){ return [
-        ...this.fillColorFace(c1),
-        ...this.fillColorFace(c2),
-        ...this.fillColorFace(c2),
-        ...this.fillColorFace(c2),
-        ...this.fillColorFace(c2),
-    ]},
     createFaceWithSquare: function (v1, v2, v3, v4, color1, color2) {
         const maxW = v2[0] - v1[0]
         const maxH = v3[1] - v1[1]
@@ -112,49 +88,35 @@ const M = {
         const v3_i = [x2, y2, v1[2]]
         const v4_i = [x1, y2, v1[2]]
 
-        const vArr = []
-        vArr.push(
-            ...this.createPolygon(v1_i, v2_i, v3_i, v4_i),
+        // outer 
+        const vArr = [
             ...this.createPolygon(v1, v2, v2_i, v1_i),
             ...this.createPolygon(v2_i, v2, v3, v3_i),
             ...this.createPolygon(v4_i, v3_i, v3, v4),
             ...this.createPolygon(v1, v1_i, v4_i, v4),
-        )
-
-        const cArr = this.fillColorFaceWithSquare(color1, color2)
-
-        const uArr = [
-            ...this.createUv(
-                [.5, .5],
-                [1, .5],
-                [1, 1],
-                [.5, 1],
-            ),
-            ...this.createUv(
-                [0, .5],
-                [.5, .5],
-                [.4, .6],
-                [.1, .6],
-            ),
-            ...this.createUv(
-                [.4, .6],
-                [.5, .5],
-                [.5, 1],
-                [.4, .9],
-            ),
-            ...this.createUv(
-                [.1, .9],
-                [.4, .9],
-                [.5, 1],
-                [0, 1],
-            ),
-            ...this.createUv(
-                [0, .5],
-                [.1, .6],
-                [.1, .9],
-                [0, 1],
-            )
         ]
+
+        const uArr = this.getUvByLen(vArr)
+        
+        // inner square
+        vArr.push(
+            ...this.createPolygon(v1_i, v2_i, v3_i, v4_i),
+        )
+        uArr.push(...this.createUv(
+            [.5, .5],
+            [1, .5],
+            [1, 1],
+            [.5, 1],
+        ))  
+        
+        const cArr = [
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color2),
+            ...this.fillColorFace(color1),
+        ]
+
         return { vArr, cArr, uArr }
     },
 }
@@ -443,6 +405,7 @@ const arc = ({ h = 1, beltH = .05, w = 2, d = 0.03, n = 15, color1 = [1, 0, 0], 
     v.push(...M.createPolygon([-w / 2, h, d], [w / 2, h, d], [w / 2, h, 0], [-w / 2, h, 0],))
     c.push(...M.fillColorFace(color1))
     uv.push(...M.createUv([0, 0], [1, 0], [1, 1], [0, 1]))
+
     const copy = [...v]
     M.rotateVerticesY(copy, PI)
     v.push(...copy)
@@ -559,6 +522,7 @@ async function initApp () {
             bumpMap: assets.mapBrickDiff,
             bumpScale: .02,
             vertexColors: true,
+            //wireframe: true,
         }),
     }
     const updateFunctions = []

@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { createStudio } from '../helpers/studio'
+import { createLoadManager } from '../helpers/loadManager'
+import { ASSETS_TO_LOAD } from './ASSETS'
 import { updateEveryFrame } from '../helpers/frameUpdater'
 import map from "../assets/map_brick_diff.jpg";
 
@@ -11,10 +13,12 @@ async function initApp () {
     studio.setBackColor(0x333333)
     studio.setCamTargetPos(1.7, .5, 0)
     updateEveryFrame(studio.render)
+    const assets = await createLoadManager(ASSETS_TO_LOAD)
+    assets.brickDiff.wrapS = assets.brickDiff.wrapT = THREE.RepeatWrapping
     const materials = {
         'brick': new THREE.MeshBasicMaterial({
             color: 0xFFFFFF,
-            map: new THREE.TextureLoader().load(map),
+            map: assets.brickDiff,
         }),
     }
 

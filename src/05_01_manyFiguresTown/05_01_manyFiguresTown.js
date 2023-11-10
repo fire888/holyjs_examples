@@ -143,9 +143,9 @@ async function initApp () {
     const v = []
     const uv = []
 
-    for (let i = 0; i < 150; ++i) {
-        const H = Math.random() * 10
-        const house1 = createTower(H, Math.random() * 1 + .3, Math.random() * 5 + 4, Math.random() * 3 + .5)
+    for (let i = 0; i < 130; ++i) {
+        const H = Math.random() * 15
+        const house1 = createTower(H, Math.random() * 1.5 + .3, Math.random() * 7 + 3, Math.random() * 4 + .5)
         m.translateVertices(house1.v, Math.random() * 20 - 10, 0, Math.random() * 20 - 10)
         v.push(...house1.v)
         uv.push(...house1.uv)
