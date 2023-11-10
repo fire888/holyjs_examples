@@ -3,6 +3,7 @@ import { GLTFExporter } from '../helpers/GLTFExporter'
 import { createStudio } from '../helpers/studio'
 import { createLoadManager } from '../helpers/loadManager'
 import { ASSETS_TO_LOAD } from './ASSETS'
+import { updateEveryFrame } from '../helpers/frameUpdater'
 
 const { sin, cos, PI, random, floor } = Math
 const PI2 = PI * 2
@@ -116,23 +117,6 @@ const M = {
         rad += Math.PI * 6
         rad = rad % (Math.PI * 2)
         return -rad
-    },
-    mirrorZ: (arr) => {
-        const arr2 = []
-        for (let i = 0; i < arr.length; i += 18) {
-            if (!arr[i + 1]) {
-                continue;
-            }
-            arr2.push(
-                arr[i + 3], arr[i + 4], -arr[i + 5],
-                arr[i], arr[i + 1], -arr[i + 2],
-                arr[i + 15], arr[i + 16], -arr[i + 17],
-                arr[i + 3], arr[i + 4], -arr[i + 5],
-                arr[i + 15], arr[i + 16], -arr[i + 17],
-                arr[i + 12], arr[i + 13], -arr[i + 14],
-            )
-        }
-        arr.push(...arr2)
     },
     getUvByLen: arr => {
         const uv = []
@@ -609,6 +593,7 @@ const createMesh = (v, uv, c, material) => {
 
 async function initApp () {
     const studio = createStudio(20)
+    updateEveryFrame(studio.render)
     studio.setCamTargetPos(0, 15, 0)
     studio.setBackColor(0x333333)
     const assets = await createLoadManager(ASSETS_TO_LOAD)
@@ -621,16 +606,6 @@ async function initApp () {
             vertexColors: true,
         }),
     }
-    const updateFunctions = []
-    let n = 0
-    const animate = () => {
-        requestAnimationFrame(animate)
-        n += .014
-        updateFunctions.forEach(fn => fn(n))
-        studio.render()
-    }
-    animate()
-
 
     /** ************************************/
     const v = []

@@ -17,10 +17,9 @@
 
 //import './09_02_structureArchesAnim/09_z1_structureBreaksAnimated'
 //import './09_00_archesElems/09_00_archesElems'
-import './09_01_structureArches/09_structureArches'
+//import './09_01_structureArches/09_structureArches'
 
-
-//import './10_00_parametricBox/index'
+import './10_00_parametricBox/index'
 //import './11_01_roomsAnimate/11_01_roomsAnim'
 //import './11_00_rooms/11_structureRooms'
 

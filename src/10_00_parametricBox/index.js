@@ -14,7 +14,7 @@ const PARAMS = {
         openAngle: -.5,
         w: 130,
         h: 150,
-        z: 5,
+        z: 10,
         facet1: {
             type: 'FACET11'
         },
