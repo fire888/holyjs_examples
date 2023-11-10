@@ -42,9 +42,9 @@ async function initApp () {
             1, 0,
             1, 1,
 
-            .8, 0,
+            0.8, 0,
             1, 1,
-                .8, 1,
+            0.8, 1,
         ]
 
         const uvF32 = new Float32Array(uv)
@@ -58,7 +58,7 @@ async function initApp () {
             geometry.attributes.position.array[0] = sin(n * 5)
             geometry.attributes.position.array[9] = sin(n * 5)
             geometry.attributes.position.needsUpdate = true
-            const v = sin(n * 5) * .02
+            const v = sin(n * 5) * .005
             geometry.attributes.uv.array[0] += v
             geometry.attributes.uv.array[2] += v
             geometry.attributes.uv.array[6] += v

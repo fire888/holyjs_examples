@@ -102,11 +102,12 @@ async function initApp () {
     const profile = assets.profiles.children.filter(item => item.name === 'profile3')[0].geometry.attributes.position.array
 
     const W1 = 5
-    const W2 = 5
+    const W2 = 2
 
     const w1 = createWall(W1, profile)
     v.push(...w1.v)
     uv.push(...w1.uv)
+
     corners.c1b = [w1.v[0], w1.v[1], w1.v[2]]
     corners.c2b = [w1.v[3], w1.v[4], w1.v[5]]
     const l = w1.v.length
@@ -124,6 +125,7 @@ async function initApp () {
     m.translateVertices(w3.v, W1, 0, W2)
     v.push(...w3.v)
     uv.push(...w3.uv)
+
     corners.c3b = [w3.v[0], w3.v[1], w3.v[2]]
     corners.c4b = [w3.v[3], w3.v[4], w3.v[5]]
     const l2 = w3.v.length

@@ -91,16 +91,16 @@ async function initApp () {
     /** CUSTOM 00 **************************/
     const R = .7
     const H = 1
-    const N = 3
+    const N = 5
 
     const points = []
     for (let i = 0; i < N; ++i) {
         points.push([sin(i / N * PI2) * R, cos(i / N * PI2) * R])
     }
 
-
     const v1 = []
     const uv1 = []
+
     for (let i = 0; i < points.length; ++i) {
         const prev = points[i - 1] ? points[i - 1] : points[points.length - 1]
         const curr = points[i]
@@ -116,15 +116,15 @@ async function initApp () {
         uv1.push(...atlas[14])
     }
 
-    const copyV = [...v1]
-    m.translateVertices(copyV, 0, H, 0)
+    const v2 = [...v1]
+    m.translateVertices(v2, 0, H, 0)
     const uv2 = []
-        points.forEach(() => {
+    points.forEach(() => {
         uv2.push(...atlas[3])
     })
 
-    const copyV2 = [...v1]
-    m.translateVertices(copyV2, 0, H * 2, 0)
+    const v3 = [...v1]
+    m.translateVertices(v3, 0, H * 2, 0)
     const uv3 = []
     points.forEach(() => {
         uv3.push(...atlas[4])
@@ -149,7 +149,7 @@ async function initApp () {
     m.translateVertices(v4, 0, H * 3, 0)
 
 
-    const v = [...v1, ...copyV, ...copyV2, ...v4]
+    const v = [...v1, ...v2, ...v3, ...v4]
     const uv = [...uv1, ...uv2, ...uv3, ...uv4]
 
     const mesh = createMesh(v, uv, materials.atlasBrick)

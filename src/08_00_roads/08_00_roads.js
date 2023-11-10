@@ -67,9 +67,11 @@ async function initApp () {
     async function createStructure (points) {
         result = await createSchemeLines(studio, points)
 
+        const H = 1
+
         const v = []
         const uv = []
-        const H = 1
+
         for(let i = 0; i < result.length; ++i) {
             if (result[i].type === 'corridor') {
                 const { leftLine, rightLine } = result[i]

@@ -16,7 +16,7 @@ async function initApp () {
     {
 
         const v = [
-            .2, 0, -.2,
+            .5, 0, -.2,
             1, 0, -.2,
             1, 2, -.2,
 

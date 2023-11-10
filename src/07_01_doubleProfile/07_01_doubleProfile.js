@@ -111,7 +111,7 @@ async function initApp () {
             return dataWalls
         }
 
-        const D = .01
+        const D = .2
         const createWall = (W, profile, angle1, angle2) => {
             const v = []
             const uv = []

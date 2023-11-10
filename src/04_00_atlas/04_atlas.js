@@ -85,7 +85,7 @@ async function initApp () {
         const ph = phase % (Math.PI * 2)
         const p1 = createPolygon([0, 0, 0], [1, 0, 0], [1, 2, sin(ph)], [0, 2, sin(ph)])
 
-        const N = 6
+        const N = 16
         for (let i = 0; i < N; ++i) {
             const copyV = [...p1.v]
             translateVertices(copyV, -.5, 0, 0)
@@ -104,13 +104,13 @@ async function initApp () {
     studio.addToScene(mesh)
 
     updateEveryFrame(n => {
-        // const { v } = createArrays(n)
-        // v.forEach((elem, i) => {
-        //     if (i % 2 > 0) {
-        //         mesh.geometry.attributes.uv.array[i] -= .001
-        //     }
-        // })
-        // mesh.geometry.attributes.uv.needsUpdate = true
+        const { v } = createArrays(n)
+        v.forEach((elem, i) => {
+            if (i % 2 > 0) {
+                mesh.geometry.attributes.uv.array[i] -= .001
+            }
+        })
+        mesh.geometry.attributes.uv.needsUpdate = true
     })
 
     /** *******************************************/

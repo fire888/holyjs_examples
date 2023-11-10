@@ -14,18 +14,21 @@
 //import './07_00_profileByPoints/07_00_profileByPoints'
 //import './07_01_doubleProfile/07_01_doubleProfile'
 //import './08_00_roads/08_00_roads'
+
+//import './09_02_structureArchesAnim/09_z1_structureBreaksAnimated'
 //import './09_00_archesElems/09_00_archesElems'
 //import './09_01_structureArches/09_structureArches'
-//import './09_02_structureArchesAnim/09_z1_structureBreaksAnimated'
+
 
 //import './10_00_parametricBox/index'
-//import './11_00_rooms/11_structureRooms'
 //import './11_01_roomsAnimate/11_01_roomsAnim'
+//import './11_00_rooms/11_structureRooms'
+
 
 //import './12_00_tiles/12_tiles'
-//import './12_01_tilesConnect/12_tilesConnect'
+import './12_01_tilesConnect/12_tilesConnect'
 
-import './14_00_wave/14_00_wave'
+//import './14_00_wave/14_00_wave'
 //import './14_01_wave1floor/14_01_wave1floor'
 //import './14_05_wave2Floors/14_05_wave2floors'
 //import './14_08_waveInsert/14_08_waveInsert'
