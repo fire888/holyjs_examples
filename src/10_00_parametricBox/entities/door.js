@@ -214,17 +214,21 @@ const createDoorGeometry = (params) => {
     const uvF32 = new Float32Array(uv)
     geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
     geometry.computeVertexNormals()
-    //geometry.addGroup(0, 386, 0)
     geometry.addGroup(0, 390, 0)
     geometry.addGroup(390, 30, 1)
 
     const updateParams = () => {
         v = []
+        uv = []
         updatePoints()
         for (let i = 0; i < v.length; ++i) {
             vF32[i] = v[i]
         }
         geometry.attributes.position.needsUpdate = true
+        for (let i = 0; i < uv.length; ++i) {
+            uvF32[i] = uv[i]
+        }
+        geometry.attributes.uv.needsUpdate = true
     }
 
 
