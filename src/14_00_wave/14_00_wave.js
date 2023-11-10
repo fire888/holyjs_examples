@@ -79,9 +79,6 @@ async function initApp () {
 
     const arrTiles = createDataTiles()
     const dataForMap = {
-        //numW: 14,
-        // numH: 10,
-        //numD: 5,
         numW: 7,
         numH: 7,
         numD: 4,

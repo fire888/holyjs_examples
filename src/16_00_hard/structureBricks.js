@@ -18,7 +18,15 @@ import { createDataTiles } from './structureBricks/dataTiles'
 import { generateStructureScheme } from './structureScheme/structureScheme'
 import { Player } from "../helpers/player";
 import { tile_ElemsTop } from './structureBricks/tile_ElemsTop'
-import { updateEveryFrame } from "../helpers/frameUpdater";
+import { updateEveryFrame } from "../helpers/frameUpdater"
+
+const button = document.createElement('button')
+button.innerText = 'WALK'
+document.body.appendChild(button)
+button.style.position = 'absolute'
+button.style.zIndex = '100'
+button.style.top = '0'
+let f = null
 
 const TILES = {
     tile_I,
@@ -168,10 +176,28 @@ async function initApp () {
         meshCollision.visible = false
         studio.addToScene(meshCollision)
 
-        const player = new Player(6, 5,6, [meshCollision])
+        const player = new Player(6, 5, 6, [meshCollision])
         studio.setCam(player)
         updateEveryFrame(studio.render)
         updateEveryFrame(() => { player.update() })
+        let isPlayer = true
+        const f = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+
+            if (!isPlayer) {
+                isPlayer = true
+                player.enable()
+                studio.setCam(player)
+            } else {
+                isPlayer = false
+                player.disable()
+                studio.enableControls()
+            }
+
+
+        }
+        button.addEventListener("click", f)
     })
 }
 
